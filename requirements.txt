@@ -1,0 +1,8 @@
+requests==2.31.0
+beautifulsoup4==4.12.3
+feedparser==6.0.11
+lxml==5.2.2
+python-dateutil==2.9.0
+pytz==2024.1
+httpx==0.27.0
+playwright>=1.44.0  # run: .venv/bin/playwright install chromium

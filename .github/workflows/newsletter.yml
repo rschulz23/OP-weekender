@@ -1,0 +1,71 @@
+name: JoCo Weekend Newsletter
+
+on:
+  # Every Wednesday at 9 AM CDT (14:00 UTC)
+  # Runs Wednesday so you have the HTML ready before Thursday send
+  schedule:
+    - cron: '0 14 * * 3'
+
+  # Also run manually from the Actions tab whenever you want
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Target Saturday (YYYY-MM-DD) — leave blank for next weekend'
+        required: false
+        default: ''
+
+jobs:
+  generate:
+    name: Scrape & Render Newsletter
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Python setup ─────────────────────────────────────────────────────
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      # ── Install Python dependencies ───────────────────────────────────────
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # ── Install Playwright + Chromium ─────────────────────────────────────
+      # Needed for Johnson County Post (CitySpark JS widget)
+      - name: Install Playwright Chromium
+        run: playwright install chromium --with-deps
+
+      # ── Run scraper + renderer ────────────────────────────────────────────
+      - name: Generate newsletter
+        env:
+          NOTIFY_EMAIL:        ${{ secrets.NOTIFY_EMAIL }}
+          GMAIL_ADDRESS:       ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD:  ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python ci_generate.py
+
+      # ── Upload HTML as downloadable artifact ──────────────────────────────
+      # Available for 14 days from the Actions run page
+      - name: Upload newsletter HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: newsletter-${{ github.run_id }}
+          path: |
+            newsletter.html
+            events.json
+          retention-days: 14
+
+      # ── Also commit the latest newsletter.html back to the repo ──────────
+      # This lets you see diffs week-over-week and pull it locally
+      - name: Commit generated files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f newsletter.html events.json
+          git diff --staged --quiet || git commit -m "chore: newsletter $(date -u +%Y-%m-%d)"
+          git push
