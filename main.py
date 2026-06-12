@@ -1,5 +1,5 @@
 """
-JoCo Weekend Newsletter — Main Runner
+OP Weekender — Main Runner
 ======================================
 Scrapes event sources, deduplicates, filters to the upcoming weekend,
 and optionally publishes to Beehiiv.
@@ -46,7 +46,7 @@ def _next_weekend(from_date=None):
 
 def print_preview(events: list[Event]):
     print("\n" + "=" * 60)
-    print("  JoCo Weekend Events — Preview")
+    print("  OP Weekender — Preview")
     print("=" * 60)
 
     if not events:
@@ -76,7 +76,7 @@ def print_preview(events: list[Event]):
 
 
 def build_post_title(saturday: datetime, sunday: datetime) -> str:
-    return f"JoCo Weekend Guide: {saturday.strftime('%B %-d')}–{sunday.strftime('%-d, %Y')}"
+    return f"OP Weekender: {saturday.strftime('%B %-d')}–{sunday.strftime('%-d, %Y')}"
 
 
 def build_subtitle(events: list[Event], saturday: datetime) -> str:
@@ -89,7 +89,7 @@ def build_subtitle(events: list[Event], saturday: datetime) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="JoCo Weekend Newsletter")
+    parser = argparse.ArgumentParser(description="OP Weekender")
     parser.add_argument("--preview",   action="store_true", help="Print events to terminal")
     parser.add_argument("--save-html", action="store_true", help="Save rendered HTML to newsletter.html")
     parser.add_argument("--draft",     action="store_true", help="Push as draft to Beehiiv (safe — won't send)")

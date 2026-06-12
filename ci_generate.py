@@ -1,5 +1,5 @@
 """
-JoCo Newsletter — CI Generator
+OP Weekender — CI Generator
 ================================
 Runs in GitHub Actions (or any headless Linux environment).
 No pbcopy, no webbrowser — saves newsletter.html and optionally
@@ -71,12 +71,12 @@ def send_email(html: str, saturday: datetime, subject: str) -> bool:
 
     msg = MIMEMultipart("mixed")
     msg["Subject"] = subject
-    msg["From"]    = f"JoCo Newsletter <{gmail_address}>"
+    msg["From"]    = f"OP Weekender <{gmail_address}>"
     msg["To"]      = notify_email
 
     # ── Plain-text body with paste instructions ────────────────────────────
     instructions = (
-        "Your JoCo Weekend Newsletter is ready!\n\n"
+        "Your OP Weekender is ready!\n\n"
         "To publish in Beehiiv:\n"
         "  1. Go to https://app.beehiiv.com/posts/new\n"
         "  2. Click the (+) block inserter\n"
@@ -119,7 +119,7 @@ def send_email(html: str, saturday: datetime, subject: str) -> bool:
 def main():
     saturday, sunday = _next_weekend()
     date_label = f"{saturday.strftime('%B %-d')} - {sunday.strftime('%B %-d, %Y')}"
-    subject    = f"JoCo Weekend Guide: {saturday.strftime('%B %-d')}-{sunday.strftime('%-d, %Y')}"
+    subject    = f"OP Weekender: {saturday.strftime('%B %-d')}-{sunday.strftime('%-d, %Y')}"
 
     log.info(f"Targeting weekend: {date_label}")
 
@@ -146,7 +146,7 @@ def main():
     # ── Summary ───────────────────────────────────────────────────────────
     print()
     print("=" * 56)
-    print(f"  JoCo Newsletter — {date_label}")
+    print(f"  OP Weekender — {date_label}")
     print(f"  {len(events)} events | {len(html):,} bytes")
     print(f"  Saved to: {OUTPUT_FILE}")
     print(f"  Email: {'sent' if email_sent else 'skipped (no credentials)'}")

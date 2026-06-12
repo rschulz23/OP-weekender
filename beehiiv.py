@@ -1,5 +1,5 @@
 """
-Beehiiv API client for the JoCo Weekend Newsletter.
+Beehiiv API client for the OP Weekender newsletter.
 
 API docs: https://developers.beehiiv.com/api-reference/posts/create
 Base URL: https://api.beehiiv.com/v2

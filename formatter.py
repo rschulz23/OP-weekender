@@ -210,7 +210,7 @@ def _header(saturday: datetime, sunday: datetime, total: int) -> str:
   <tr>
     <td style="padding:28px 24px 22px;text-align:center;">
       <div style="font-size:26px;font-weight:900;color:{WHITE};letter-spacing:-0.5px;line-height:1.2;">
-        JoCo Weekend Guide
+        OP Weekender
       </div>
       <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:6px;">
         {date_range} &nbsp;&middot;&nbsp; {total} events across Johnson County
@@ -238,7 +238,7 @@ def _footer() -> str:
         Know of an event we missed? Reply to this email and we&#39;ll add it next week.
       </p>
       <p style="font-size:12px;color:{TEXT_MUTED};margin:0;">
-        JoCo Weekend Guide &nbsp;&middot;&nbsp; Johnson County, Kansas
+        OP Weekender &nbsp;&middot;&nbsp; Johnson County, KS
       </p>
     </td>
   </tr>

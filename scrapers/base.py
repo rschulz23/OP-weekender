@@ -1,6 +1,6 @@
 from __future__ import annotations
 """
-Base scraper class for JoCo Newsletter event scrapers.
+Base scraper class for OP Weekender event scrapers.
 All scrapers return a list of Event dicts with a consistent schema.
 """
 

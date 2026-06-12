@@ -1,5 +1,5 @@
 """
-JoCo Newsletter — One-Click Beehiiv Publisher
+OP Weekender — One-Click Beehiiv Publisher
 ==============================================
 Scrapes events, renders the newsletter HTML, copies it to your clipboard,
 and opens your Beehiiv new-post editor in one command.
@@ -71,7 +71,7 @@ def save_html(html: str, path: str = "newsletter.html"):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="JoCo Newsletter — Beehiiv Publisher")
+    parser = argparse.ArgumentParser(description="OP Weekender — Beehiiv Publisher")
     parser.add_argument("--date",      type=str,  help="Target Saturday (YYYY-MM-DD)")
     parser.add_argument("--html-only", action="store_true",
                         help="Copy HTML to clipboard only, don't open browser")
@@ -85,7 +85,7 @@ def main():
     saturday, sunday = _next_weekend(target_saturday)
     date_label = f"{saturday.strftime('%B %-d')} - {sunday.strftime('%B %-d, %Y')}"
 
-    print(f"\n📋  JoCo Newsletter Publisher")
+    print(f"\n📋  OP Weekender Publisher")
     print(f"    Weekend: {date_label}")
     print()
 
@@ -120,7 +120,7 @@ def main():
         webbrowser.open(BEEHIIV_NEW_POST_URL)
 
     # ── Instructions ──────────────────────────────────────────────────────────
-    subject = f"JoCo Weekend Guide: {saturday.strftime('%B %-d')}-{sunday.strftime('%-d, %Y')}"
+    subject = f"OP Weekender: {saturday.strftime('%B %-d')}-{sunday.strftime('%-d, %Y')}"
     print("─" * 56)
     print("  Next steps in Beehiiv:")
     print()
