@@ -14,6 +14,7 @@ import logging
 
 from scrapers import ALL_SCRAPERS
 from scrapers.base import Event
+from categorizer import categorize_all
 
 CENTRAL = pytz.timezone("America/Chicago")
 logger = logging.getLogger("Aggregator")
@@ -71,6 +72,31 @@ def deduplicate(events: list[Event]) -> list[Event]:
     return unique
 
 
+def _is_local_english_event(event: Event) -> bool:
+    """
+    Drop events that are clearly not local / not in English.
+    Checks:
+      - Title + description ASCII ratio (< 70% ASCII → likely non-English)
+      - Title contains obvious online/virtual/international signals
+    """
+    text = event.title + " " + event.description
+    if not text.strip():
+        return True
+
+    non_ascii = sum(1 for c in text if ord(c) > 127)
+    ratio = non_ascii / len(text)
+    if ratio > 0.12:   # more than 12% non-ASCII → non-English
+        return False
+
+    # Drop clearly online-only / international events
+    lower_title = event.title.lower()
+    online_signals = ["seminario", "gratuito", "pyme", "afiliados", "online gratuito"]
+    if any(sig in lower_title for sig in online_signals):
+        return False
+
+    return True
+
+
 def filter_weekend(events: list[Event], saturday: datetime, sunday: datetime) -> list[Event]:
     """Keep only events that fall on the target Saturday or Sunday."""
     result = []
@@ -123,6 +149,10 @@ def run(
     unique_events = deduplicate(weekend_events)
     logger.info(f"Unique weekend events: {len(unique_events)}")
 
+    unique_events = [e for e in unique_events if _is_local_english_event(e)]
+    logger.info(f"After language filter: {len(unique_events)}")
+
+    categorize_all(unique_events)
     return sort_events(unique_events)
 
 

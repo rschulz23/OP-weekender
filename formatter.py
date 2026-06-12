@@ -7,6 +7,7 @@ Design principles:
   UTF-8/Latin-1 encoding corruption in Beehiiv's editor
 - Mobile-first single-column layout (max-width 600px)
 - Events grouped by day (Saturday first, then Sunday)
+- Within each day, events are grouped by category with a coloured pill header
 - Each event card: title, time + location, cost badge, description snippet, source link
 """
 
@@ -41,14 +42,53 @@ def _strip_emoji(text: str) -> str:
 
 
 # ── Color palette ────────────────────────────────────────────────────────────
-BRAND_BLUE    = "#1A3A5C"   # header background, section headers
-BRAND_ORANGE  = "#E8621A"   # accent (event title links, cost badge)
+BRAND_BLUE    = "#1A3A5C"   # header background
+BRAND_ORANGE  = "#E8621A"   # event title links, cost badge
 LIGHT_BG      = "#F7F8FA"   # card background
 BORDER_COLOR  = "#E2E6EA"   # card border
 TEXT_PRIMARY  = "#1A1A2E"   # main text
 TEXT_MUTED    = "#6B7280"   # meta text (time, location, source)
 WHITE         = "#FFFFFF"
 FREE_GREEN    = "#16A34A"
+
+# Category pill colors — (background, text)
+CATEGORY_COLORS: dict[str, tuple[str, str]] = {
+    "Family & Kids":          ("#F59E0B", "#1A1A2E"),  # amber
+    "Music & Entertainment":  ("#7C3AED", WHITE),       # purple
+    "Arts & Culture":         ("#DB2777", WHITE),       # pink
+    "Food & Drink":           ("#D97706", WHITE),       # dark amber
+    "Sports & Fitness":       ("#059669", WHITE),       # emerald
+    "Outdoors & Nature":      ("#16A34A", WHITE),       # green
+    "Community & Festivals":  ("#2563EB", WHITE),       # blue
+    "Workshops & Classes":    ("#0891B2", WHITE),       # cyan
+    "Other":                  ("#6B7280", WHITE),       # gray
+}
+
+# Display order within each day section
+CATEGORY_ORDER = [
+    "Family & Kids",
+    "Music & Entertainment",
+    "Arts & Culture",
+    "Food & Drink",
+    "Sports & Fitness",
+    "Outdoors & Nature",
+    "Community & Festivals",
+    "Workshops & Classes",
+    "Other",
+]
+
+# Icons (text-safe — no emoji, just ASCII/HTML entities)
+CATEGORY_ICONS: dict[str, str] = {
+    "Family & Kids":          "&#9733;",   # star
+    "Music & Entertainment":  "&#9835;",   # music note
+    "Arts & Culture":         "&#9830;",   # diamond
+    "Food & Drink":           "&#9749;",   # hot beverage
+    "Sports & Fitness":       "&#9654;",   # play triangle
+    "Outdoors & Nature":      "&#9752;",   # shamrock / leaf
+    "Community & Festivals":  "&#10022;",  # 8-pointed star
+    "Workshops & Classes":    "&#9998;",   # pencil
+    "Other":                  "&#8226;",   # bullet
+}
 
 
 def _fmt_time(dt: datetime) -> str:
@@ -89,18 +129,18 @@ def _event_card(event: Event) -> str:
         )
 
     return f"""
-<table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid {BORDER_COLOR};border-radius:8px;background:{LIGHT_BG};margin-bottom:16px;overflow:hidden;">
+<table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid {BORDER_COLOR};border-radius:8px;background:{LIGHT_BG};margin-bottom:12px;overflow:hidden;">
   <tr>
     <td style="padding:0;">
       {img_html}
-      <div style="padding:16px 18px 14px;">
-        <a href="{event.url}" style="font-size:17px;font-weight:700;color:{BRAND_ORANGE};text-decoration:none;line-height:1.3;">{title}</a>{cost_badge}
-        <div style="margin-top:6px;font-size:13px;color:{TEXT_MUTED};line-height:1.5;">
+      <div style="padding:14px 16px 12px;">
+        <a href="{event.url}" style="font-size:16px;font-weight:700;color:{BRAND_ORANGE};text-decoration:none;line-height:1.3;">{title}</a>{cost_badge}
+        <div style="margin-top:5px;font-size:13px;color:{TEXT_MUTED};line-height:1.5;">
           {time_str} &nbsp;&middot;&nbsp; {location}
         </div>
-        {f'<p style="margin:10px 0 0;font-size:14px;color:{TEXT_PRIMARY};line-height:1.6;">{desc}</p>' if desc else ''}
-        <div style="margin-top:10px;font-size:12px;color:{TEXT_MUTED};">
-          Source: <a href="{event.url}" style="color:{TEXT_MUTED};text-decoration:underline;">{event.source}</a>
+        {f'<p style="margin:8px 0 0;font-size:13px;color:{TEXT_PRIMARY};line-height:1.6;">{desc}</p>' if desc else ''}
+        <div style="margin-top:8px;font-size:11px;color:{TEXT_MUTED};">
+          via <a href="{event.url}" style="color:{TEXT_MUTED};text-decoration:underline;">{event.source}</a>
         </div>
       </div>
     </td>
@@ -108,20 +148,58 @@ def _event_card(event: Event) -> str:
 </table>"""
 
 
-def _day_section(label: str, events: list[Event]) -> str:
+def _category_section(category: str, events: list[Event]) -> str:
+    """Render a coloured category pill + its event cards."""
     if not events:
         return ""
-    cards = "\n".join(_event_card(e) for e in events)
+
+    bg, fg = CATEGORY_COLORS.get(category, ("#6B7280", WHITE))
+    icon   = CATEGORY_ICONS.get(category, "&bull;")
+    cards  = "\n".join(_event_card(e) for e in events)
+
     return f"""
-<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 6px;">
   <tr>
-    <td style="background:{BRAND_BLUE};border-radius:6px;padding:10px 16px;">
-      <span style="font-size:18px;font-weight:800;color:{WHITE};letter-spacing:0.5px;">{label}</span>
+    <td>
+      <span style="display:inline-block;background:{bg};color:{fg};font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;padding:4px 14px;border-radius:20px;">
+        {icon}&nbsp; {category}
+      </span>
     </td>
   </tr>
 </table>
-<div style="margin-bottom:24px;">
+<div style="margin-bottom:20px;">
   {cards}
+</div>"""
+
+
+def _day_section(label: str, events: list[Event]) -> str:
+    """Render a full day block with events grouped by category."""
+    if not events:
+        return ""
+
+    # Group events by category, preserving CATEGORY_ORDER
+    grouped: dict[str, list[Event]] = {cat: [] for cat in CATEGORY_ORDER}
+    for e in events:
+        cat = e.category if e.category in grouped else "Other"
+        grouped[cat].append(e)
+
+    # Render category sections in order, skipping empty ones
+    cat_sections = "".join(
+        _category_section(cat, grouped[cat])
+        for cat in CATEGORY_ORDER
+        if grouped[cat]
+    )
+
+    return f"""
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;">
+  <tr>
+    <td style="background:{BRAND_BLUE};border-radius:8px;padding:12px 18px;">
+      <span style="font-size:20px;font-weight:900;color:{WHITE};letter-spacing:0.3px;">{label}</span>
+    </td>
+  </tr>
+</table>
+<div style="margin-bottom:28px;">
+  {cat_sections}
 </div>"""
 
 
@@ -178,10 +256,9 @@ def render(events: list[Event], saturday: datetime, sunday: datetime) -> str:
     """
     Render a full newsletter HTML string from a list of events.
 
-    Args:
-        events:   Sorted, deduplicated weekend events.
-        saturday: The Saturday of the target weekend (timezone-aware).
-        sunday:   The Sunday of the target weekend (timezone-aware).
+    Events are grouped first by day (Saturday / Sunday), then by category
+    within each day. Category assignment must be done before calling this
+    (aggregator.run() handles it via categorize_all()).
 
     Returns:
         A single HTML string suitable for Beehiiv's body_content field.

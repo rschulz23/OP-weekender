@@ -34,6 +34,7 @@ class Event:
     image_url: Optional[str] = None
     cost: Optional[str] = None     # e.g. "Free", "$10", "Varies"
     tags: list = field(default_factory=list)
+    category: str = "Other"        # assigned by categorizer after scraping
 
     def is_weekend(self) -> bool:
         """Return True if the event falls on a Saturday or Sunday."""
@@ -52,6 +53,7 @@ class Event:
             "image_url": self.image_url,
             "cost": self.cost,
             "tags": self.tags,
+            "category": self.category,
         }
 
 
