@@ -2,11 +2,16 @@ from __future__ import annotations
 """
 Scraper: Local Venues
 Sources:
-  - Bluhawk (bluhawk.com/events/) — Playwright, JS-rendered
+  - Bluhawk Sports Park (bluhawksports.com) — JSON-LD
   - Prairiefire (prairiefireop.com/happenings) — requests + BS4
-  - Chicken N Pickle OP (chickennpickle.com/events/) — requests + BS4 (Tribe Events)
+  - Chicken N Pickle OP (chickennpickle.com/events/) — requests + BS4 (MEC plugin)
   - KC Running Company (kcrunningcompany.com/our-events) — requests + BS4
   - Blue Valley Recreation (bluevalleyrec.org/events/) — requests + BS4
+  - Knuckleheads (knuckleheadskc.com) — own ticketing, requests + BS4
+  - Green Lady Lounge (greenladylounge.com) — requests + BS4
+  - Sporting Kansas City (seatgeek.com) — SeatGeek HTML scrape
+  - Kansas City Current (seatgeek.com) — SeatGeek HTML scrape
+  - Kansas City Monarchs (monarchsbaseball.com) — Igniter Tickets scrape
 """
 
 import re
@@ -396,4 +401,382 @@ class BlueValleyRecScraper(BaseScraper):
                 self.logger.warning(f"Row parse error: {e}")
 
         self.logger.info(f"Parsed {len(events)} events from Blue Valley Rec")
+        return events
+
+
+# ── Knuckleheads ──────────────────────────────────────────────────────────────
+
+class KnuckleheadsScraper(BaseScraper):
+    name    = "Knuckleheads"
+    # ShowWare ticketing — JS-rendered, use Playwright
+    URL     = "https://tickets.knuckleheadskc.com"
+    REAL_UA = (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    )
+
+    def fetch(self) -> list[Event]:
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            self.logger.warning("Playwright not installed — skipping Knuckleheads")
+            return []
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(user_agent=self.REAL_UA)
+            page = context.new_page()
+            try:
+                page.goto(self.URL, wait_until="domcontentloaded", timeout=30000)
+                page.wait_for_selector(".show-item, .event-item, li.item, .event-listing", timeout=12000)
+            except Exception as e:
+                self.logger.warning(f"Page load issue: {e}")
+                browser.close()
+                return []
+            page.wait_for_timeout(2000)
+            html = page.content()
+            browser.close()
+
+        soup = BeautifulSoup(html, "lxml")
+        return self._parse(soup)
+
+    def _parse(self, soup: BeautifulSoup) -> list[Event]:
+        events = []
+        for item in soup.find_all(class_=re.compile(r"show-item|event-item|event-listing")):
+            try:
+                title_tag = item.find(class_=re.compile(r"name|title")) or item.find(["h2", "h3", "h4"])
+                if not title_tag:
+                    continue
+                title = title_tag.get_text(strip=True)
+                date_tag = item.find(class_=re.compile(r"date|time")) or item.find("time")
+                date_str = (date_tag.get("datetime") or date_tag.get_text(strip=True)) if date_tag else ""
+                start_date = _parse_date(date_str) or datetime.now(CENTRAL)
+                link = item.find("a", href=True)
+                url  = link["href"] if link else self.URL
+                if url.startswith("/"):
+                    url = self.URL + url
+                events.append(Event(
+                    title=title, start_date=start_date, end_date=None,
+                    location="Knuckleheads, Kansas City", city="Kansas City",
+                    description="", url=url, source="Knuckleheads",
+                ))
+            except Exception as e:
+                self.logger.warning(f"Item parse error: {e}")
+        self.logger.info(f"Parsed {len(events)} events from Knuckleheads")
+        return events
+
+
+# ── Green Lady Lounge ─────────────────────────────────────────────────────────
+
+class GreenLadyLoungeScraper(BaseScraper):
+    name = "Green Lady Lounge"
+    URL  = "https://greenladylounge.com/calendar"
+
+    def fetch(self) -> list[Event]:
+        try:
+            resp = requests.get(self.URL, headers=HEADERS, timeout=15)
+            resp.raise_for_status()
+        except Exception as e:
+            self.logger.warning(f"Fetch failed: {e}")
+            return []
+        soup = BeautifulSoup(resp.text, "lxml")
+        return self._parse(soup)
+
+    def _parse(self, soup: BeautifulSoup) -> list[Event]:
+        import json as _json
+        events = []
+
+        # Try JSON-LD
+        for script in soup.find_all("script", type="application/ld+json"):
+            try:
+                data = _json.loads(script.string or "")
+                items = data if isinstance(data, list) else [data]
+                for item in items:
+                    if item.get("@type") == "Event":
+                        start = _parse_date(item.get("startDate", ""))
+                        if start:
+                            events.append(Event(
+                                title=item.get("name", ""),
+                                start_date=start,
+                                end_date=None,
+                                location="Green Lady Lounge, Kansas City",
+                                city="Kansas City",
+                                description=item.get("description", "")[:300],
+                                url=item.get("url", self.URL),
+                                source="Green Lady Lounge",
+                            ))
+            except Exception:
+                pass
+
+        if events:
+            self.logger.info(f"Parsed {len(events)} events from Green Lady Lounge (JSON-LD)")
+            return events
+
+        # Fallback: Squarespace/generic event list pattern
+        for block in soup.find_all(class_=re.compile(r"eventlist-event|event-card|event-item|summary-item")):
+            try:
+                title_tag = block.find(class_=re.compile(r"title|name|heading"))
+                if not title_tag:
+                    title_tag = block.find(["h2", "h3"])
+                if not title_tag:
+                    continue
+                link = title_tag.find("a") or block.find("a", href=True)
+                title = title_tag.get_text(strip=True)
+                url   = link["href"] if link else self.URL
+                if url.startswith("/"):
+                    url = "https://www.greenladylounge.com" + url
+
+                date_tag = block.find(class_=re.compile(r"date|time|dt"))
+                if not date_tag:
+                    date_tag = block.find("time")
+                date_str = (date_tag.get("datetime") or date_tag.get_text(strip=True)) if date_tag else ""
+                start_date = _parse_date(date_str) or datetime.now(CENTRAL)
+
+                events.append(Event(
+                    title=title, start_date=start_date, end_date=None,
+                    location="Green Lady Lounge, Kansas City", city="Kansas City",
+                    description="", url=url, source="Green Lady Lounge",
+                ))
+            except Exception as e:
+                self.logger.warning(f"Block parse error: {e}")
+
+        self.logger.info(f"Parsed {len(events)} events from Green Lady Lounge")
+        return events
+
+
+# ── Sporting Kansas City ──────────────────────────────────────────────────────
+
+class SportingKCScraper(BaseScraper):
+    name    = "Sporting KC"
+    URL     = "https://www.sportingkc.com/schedule/"
+    REAL_UA = (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    )
+
+    def fetch(self) -> list[Event]:
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            self.logger.warning("Playwright not installed — skipping Sporting KC")
+            return []
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(user_agent=self.REAL_UA)
+            page = context.new_page()
+            try:
+                page.goto(self.URL, wait_until="domcontentloaded", timeout=30000)
+                page.wait_for_selector(".mls-l-module--match-list, .c-schedule, [class*='match']", timeout=12000)
+            except Exception as e:
+                self.logger.warning(f"Page load issue: {e}")
+                browser.close()
+                return []
+            page.wait_for_timeout(2500)
+            html = page.content()
+            browser.close()
+
+        import json as _json
+        soup = BeautifulSoup(html, "lxml")
+        events = []
+
+        # JSON-LD SportsEvent
+        for script in soup.find_all("script", type="application/ld+json"):
+            try:
+                data = _json.loads(script.string or "")
+                items = data if isinstance(data, list) else [data]
+                for item in items:
+                    if item.get("@type") in ("SportsEvent", "Event"):
+                        start = _parse_date(item.get("startDate", ""))
+                        if not start:
+                            continue
+                        loc = item.get("location", {})
+                        location = loc.get("name", "Children's Mercy Park") if isinstance(loc, dict) else "Children's Mercy Park"
+                        events.append(Event(
+                            title=item.get("name", "Sporting KC"),
+                            start_date=start, end_date=None,
+                            location=f"{location}, Kansas City", city="Kansas City",
+                            description="", url=item.get("url", self.URL),
+                            source="Sporting KC",
+                        ))
+            except Exception:
+                pass
+
+        if not events:
+            # MLS widget match cards
+            for card in soup.find_all(class_=re.compile(r"match-list__match|c-schedule__item|match-row")):
+                try:
+                    date_tag = card.find("time") or card.find(class_=re.compile(r"date|time"))
+                    if not date_tag:
+                        continue
+                    start_date = _parse_date(date_tag.get("datetime") or date_tag.get_text(strip=True))
+                    if not start_date:
+                        continue
+                    opp = card.find(class_=re.compile(r"opponent|away|home|team-name"))
+                    title = f"Sporting KC vs {opp.get_text(strip=True)}" if opp else "Sporting KC"
+                    link  = card.find("a", href=True)
+                    url   = link["href"] if link else self.URL
+                    events.append(Event(
+                        title=title, start_date=start_date, end_date=None,
+                        location="Children's Mercy Park, Kansas City", city="Kansas City",
+                        description="", url=url, source="Sporting KC",
+                    ))
+                except Exception:
+                    pass
+
+        self.logger.info(f"Parsed {len(events)} events from Sporting KC")
+        return events
+
+
+# ── Kansas City Current ───────────────────────────────────────────────────────
+
+class KCCurrentScraper(BaseScraper):
+    name    = "KC Current"
+    URL     = "https://www.kansascitycurrent.com/schedule"
+    REAL_UA = (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    )
+
+    def fetch(self) -> list[Event]:
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            self.logger.warning("Playwright not installed — skipping KC Current")
+            return []
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(user_agent=self.REAL_UA)
+            page = context.new_page()
+            try:
+                page.goto(self.URL, wait_until="domcontentloaded", timeout=30000)
+                page.wait_for_selector("[class*='match'], [class*='schedule'], [class*='game']", timeout=12000)
+            except Exception as e:
+                self.logger.warning(f"Page load issue: {e}")
+                browser.close()
+                return []
+            page.wait_for_timeout(2500)
+            html = page.content()
+            browser.close()
+
+        import json as _json
+        soup = BeautifulSoup(html, "lxml")
+        events = []
+
+        # JSON-LD SportsEvent
+        for script in soup.find_all("script", type="application/ld+json"):
+            try:
+                data = _json.loads(script.string or "")
+                items = data if isinstance(data, list) else [data]
+                for item in items:
+                    if item.get("@type") in ("SportsEvent", "Event"):
+                        start = _parse_date(item.get("startDate", ""))
+                        if not start:
+                            continue
+                        # Skip past events
+                        if start < datetime.now(CENTRAL):
+                            continue
+                        loc = item.get("location", {})
+                        location = loc.get("name", "CPKC Stadium") if isinstance(loc, dict) else "CPKC Stadium"
+                        events.append(Event(
+                            title=item.get("name", "KC Current"),
+                            start_date=start, end_date=None,
+                            location=f"{location}, Kansas City", city="Kansas City",
+                            description="", url=item.get("url", self.URL),
+                            source="KC Current",
+                        ))
+            except Exception:
+                pass
+
+        if not events:
+            for card in soup.find_all(class_=re.compile(r"match|game|fixture"), limit=30):
+                try:
+                    date_tag = card.find("time") or card.find(class_=re.compile(r"date"))
+                    if not date_tag:
+                        continue
+                    start_date = _parse_date(date_tag.get("datetime") or date_tag.get_text(strip=True))
+                    if not start_date or start_date < datetime.now(CENTRAL):
+                        continue
+                    opp = card.find(class_=re.compile(r"opponent|away|team"))
+                    title = f"KC Current vs {opp.get_text(strip=True)}" if opp else "KC Current"
+                    link  = card.find("a", href=True)
+                    url   = link["href"] if link else self.URL
+                    events.append(Event(
+                        title=title, start_date=start_date, end_date=None,
+                        location="CPKC Stadium, Kansas City", city="Kansas City",
+                        description="", url=url, source="KC Current",
+                    ))
+                except Exception:
+                    pass
+
+        self.logger.info(f"Parsed {len(events)} events from KC Current")
+        return events
+
+
+# ── Kansas City Monarchs ──────────────────────────────────────────────────────
+
+class KCMonarchsScraper(BaseScraper):
+    name = "KC Monarchs"
+    URL  = "https://www.monarchsbaseball.com/schedule"
+
+    def fetch(self) -> list[Event]:
+        try:
+            resp = requests.get(self.URL, headers=HEADERS, timeout=15)
+            resp.raise_for_status()
+        except Exception as e:
+            self.logger.warning(f"Fetch failed: {e}")
+            return []
+        soup = BeautifulSoup(resp.text, "lxml")
+        return self._parse(soup)
+
+    def _parse(self, soup: BeautifulSoup) -> list[Event]:
+        import json as _json
+        events = []
+
+        # Try JSON-LD first
+        for script in soup.find_all("script", type="application/ld+json"):
+            try:
+                data = _json.loads(script.string or "")
+                items = data if isinstance(data, list) else [data]
+                for item in items:
+                    if item.get("@type") in ("SportsEvent", "Event"):
+                        start = _parse_date(item.get("startDate", ""))
+                        if start:
+                            events.append(Event(
+                                title=item.get("name", "KC Monarchs"),
+                                start_date=start,
+                                end_date=None,
+                                location="Legends Field, Kansas City",
+                                city="Kansas City",
+                                description="",
+                                url=item.get("url", self.URL),
+                                source="KC Monarchs",
+                            ))
+            except Exception:
+                pass
+
+        if not events:
+            # Generic schedule row fallback
+            for row in soup.find_all(class_=re.compile(r"schedule|game|event"), limit=30):
+                try:
+                    date_tag = row.find("time") or row.find(class_=re.compile(r"date"))
+                    if not date_tag:
+                        continue
+                    start_date = _parse_date(date_tag.get("datetime") or date_tag.get_text(strip=True))
+                    if not start_date:
+                        continue
+                    title_tag = row.find(class_=re.compile(r"opponent|title|name|team"))
+                    title = f"KC Monarchs vs {title_tag.get_text(strip=True)}" if title_tag else "KC Monarchs"
+                    link  = row.find("a", href=True)
+                    url   = link["href"] if link else self.URL
+                    events.append(Event(
+                        title=title, start_date=start_date, end_date=None,
+                        location="Legends Field, Kansas City", city="Kansas City",
+                        description="", url=url, source="KC Monarchs",
+                    ))
+                except Exception:
+                    pass
+
+        self.logger.info(f"Parsed {len(events)} events from KC Monarchs")
         return events

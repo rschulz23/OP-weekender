@@ -10,7 +10,13 @@ from .venues import (
     ChickenNPickleScraper,
     KCRunningCompanyScraper,
     BlueValleyRecScraper,
+    KnuckleheadsScraper,
+    GreenLadyLoungeScraper,
+    SportingKCScraper,
+    KCCurrentScraper,
+    KCMonarchsScraper,
 )
+from .ticketmaster import TicketmasterScraper
 
 ALL_SCRAPERS = [
     ShawneeMissionPostScraper,
@@ -24,4 +30,10 @@ ALL_SCRAPERS = [
     ChickenNPickleScraper,
     KCRunningCompanyScraper,
     BlueValleyRecScraper,
+    KnuckleheadsScraper,
+    GreenLadyLoungeScraper,
+    SportingKCScraper,
+    KCCurrentScraper,
+    KCMonarchsScraper,
+    TicketmasterScraper,
 ]
