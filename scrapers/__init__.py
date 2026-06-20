@@ -4,6 +4,13 @@ from .visit_overland_park import VisitOverlandParkScraper
 from .jcprd import JCPRDScraper
 from .city_calendars import CityCalendarScraper
 from .eventbrite import EventbriteScraper
+from .venues import (
+    BluhawkScraper,
+    PrairiefireScraper,
+    ChickenNPickleScraper,
+    KCRunningCompanyScraper,
+    BlueValleyRecScraper,
+)
 
 ALL_SCRAPERS = [
     ShawneeMissionPostScraper,
@@ -12,4 +19,9 @@ ALL_SCRAPERS = [
     JCPRDScraper,
     CityCalendarScraper,
     EventbriteScraper,
+    BluhawkScraper,
+    PrairiefireScraper,
+    ChickenNPickleScraper,
+    KCRunningCompanyScraper,
+    BlueValleyRecScraper,
 ]
