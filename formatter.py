@@ -172,7 +172,7 @@ def _category_section(category: str, events: list[Event]) -> str:
 </div>"""
 
 
-def _day_section(label: str, events: list[Event]) -> str:
+def _day_section(label: str, events: list[Event], anchor: str = "") -> str:
     """Render a full day block with events grouped by category."""
     if not events:
         return ""
@@ -190,10 +190,12 @@ def _day_section(label: str, events: list[Event]) -> str:
         if grouped[cat]
     )
 
+    anchor_attr = f' id="{anchor}"' if anchor else ""
+
     return f"""
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;">
   <tr>
-    <td style="background:{BRAND_BLUE};border-radius:8px;padding:12px 18px;">
+    <td{anchor_attr} style="background:{BRAND_BLUE};border-radius:8px;padding:12px 18px;">
       <span style="font-size:20px;font-weight:900;color:{WHITE};letter-spacing:0.3px;">{label}</span>
     </td>
   </tr>
@@ -205,6 +207,8 @@ def _day_section(label: str, events: list[Event]) -> str:
 
 def _header(saturday: datetime, sunday: datetime, total: int) -> str:
     date_range = f"{saturday.strftime('%B %-d')} &ndash; {sunday.strftime('%B %-d, %Y')}"
+    sat_label  = saturday.strftime("%A, %B %-d")
+    sun_label  = sunday.strftime("%A, %B %-d")
     return f"""
 <table width="100%" cellpadding="0" cellspacing="0" style="background:{BRAND_BLUE};border-radius:10px 10px 0 0;margin-bottom:0;">
   <tr>
@@ -213,17 +217,16 @@ def _header(saturday: datetime, sunday: datetime, total: int) -> str:
         OP Weekender
       </div>
       <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:6px;">
-        {date_range} &nbsp;&middot;&nbsp; {total} events across Johnson County
+        {date_range} &nbsp;&middot;&nbsp; {total} events in the Overland Park area
       </div>
     </td>
   </tr>
 </table>
-<table width="100%" cellpadding="0" cellspacing="0" style="background:{BRAND_ORANGE};margin-bottom:24px;border-radius:0 0 10px 10px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{WHITE};border:1px solid {BORDER_COLOR};border-top:none;border-radius:0 0 10px 10px;margin-bottom:24px;">
   <tr>
-    <td style="padding:8px 24px;text-align:center;">
-      <span style="font-size:12px;font-weight:600;color:{WHITE};letter-spacing:1px;text-transform:uppercase;">
-        Overland Park &nbsp;&middot;&nbsp; Shawnee &nbsp;&middot;&nbsp; Lenexa &nbsp;&middot;&nbsp; Leawood &nbsp;&middot;&nbsp; Olathe
-      </span>
+    <td style="padding:12px 24px;text-align:center;">
+      <a href="#saturday" style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:13px;font-weight:700;text-decoration:none;padding:8px 24px;border-radius:20px;margin:0 6px;">{sat_label}</a>
+      <a href="#sunday"   style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:13px;font-weight:700;text-decoration:none;padding:8px 24px;border-radius:20px;margin:0 6px;">{sun_label}</a>
     </td>
   </tr>
 </table>"""
@@ -274,8 +277,8 @@ def render(events: list[Event], saturday: datetime, sunday: datetime) -> str:
     else:
         sat_label = saturday.strftime("Saturday, %B %-d")
         sun_label = sunday.strftime("Sunday, %B %-d")
-        body += _day_section(sat_label, saturday_events)
-        body += _day_section(sun_label, sunday_events)
+        body += _day_section(sat_label, saturday_events, anchor="saturday")
+        body += _day_section(sun_label, sunday_events,   anchor="sunday")
 
     body += _footer()
 
