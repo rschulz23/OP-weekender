@@ -32,89 +32,63 @@ def _parse_date(text: str) -> datetime | None:
     return None
 
 
-# ── Bluhawk ───────────────────────────────────────────────────────────────────
+# ── Bluhawk (AdventHealth Sports Park) ───────────────────────────────────────
 
 class BluhawkScraper(BaseScraper):
     name = "Bluhawk"
-    URL  = "https://www.bluhawk.com/events/"
+    URL  = "https://bluhawksports.com/event-calendar/"
 
     def fetch(self) -> list[Event]:
-        try:
-            from playwright.sync_api import sync_playwright
-        except ImportError:
-            self.logger.warning("Playwright not installed — skipping Bluhawk")
-            return []
+        import json as _json
+        resp = requests.get(self.URL, headers=HEADERS, timeout=15)
+        resp.raise_for_status()
+        soup = BeautifulSoup(resp.text, "lxml")
 
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(user_agent=(
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-            ))
-            page = context.new_page()
-            page.add_init_script(
-                "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
-            )
-            try:
-                page.goto(self.URL, wait_until="domcontentloaded", timeout=30000)
-                # Wait for any event card to appear
-                page.wait_for_selector("article, .event, .tribe-event, [class*='event']", timeout=12000)
-            except Exception as e:
-                self.logger.warning(f"Page load issue: {e}")
-                browser.close()
-                return []
-            page.wait_for_timeout(2000)
-            html = page.content()
-            browser.close()
-
-        soup = BeautifulSoup(html, "lxml")
-        return self._parse(soup)
-
-    def _parse(self, soup: BeautifulSoup) -> list[Event]:
         events = []
-
-        # Tribe Events plugin structure (most common WP event plugin)
-        articles = soup.find_all("article", class_=re.compile(r"tribe_events|type-tribe"))
-        if not articles:
-            # Fallback: any article with an event-like class
-            articles = soup.find_all("article", class_=re.compile(r"event"))
-
-        for art in articles:
+        for script in soup.find_all("script", type="application/ld+json"):
             try:
-                # Title + URL
-                title_tag = art.find(["h2", "h3", "h4"], class_=re.compile(r"title|event-title"))
-                if not title_tag:
-                    title_tag = art.find(["h2", "h3", "h4"])
-                if not title_tag:
+                data = _json.loads(script.string or "")
+                if not isinstance(data, list):
                     continue
-                link = title_tag.find("a") or art.find("a", href=True)
-                title = title_tag.get_text(strip=True)
-                url   = link["href"] if link else self.URL
-
-                # Date
-                date_tag = art.find(class_=re.compile(r"date|time|schedule|start"))
-                date_str = date_tag.get_text(strip=True) if date_tag else ""
-                start_date = _parse_date(date_str) or datetime.now(CENTRAL)
-
-                # Location
-                loc_tag = art.find(class_=re.compile(r"venue|location|address"))
-                location = loc_tag.get_text(strip=True) if loc_tag else "Bluhawk, Overland Park"
-
-                events.append(Event(
-                    title=title,
-                    start_date=start_date,
-                    end_date=None,
-                    location=location,
-                    city="Overland Park",
-                    description="",
-                    url=url,
-                    source="Bluhawk",
-                ))
+                for item in data:
+                    if item.get("@type") != "Event":
+                        continue
+                    event = self._item_to_event(item)
+                    if event:
+                        events.append(event)
             except Exception as e:
-                self.logger.warning(f"Card parse error: {e}")
+                self.logger.warning(f"JSON-LD parse error: {e}")
 
         self.logger.info(f"Parsed {len(events)} events from Bluhawk")
         return events
+
+    def _item_to_event(self, item: dict) -> Event | None:
+        try:
+            title      = item.get("name", "").strip()
+            url        = item.get("url", self.URL)
+            start_date = _parse_date(item.get("startDate", ""))
+            end_date   = _parse_date(item.get("endDate", ""))
+            description = item.get("description", "")[:300]
+
+            loc = item.get("location", {})
+            location = loc.get("name", "AdventHealth Sports Park at BluHawk, Overland Park") if isinstance(loc, dict) else "BluHawk, Overland Park"
+
+            if not title or not start_date:
+                return None
+
+            return Event(
+                title=title,
+                start_date=start_date,
+                end_date=end_date,
+                location=location,
+                city="Overland Park",
+                description=description,
+                url=url,
+                source="Bluhawk",
+            )
+        except Exception as e:
+            self.logger.warning(f"Item parse error: {e}")
+            return None
 
 
 # ── Prairiefire ───────────────────────────────────────────────────────────────
