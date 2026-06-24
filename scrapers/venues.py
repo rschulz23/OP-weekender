@@ -780,3 +780,125 @@ class KCMonarchsScraper(BaseScraper):
 
         self.logger.info(f"Parsed {len(events)} events from KC Monarchs")
         return events
+
+
+# ── The Midland KC ────────────────────────────────────────────────────────────
+
+class MidlandKCScraper(BaseScraper):
+    name = "The Midland"
+    URL  = "https://www.midlandkc.com/events"
+    BASE = "https://www.midlandkc.com"
+
+    def fetch(self) -> list[Event]:
+        try:
+            resp = requests.get(self.URL, headers=HEADERS, timeout=15)
+            resp.raise_for_status()
+        except Exception as e:
+            self.logger.warning(f"Fetch failed: {e}")
+            return []
+        soup = BeautifulSoup(resp.text, "lxml")
+        return self._parse(soup)
+
+    def _parse(self, soup: BeautifulSoup) -> list[Event]:
+        events = []
+        # Each event is div.entry.midland.clearfix
+        for block in soup.find_all("div", class_="entry"):
+            try:
+                title_tag = block.find("h3", class_="carousel_item_title_small")
+                if not title_tag:
+                    continue
+                title = title_tag.get_text(strip=True)
+                if not title:
+                    continue
+
+                # Skip cancelled events
+                buttons = block.find("div", class_="buttons")
+                if buttons and re.search(r"cancel", buttons.get_text(), re.I):
+                    continue
+
+                # Date: span.date inside div.date-time-container
+                date_span = block.find("span", class_="date")
+                time_span = block.find("span", class_="time")
+                date_text = date_span.get_text(strip=True) if date_span else ""
+                # Strip the font-awesome icon text (empty span) — just keep the visible text
+                date_text = re.sub(r"\s+", " ", date_text).strip()
+                if time_span:
+                    time_text = time_span.get_text(strip=True).replace("Show", "").strip()
+                    date_text = f"{date_text} {time_text}"
+                start_date = _parse_date(date_text)
+                if not start_date:
+                    continue
+
+                link = block.find("a", href=re.compile(r"/events/detail/"))
+                url  = link["href"] if link else self.URL
+
+                img_tag   = block.find("img")
+                image_url = img_tag.get("src") if img_tag else None
+
+                events.append(Event(
+                    title=title, start_date=start_date, end_date=None,
+                    location="The Midland, Kansas City", city="Kansas City",
+                    description="", url=url, source="The Midland",
+                    image_url=image_url,
+                ))
+            except Exception as e:
+                self.logger.warning(f"Block parse error: {e}")
+
+        self.logger.info(f"Parsed {len(events)} events from The Midland")
+        return events
+
+
+# ── T-Mobile Center ───────────────────────────────────────────────────────────
+
+class TMobileCenterScraper(BaseScraper):
+    name = "T-Mobile Center"
+    URL  = "https://www.t-mobilecenter.com/events"
+    BASE = "https://www.t-mobilecenter.com"
+
+    def fetch(self) -> list[Event]:
+        try:
+            resp = requests.get(self.URL, headers=HEADERS, timeout=15)
+            resp.raise_for_status()
+        except Exception as e:
+            self.logger.warning(f"Fetch failed: {e}")
+            return []
+        soup = BeautifulSoup(resp.text, "lxml")
+        return self._parse(soup)
+
+    def _parse(self, soup: BeautifulSoup) -> list[Event]:
+        import json as _json
+        events = []
+        # Page embeds a JSON-LD array of Event objects (Vue app loads the same data)
+        for script in soup.find_all("script", type="application/ld+json"):
+            try:
+                data = _json.loads(script.string or "")
+                items = data if isinstance(data, list) else [data]
+                for item in items:
+                    if item.get("@type") != "Event":
+                        continue
+                    title = item.get("name", "").strip()
+                    if not title:
+                        continue
+                    start_date = _parse_date(item.get("startDate", ""))
+                    if not start_date:
+                        continue
+                    url = item.get("url") or self.URL
+                    if url.startswith("/"):
+                        url = self.BASE + url
+                    image_url = None
+                    img = item.get("image")
+                    if isinstance(img, str):
+                        image_url = img
+                    elif isinstance(img, dict):
+                        image_url = img.get("url")
+                    events.append(Event(
+                        title=title, start_date=start_date, end_date=None,
+                        location="T-Mobile Center, Kansas City", city="Kansas City",
+                        description="", url=url, source="T-Mobile Center",
+                        image_url=image_url,
+                    ))
+            except Exception as e:
+                self.logger.warning(f"JSON-LD parse error: {e}")
+
+        self.logger.info(f"Parsed {len(events)} events from T-Mobile Center")
+        return events
