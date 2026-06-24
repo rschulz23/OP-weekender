@@ -266,16 +266,31 @@ def _header(friday: datetime, saturday: datetime, sunday: datetime, total: int) 
 </table>"""
 
 
+SUBSCRIBE_URL = "https://op-weekender.beehiiv.com/subscribe"
+
 def _footer() -> str:
     return f"""
-<table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid {BORDER_COLOR};margin-top:32px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid {BORDER_COLOR};margin-top:36px;">
   <tr>
-    <td style="padding:24px 0;text-align:center;">
-      <p style="font-size:13px;color:{TEXT_MUTED};margin:0 0 6px;">
-        Know of an event we missed? Reply to this email and we&#39;ll add it next week.
+    <td style="padding:28px 0 8px;text-align:center;">
+      <a href="{SUBSCRIBE_URL}" style="display:inline-block;background:{BRAND_ORANGE};color:{WHITE};font-size:13px;font-weight:700;text-decoration:none;padding:10px 28px;border-radius:20px;letter-spacing:0.3px;">
+        Subscribe to OP Weekender
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:12px 0 4px;text-align:center;">
+      <p style="font-size:13px;color:{TEXT_MUTED};margin:0;">
+        Enjoying this? Forward it to a neighbor &mdash; they can subscribe at
+        <a href="{SUBSCRIBE_URL}" style="color:{BRAND_ORANGE};text-decoration:none;font-weight:600;">op-weekender.beehiiv.com</a>
       </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:10px 0 24px;text-align:center;">
       <p style="font-size:12px;color:{TEXT_MUTED};margin:0;">
-        OP Weekender &nbsp;&middot;&nbsp; Johnson County, KS
+        Know of an event we missed? Reply to this email and we&#39;ll add it next week.
+        &nbsp;&middot;&nbsp; OP Weekender &nbsp;&middot;&nbsp; Overland Park, KS
       </p>
     </td>
   </tr>
