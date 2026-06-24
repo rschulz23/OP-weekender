@@ -40,40 +40,39 @@ CENTRAL = pytz.timezone("America/Chicago")
 TM_BASE = "https://app.ticketmaster.com/discovery/v2"
 
 VENUE_IDS = [
-    "50225",   # T-Mobile Center
-    "49168",   # Azura Amphitheater
-    "49175",   # Starlight Theatre
-    "49686",   # Uptown Theater
-    "50599",   # KC Live! at Power & Light
-    "50571",   # Kauffman Center
-    "50295",   # GrindersKC
-    "341872",  # The Truman KC
-    "49188",   # Folly Theater
-    "50304",   # Kansas Speedway
-    "50600",   # The Midland Theatre
+    "KovZpZAE7eeA",  # T-Mobile Center
+    "KovZpa3sfe",    # Azura Amphitheater
+    "KovZpZAF7EaA",  # Starlight Theatre
+    "KovZpa3sre",    # Uptown Theater
+    "KovZpZAE7eAA",  # KC Live!
+    "KovZpaF1me",    # Kauffman Center
+    "KovZpZAaJJnA",  # Grinders KC
+    "KovZ917AQI8",   # The Truman
+    "KovZpaoXie",    # Folly Theater
+    "KovZpZAaEeIA",  # Kansas Speedway
+    "KovZpZAEdaIA",  # The Midland Theatre
 ]
 
 ATTRACTION_IDS = [
-    "805955",   # Kansas City Chiefs
-    "805956",   # Kansas City Royals
-    "2389635",  # Kansas City Mavericks
-    "835909",   # Kansas City Comets
-    "2777162",  # Kansas City Monarchs
+    "K8vZ9171oMf",  # Kansas City Chiefs
+    "K8vZ9171oF7",  # Kansas City Royals
+    "K8vZ917p6x0",  # Kansas City Mavericks
+    "K8vZ91719vV",  # Kansas City Comets
 ]
 
 # Maps venue ID → friendly display name
 VENUE_NAMES = {
-    "50225":   "T-Mobile Center",
-    "49168":   "Azura Amphitheater",
-    "49175":   "Starlight Theatre",
-    "49686":   "Uptown Theater",
-    "50599":   "KC Live! at Power & Light",
-    "50571":   "Kauffman Center",
-    "50295":   "GrindersKC",
-    "341872":  "The Truman KC",
-    "49188":   "Folly Theater",
-    "50304":   "Kansas Speedway",
-    "50600":   "The Midland Theatre",
+    "KovZpZAE7eeA":  "T-Mobile Center",
+    "KovZpa3sfe":    "Azura Amphitheater",
+    "KovZpZAF7EaA":  "Starlight Theatre",
+    "KovZpa3sre":    "Uptown Theater",
+    "KovZpZAE7eAA":  "KC Live!",
+    "KovZpaF1me":    "Kauffman Center",
+    "KovZpZAaJJnA":  "Grinders KC",
+    "KovZ917AQI8":   "The Truman",
+    "KovZpaoXie":    "Folly Theater",
+    "KovZpZAaEeIA":  "Kansas Speedway",
+    "KovZpZAEdaIA":  "The Midland Theatre",
 }
 
 
