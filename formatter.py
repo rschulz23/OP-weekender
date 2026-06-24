@@ -148,14 +148,45 @@ def _event_card(event: Event) -> str:
 </table>"""
 
 
+FEATURED_PER_CATEGORY = 2  # number of full cards before switching to list rows
+
+
+def _event_list_row(event: Event) -> str:
+    """Compact single-line text row for overflow events."""
+    time_str = _fmt_time(event.start_date)
+    title    = _strip_emoji(event.title)
+    location = _strip_emoji(event.location)
+    cost     = f" &nbsp;&middot;&nbsp; {event.cost}" if event.cost else ""
+    return (
+        f'<div style="padding:7px 0;border-bottom:1px solid {BORDER_COLOR};line-height:1.5;">'
+        f'<a href="{event.url}" style="font-size:13px;font-weight:600;color:{BRAND_ORANGE};text-decoration:none;">{title}</a>'
+        f'<span style="font-size:12px;color:{TEXT_MUTED};"> &nbsp;&middot;&nbsp; {time_str} &nbsp;&middot;&nbsp; {location}{cost}</span>'
+        f'</div>'
+    )
+
+
 def _category_section(category: str, events: list[Event]) -> str:
-    """Render a coloured category pill + its event cards."""
+    """Render a coloured category pill, up to FEATURED_PER_CATEGORY full cards,
+    then any remaining events as compact text rows."""
     if not events:
         return ""
 
-    bg, fg = CATEGORY_COLORS.get(category, ("#6B7280", WHITE))
-    icon   = CATEGORY_ICONS.get(category, "&bull;")
-    cards  = "\n".join(_event_card(e) for e in events)
+    bg, fg   = CATEGORY_COLORS.get(category, ("#6B7280", WHITE))
+    icon     = CATEGORY_ICONS.get(category, "&bull;")
+    featured = events[:FEATURED_PER_CATEGORY]
+    overflow = events[FEATURED_PER_CATEGORY:]
+
+    cards = "\n".join(_event_card(e) for e in featured)
+
+    list_rows = ""
+    if overflow:
+        rows_html = "\n".join(_event_list_row(e) for e in overflow)
+        list_rows = (
+            f'<div style="background:{WHITE};border:1px solid {BORDER_COLOR};'
+            f'border-radius:8px;padding:4px 14px 4px;margin-bottom:16px;">'
+            f'{rows_html}'
+            f'</div>'
+        )
 
     return f"""
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0 10px;">
@@ -169,7 +200,8 @@ def _category_section(category: str, events: list[Event]) -> str:
 </table>
 <div style="margin-bottom:8px;">
   {cards}
-</div>"""
+</div>
+{list_rows}"""
 
 
 def _day_section(label: str, events: list[Event], anchor: str = "") -> str:
