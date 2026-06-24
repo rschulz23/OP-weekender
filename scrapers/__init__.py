@@ -17,6 +17,8 @@ from .venues import (
     KCMonarchsScraper,
     MidlandKCScraper,
     TMobileCenterScraper,
+    LeawoodCalendarScraper,
+    OPKansasScraper,
 )
 from .ticketmaster import TicketmasterScraper
 
@@ -39,5 +41,7 @@ ALL_SCRAPERS = [
     KCMonarchsScraper,
     MidlandKCScraper,
     TMobileCenterScraper,
+    LeawoodCalendarScraper,
+    OPKansasScraper,
     TicketmasterScraper,
 ]
