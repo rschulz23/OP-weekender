@@ -20,26 +20,26 @@ CENTRAL = pytz.timezone("America/Chicago")
 logger = logging.getLogger("Aggregator")
 
 
-def _next_weekend(from_date: Optional[datetime] = None) -> tuple[datetime, datetime]:
+def _next_weekend(from_date: Optional[datetime] = None) -> tuple[datetime, datetime, datetime]:
     """
-    Returns (saturday, sunday) for the upcoming weekend relative to from_date.
-    If from_date is a Saturday or Sunday, returns the current weekend.
+    Returns (friday, saturday, sunday) for the upcoming weekend relative to from_date.
+    If from_date falls on Fri/Sat/Sun, returns the current weekend.
     """
     today = from_date or datetime.now(CENTRAL)
-    # weekday(): Monday=0 ... Saturday=5, Sunday=6
-    days_until_saturday = (5 - today.weekday()) % 7
-    if days_until_saturday == 0 and today.weekday() == 5:
-        days_until_saturday = 0
-    elif today.weekday() == 6:
-        days_until_saturday = 6  # next Saturday
+    # weekday(): Monday=0 ... Friday=4, Saturday=5, Sunday=6
+    days_until_friday = (4 - today.weekday()) % 7
+    if today.weekday() == 6:
+        days_until_friday = 5  # next Friday
 
-    saturday = today + timedelta(days=days_until_saturday)
-    sunday = saturday + timedelta(days=1)
+    friday   = today + timedelta(days=days_until_friday)
+    saturday = friday + timedelta(days=1)
+    sunday   = friday + timedelta(days=2)
 
+    friday   = CENTRAL.localize(datetime(friday.year,   friday.month,   friday.day))
     saturday = CENTRAL.localize(datetime(saturday.year, saturday.month, saturday.day))
-    sunday = CENTRAL.localize(datetime(sunday.year, sunday.month, sunday.day, 23, 59, 59))
+    sunday   = CENTRAL.localize(datetime(sunday.year,   sunday.month,   sunday.day, 23, 59, 59))
 
-    return saturday, sunday
+    return friday, saturday, sunday
 
 
 def _is_duplicate(a: Event, b: Event, threshold: float = 0.85) -> bool:
@@ -97,18 +97,15 @@ def _is_local_english_event(event: Event) -> bool:
     return True
 
 
-def filter_weekend(events: list[Event], saturday: datetime, sunday: datetime) -> list[Event]:
-    """Keep only events that fall on the target Saturday or Sunday."""
+def filter_weekend(events: list[Event], friday: datetime, sunday: datetime) -> list[Event]:
+    """Keep only events that fall on the target Friday through Sunday."""
     result = []
     for e in events:
-        # Ensure timezone-aware comparison
         start = e.start_date
         if start.tzinfo is None:
             start = CENTRAL.localize(start)
-
-        if saturday.date() <= start.date() <= sunday.date():
+        if friday.date() <= start.date() <= sunday.date():
             result.append(e)
-
     return result
 
 
@@ -130,9 +127,9 @@ def run(
         scraper_classes: Override which scrapers to use (defaults to ALL_SCRAPERS).
     """
     scraper_classes = scraper_classes or ALL_SCRAPERS
-    saturday, sunday = _next_weekend(target_saturday)
+    friday, saturday, sunday = _next_weekend(target_saturday)
 
-    logger.info(f"Targeting weekend: {saturday.strftime('%A %b %d')} – {sunday.strftime('%A %b %d, %Y')}")
+    logger.info(f"Targeting weekend: {friday.strftime('%A %b %d')} – {sunday.strftime('%A %b %d, %Y')}")
     logger.info(f"Running {len(scraper_classes)} scrapers...")
 
     all_events: list[Event] = []
@@ -143,7 +140,7 @@ def run(
 
     logger.info(f"Total raw events: {len(all_events)}")
 
-    weekend_events = filter_weekend(all_events, saturday, sunday)
+    weekend_events = filter_weekend(all_events, friday, sunday)
     logger.info(f"Weekend events (before dedup): {len(weekend_events)}")
 
     unique_events = deduplicate(weekend_events)

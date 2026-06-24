@@ -44,14 +44,16 @@ OUTPUT_FILE = "newsletter.html"
 
 def _next_weekend():
     today = datetime.now(CENTRAL)
-    days_until_saturday = (5 - today.weekday()) % 7
+    days_until_friday = (4 - today.weekday()) % 7
     if today.weekday() == 6:
-        days_until_saturday = 6
-    saturday = today + timedelta(days=days_until_saturday)
-    sunday   = saturday + timedelta(days=1)
+        days_until_friday = 5  # next Friday
+    friday   = today + timedelta(days=days_until_friday)
+    saturday = friday + timedelta(days=1)
+    sunday   = friday + timedelta(days=2)
+    friday   = CENTRAL.localize(datetime(friday.year,   friday.month,   friday.day))
     saturday = CENTRAL.localize(datetime(saturday.year, saturday.month, saturday.day))
-    sunday   = CENTRAL.localize(datetime(sunday.year, sunday.month, sunday.day, 23, 59, 59))
-    return saturday, sunday
+    sunday   = CENTRAL.localize(datetime(sunday.year,   sunday.month,   sunday.day, 23, 59, 59))
+    return friday, saturday, sunday
 
 
 def send_email(html: str, saturday: datetime, subject: str) -> bool:
@@ -117,9 +119,9 @@ def send_email(html: str, saturday: datetime, subject: str) -> bool:
 
 
 def main():
-    saturday, sunday = _next_weekend()
-    date_label = f"{saturday.strftime('%B %-d')} - {sunday.strftime('%B %-d, %Y')}"
-    subject    = f"OP Weekender: {saturday.strftime('%B %-d')}-{sunday.strftime('%-d, %Y')}"
+    friday, saturday, sunday = _next_weekend()
+    date_label = f"{friday.strftime('%B %-d')} - {sunday.strftime('%B %-d, %Y')}"
+    subject    = f"OP Weekender: {friday.strftime('%B %-d')}-{sunday.strftime('%-d, %Y')}"
 
     log.info(f"Targeting weekend: {date_label}")
 
@@ -134,7 +136,7 @@ def main():
 
     # ── Render ────────────────────────────────────────────────────────────
     log.info("Rendering HTML...")
-    html = formatter.render(events, saturday, sunday)
+    html = formatter.render(events, friday, saturday, sunday)
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html)

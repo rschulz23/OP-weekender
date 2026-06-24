@@ -124,22 +124,22 @@ def _event_card(event: Event) -> str:
     if event.image_url:
         img_html = (
             f'<img src="{event.image_url}" alt="" '
-            f'style="width:100%;max-height:200px;object-fit:cover;'
-            f'border-radius:6px 6px 0 0;display:block;margin-bottom:0;" />'
+            f'style="width:100%;max-height:160px;object-fit:cover;'
+            f'border-radius:6px 6px 0 0;display:block;" />'
         )
 
     return f"""
-<table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid {BORDER_COLOR};border-radius:8px;background:{LIGHT_BG};margin-bottom:12px;overflow:hidden;">
+<table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid {BORDER_COLOR};border-radius:8px;background:{LIGHT_BG};margin-bottom:16px;overflow:hidden;">
   <tr>
     <td style="padding:0;">
       {img_html}
-      <div style="padding:14px 16px 12px;">
-        <a href="{event.url}" style="font-size:16px;font-weight:700;color:{BRAND_ORANGE};text-decoration:none;line-height:1.3;">{title}</a>{cost_badge}
-        <div style="margin-top:5px;font-size:13px;color:{TEXT_MUTED};line-height:1.5;">
+      <div style="padding:16px 18px 14px;">
+        <a href="{event.url}" style="font-size:15px;font-weight:700;color:{BRAND_ORANGE};text-decoration:none;line-height:1.3;">{title}</a>{cost_badge}
+        <div style="margin-top:6px;font-size:12px;color:{TEXT_MUTED};line-height:1.6;">
           {time_str} &nbsp;&middot;&nbsp; {location}
         </div>
-        {f'<p style="margin:8px 0 0;font-size:13px;color:{TEXT_PRIMARY};line-height:1.6;">{desc}</p>' if desc else ''}
-        <div style="margin-top:8px;font-size:11px;color:{TEXT_MUTED};">
+        {f'<p style="margin:10px 0 2px;font-size:13px;color:{TEXT_PRIMARY};line-height:1.7;">{desc}</p>' if desc else ''}
+        <div style="margin-top:10px;font-size:11px;color:{TEXT_MUTED};">
           via <a href="{event.url}" style="color:{TEXT_MUTED};text-decoration:underline;">{event.source}</a>
         </div>
       </div>
@@ -158,16 +158,16 @@ def _category_section(category: str, events: list[Event]) -> str:
     cards  = "\n".join(_event_card(e) for e in events)
 
     return f"""
-<table width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 6px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0 10px;">
   <tr>
     <td>
-      <span style="display:inline-block;background:{bg};color:{fg};font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;padding:4px 14px;border-radius:20px;">
+      <span style="display:inline-block;background:{bg};color:{fg};font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;padding:5px 16px;border-radius:20px;">
         {icon}&nbsp; {category}
       </span>
     </td>
   </tr>
 </table>
-<div style="margin-bottom:20px;">
+<div style="margin-bottom:8px;">
   {cards}
 </div>"""
 
@@ -205,28 +205,30 @@ def _day_section(label: str, events: list[Event], anchor: str = "") -> str:
 </div>"""
 
 
-def _header(saturday: datetime, sunday: datetime, total: int) -> str:
-    date_range = f"{saturday.strftime('%B %-d')} &ndash; {sunday.strftime('%B %-d, %Y')}"
+def _header(friday: datetime, saturday: datetime, sunday: datetime, total: int) -> str:
+    date_range = f"{friday.strftime('%B %-d')} &ndash; {sunday.strftime('%B %-d, %Y')}"
+    fri_label  = friday.strftime("%A, %B %-d")
     sat_label  = saturday.strftime("%A, %B %-d")
     sun_label  = sunday.strftime("%A, %B %-d")
     return f"""
 <table width="100%" cellpadding="0" cellspacing="0" style="background:{BRAND_BLUE};border-radius:10px 10px 0 0;margin-bottom:0;">
   <tr>
-    <td style="padding:28px 24px 22px;text-align:center;">
-      <div style="font-size:26px;font-weight:900;color:{WHITE};letter-spacing:-0.5px;line-height:1.2;">
+    <td style="padding:30px 24px 24px;text-align:center;">
+      <div style="font-size:28px;font-weight:900;color:{WHITE};letter-spacing:-0.5px;line-height:1.2;">
         OP Weekender
       </div>
-      <div style="font-size:14px;color:rgba(255,255,255,0.8);margin-top:6px;">
+      <div style="font-size:13px;color:rgba(255,255,255,0.75);margin-top:8px;letter-spacing:0.2px;">
         {date_range} &nbsp;&middot;&nbsp; {total} events in the Overland Park area
       </div>
     </td>
   </tr>
 </table>
-<table width="100%" cellpadding="0" cellspacing="0" style="background:{WHITE};border:1px solid {BORDER_COLOR};border-top:none;border-radius:0 0 10px 10px;margin-bottom:24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{WHITE};border:1px solid {BORDER_COLOR};border-top:none;border-radius:0 0 10px 10px;margin-bottom:28px;">
   <tr>
-    <td style="padding:12px 24px;text-align:center;">
-      <a href="#saturday" style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:13px;font-weight:700;text-decoration:none;padding:8px 24px;border-radius:20px;margin:0 6px;">{sat_label}</a>
-      <a href="#sunday"   style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:13px;font-weight:700;text-decoration:none;padding:8px 24px;border-radius:20px;margin:0 6px;">{sun_label}</a>
+    <td style="padding:14px 24px 16px;text-align:center;">
+      <a href="#friday"   style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:12px;font-weight:700;text-decoration:none;padding:7px 18px;border-radius:20px;margin:0 4px;">{fri_label}</a>
+      <a href="#saturday" style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:12px;font-weight:700;text-decoration:none;padding:7px 18px;border-radius:20px;margin:0 4px;">{sat_label}</a>
+      <a href="#sunday"   style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:12px;font-weight:700;text-decoration:none;padding:7px 18px;border-radius:20px;margin:0 4px;">{sun_label}</a>
     </td>
   </tr>
 </table>"""
@@ -255,28 +257,31 @@ def _no_events_message() -> str:
     )
 
 
-def render(events: list[Event], saturday: datetime, sunday: datetime) -> str:
+def render(events: list[Event], friday: datetime, saturday: datetime, sunday: datetime) -> str:
     """
     Render a full newsletter HTML string from a list of events.
 
-    Events are grouped first by day (Saturday / Sunday), then by category
-    within each day. Category assignment must be done before calling this
-    (aggregator.run() handles it via categorize_all()).
+    Events are grouped first by day (Friday / Saturday / Sunday), then by
+    category within each day. Category assignment must be done before calling
+    this (aggregator.run() handles it via categorize_all()).
 
     Returns:
         A single HTML string suitable for Beehiiv's body_content field.
         All characters are ASCII-safe HTML entities -- no raw Unicode emoji.
     """
+    friday_events   = [e for e in events if e.start_date.date() == friday.date()]
     saturday_events = [e for e in events if e.start_date.date() == saturday.date()]
     sunday_events   = [e for e in events if e.start_date.date() == sunday.date()]
 
-    body = _header(saturday, sunday, len(events))
+    body = _header(friday, saturday, sunday, len(events))
 
     if not events:
         body += _no_events_message()
     else:
+        fri_label = friday.strftime("Friday, %B %-d")
         sat_label = saturday.strftime("Saturday, %B %-d")
         sun_label = sunday.strftime("Sunday, %B %-d")
+        body += _day_section(fri_label, friday_events,   anchor="friday")
         body += _day_section(sat_label, saturday_events, anchor="saturday")
         body += _day_section(sun_label, sunday_events,   anchor="sunday")
 

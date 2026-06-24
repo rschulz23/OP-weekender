@@ -93,16 +93,17 @@ class TicketmasterScraper(BaseScraper):
         return events
 
     def _date_window(self) -> tuple[str, str]:
-        """Return ISO 8601 UTC strings for the upcoming Sat 00:00 → Sun 23:59 CDT."""
-        now    = datetime.now(CENTRAL)
-        days   = (5 - now.weekday()) % 7
-        sat    = now + timedelta(days=days)
-        sun    = sat + timedelta(days=1)
-        # Convert midnight CDT → UTC for API
-        sat_utc = CENTRAL.localize(datetime(sat.year, sat.month, sat.day)).astimezone(timezone.utc)
+        """Return ISO 8601 UTC strings for the upcoming Fri 00:00 → Sun 23:59 CDT."""
+        now  = datetime.now(CENTRAL)
+        days = (4 - now.weekday()) % 7
+        if now.weekday() == 6:
+            days = 5  # next Friday
+        fri = now + timedelta(days=days)
+        sun = fri + timedelta(days=2)
+        fri_utc = CENTRAL.localize(datetime(fri.year, fri.month, fri.day)).astimezone(timezone.utc)
         sun_utc = CENTRAL.localize(datetime(sun.year, sun.month, sun.day, 23, 59, 59)).astimezone(timezone.utc)
         return (
-            sat_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            fri_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
             sun_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
         )
 
