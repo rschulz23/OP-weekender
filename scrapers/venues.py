@@ -1096,4 +1096,132 @@ class OPKansasScraper(BaseScraper):
 
         self.logger.info(f"Parsed {len(events)} events from City of Overland Park")
         return events
+
+
+# ── Overland Park Convention Center (MEC plugin) ─────────────────────────────
+
+class OPConventionCenterScraper(BaseScraper):
+    name = "OP Convention Center"
+    URL  = "https://opconventioncenter.com/events/"
+    BASE = "https://opconventioncenter.com"
+
+    def fetch(self) -> list[Event]:
+        try:
+            resp = requests.get(self.URL, headers=HEADERS, timeout=15)
+            resp.raise_for_status()
+        except Exception as e:
+            self.logger.warning(f"Fetch failed: {e}")
+            return []
+        soup = BeautifulSoup(resp.text, "lxml")
+        return self._parse(soup)
+
+    def _parse(self, soup: BeautifulSoup) -> list[Event]:
+        events = []
+        for article in soup.find_all("article", class_="mec-event-article"):
+            try:
+                title_tag = article.find("h4", class_="mec-event-title")
+                if not title_tag:
+                    continue
+                title = title_tag.get_text(strip=True)
+                if not title:
+                    continue
+
+                link = title_tag.find("a", href=True)
+                url  = link["href"] if link else self.URL
+
+                # Date: span.mec-start-date-label e.g. "28 - 30 August 2026"
+                date_span = article.find("span", class_="mec-start-date-label")
+                date_str  = date_span.get_text(strip=True) if date_span else ""
+                start_date = _parse_date(date_str)
+                if not start_date:
+                    continue
+
+                img_tag   = article.find("img")
+                image_url = img_tag.get("src") if img_tag else None
+
+                location_tag = article.find("p", class_="mec-grid-event-location")
+                location = location_tag.get_text(strip=True) if location_tag else "Overland Park Convention Center"
+
+                events.append(Event(
+                    title=title, start_date=start_date, end_date=None,
+                    location=location, city="Overland Park",
+                    description="", url=url, source="OP Convention Center",
+                    image_url=image_url,
+                ))
+            except Exception as e:
+                self.logger.warning(f"Article parse error: {e}")
+
+        self.logger.info(f"Parsed {len(events)} events from OP Convention Center")
+        return events
+
+
+# ── Overland Park Farmers Market ──────────────────────────────────────────────
+
+class OPFarmersMarketScraper(BaseScraper):
+    """CivicPlus page — same Playwright approach as OPKansasScraper."""
+    name    = "OP Farmers Market"
+    URL     = "https://www.opkansas.gov/farmers-market-events"
+    REAL_UA = (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    )
+
+    def fetch(self) -> list[Event]:
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            self.logger.warning("Playwright not installed — skipping OP Farmers Market")
+            return []
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_context(user_agent=self.REAL_UA).new_page()
+            try:
+                page.goto(self.URL, wait_until="networkidle", timeout=40000)
+                page.wait_for_timeout(3000)
+            except Exception as e:
+                self.logger.warning(f"Page load issue: {e}")
+                browser.close()
+                return []
+            html = page.content()
+            browser.close()
+
+        soup = BeautifulSoup(html, "lxml")
+        events = []
+
+        for block in soup.find_all("div", class_="widgetItem--contentItem"):
+            try:
+                title_tag = block.find(class_="cp-fieldWrapper")
+                if not title_tag:
+                    continue
+                title = title_tag.get_text(strip=True)
+                if not title or len(title) > 120:
+                    continue
+                if re.search(r"\d{5}|\d{3}[-.\s]\d{3}[-.\s]\d{4}|a\.m\.|p\.m\.", title):
+                    continue
+
+                link = block.find("a", class_="widgetTitle--link")
+                href = link["href"] if link else ""
+                url  = ("https://www.opkansas.gov" + href) if href.startswith("/") else href or self.URL
+
+                desc_div  = block.find(class_="widgetDesc")
+                desc_text = desc_div.get_text(" ", strip=True) if desc_div else ""
+                date_match = re.match(
+                    r"([A-Za-z]+ \d{1,2},\s*\d{4}[^A-Z]*?)(?:\d{4,5}\s+[A-Z]|$)",
+                    desc_text
+                )
+                date_str   = date_match.group(1).strip() if date_match else desc_text[:40]
+                start_date = _parse_date(date_str)
+                if not start_date:
+                    continue
+
+                events.append(Event(
+                    title=title, start_date=start_date, end_date=None,
+                    location="Overland Park Farmers Market, Overland Park", city="Overland Park",
+                    description="", url=url, source="OP Farmers Market",
+                ))
+            except Exception as e:
+                self.logger.warning(f"Block parse error: {e}")
+
+        self.logger.info(f"Parsed {len(events)} events from OP Farmers Market")
         return events

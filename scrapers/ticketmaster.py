@@ -51,6 +51,7 @@ VENUE_IDS = [
     "KovZpaoXie",    # Folly Theater
     "KovZpZAaEeIA",  # Kansas Speedway
     "KovZpZAEdaIA",  # The Midland Theatre
+    "KovZ917ASlK",   # Morton Amphitheater
 ]
 
 ATTRACTION_IDS = [
@@ -73,6 +74,7 @@ VENUE_NAMES = {
     "KovZpaoXie":    "Folly Theater",
     "KovZpZAaEeIA":  "Kansas Speedway",
     "KovZpZAEdaIA":  "The Midland Theatre",
+    "KovZ917ASlK":   "Morton Amphitheater",
 }
 
 
