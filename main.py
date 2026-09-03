@@ -34,14 +34,16 @@ CENTRAL = pytz.timezone("America/Chicago")
 
 def _next_weekend(from_date=None):
     today = from_date or datetime.now(CENTRAL)
-    days_until_saturday = (5 - today.weekday()) % 7
+    days_until_friday = (4 - today.weekday()) % 7
     if today.weekday() == 6:
-        days_until_saturday = 6
-    saturday = today + timedelta(days=days_until_saturday)
-    sunday   = saturday + timedelta(days=1)
+        days_until_friday = 5
+    friday   = today + timedelta(days=days_until_friday)
+    saturday = friday + timedelta(days=1)
+    sunday   = friday + timedelta(days=2)
+    friday   = CENTRAL.localize(datetime(friday.year,   friday.month,   friday.day))
     saturday = CENTRAL.localize(datetime(saturday.year, saturday.month, saturday.day))
-    sunday   = CENTRAL.localize(datetime(sunday.year, sunday.month, sunday.day, 23, 59, 59))
-    return saturday, sunday
+    sunday   = CENTRAL.localize(datetime(sunday.year,   sunday.month,   sunday.day, 23, 59, 59))
+    return friday, saturday, sunday
 
 
 def print_preview(events: list[Event]):
@@ -102,7 +104,7 @@ def main():
     if args.date:
         target_saturday = CENTRAL.localize(datetime.strptime(args.date, "%Y-%m-%d"))
 
-    saturday, sunday = _next_weekend(target_saturday)
+    friday, saturday, sunday = _next_weekend(target_saturday)
 
     # ── Scrape events ─────────────────────────────────────────────────────────
     events = aggregator.run(target_saturday=target_saturday)
@@ -112,7 +114,7 @@ def main():
         print_preview(events)
 
     # ── Render HTML ───────────────────────────────────────────────────────────
-    html = formatter.render(events, saturday, sunday)
+    html = formatter.render(events, friday, saturday, sunday)
 
     if args.save_html:
         with open("newsletter.html", "w") as f:

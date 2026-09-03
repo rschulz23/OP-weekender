@@ -592,8 +592,17 @@ class SportingKCScraper(BaseScraper):
                             continue
                         loc = item.get("location", {})
                         location = loc.get("name", "Children's Mercy Park") if isinstance(loc, dict) else "Children's Mercy Park"
+                        raw_name = item.get("name", "Sporting KC")
+                        # MLS JSON-LD sometimes concatenates team code + city,
+                        # e.g. "Sporting KC vs DALDallas" → strip leading uppercase code
+                        clean_name = re.sub(r'\b([A-Z]{2,4})(?=[A-Z][a-z])', r'', raw_name)
+                        # Skip if parsed as an own-game (SKC vs SKC)
+                        if "Sporting KC vs Sporting KC" in clean_name or "Sporting Kansas City vs Sporting Kansas City" in clean_name:
+                            continue
+                        if not start or start < datetime.now(CENTRAL):
+                            continue
                         events.append(Event(
-                            title=item.get("name", "Sporting KC"),
+                            title=clean_name,
                             start_date=start, end_date=None,
                             location=f"{location}, Kansas City", city="Kansas City",
                             description="", url=item.get("url", self.URL),
@@ -603,6 +612,7 @@ class SportingKCScraper(BaseScraper):
                 pass
 
         if not events:
+            seen = set()
             # MLS widget match cards
             for card in soup.find_all(class_=re.compile(r"match-list__match|c-schedule__item|match-row")):
                 try:
@@ -610,12 +620,25 @@ class SportingKCScraper(BaseScraper):
                     if not date_tag:
                         continue
                     start_date = _parse_date(date_tag.get("datetime") or date_tag.get_text(strip=True))
-                    if not start_date:
+                    if not start_date or start_date < datetime.now(CENTRAL):
                         continue
                     opp = card.find(class_=re.compile(r"opponent|away|home|team-name"))
-                    title = f"Sporting KC vs {opp.get_text(strip=True)}" if opp else "Sporting KC"
-                    link  = card.find("a", href=True)
-                    url   = link["href"] if link else self.URL
+                    if opp:
+                        # Strip leading team abbreviation (e.g. "DALDallas" → "Dallas")
+                        raw_opp = opp.get_text(strip=True)
+                        clean_opp = re.sub(r'^[A-Z]{2,5}(?=[A-Z][a-z])', '', raw_opp).strip()
+                        # Skip if opponent resolves to Sporting KC itself (home game duplicate)
+                        if "sporting" in clean_opp.lower() or "kansas city" in clean_opp.lower():
+                            continue
+                        title = f"Sporting KC vs {clean_opp}"
+                    else:
+                        title = "Sporting KC"
+                    dedup_key = (title, start_date.date())
+                    if dedup_key in seen:
+                        continue
+                    seen.add(dedup_key)
+                    link = card.find("a", href=True)
+                    url  = link["href"] if link else self.URL
                     events.append(Event(
                         title=title, start_date=start_date, end_date=None,
                         location="Children's Mercy Park, Kansas City", city="Kansas City",
@@ -1189,36 +1212,50 @@ class OPFarmersMarketScraper(BaseScraper):
         soup = BeautifulSoup(html, "lxml")
         events = []
 
-        for block in soup.find_all("div", class_="widgetItem--contentItem"):
+        for block in soup.find_all("div", class_="widgetText"):
             try:
-                title_tag = block.find(class_="cp-fieldWrapper")
-                if not title_tag:
+                # Date is in the h2 > a > div.cp-fieldWrapper
+                date_tag = block.find("h2", class_="widgetTitle")
+                if not date_tag:
                     continue
-                title = title_tag.get_text(strip=True)
-                if not title or len(title) > 120:
-                    continue
-                if re.search(r"\d{5}|\d{3}[-.\s]\d{3}[-.\s]\d{4}|a\.m\.|p\.m\.", title):
+                date_str = date_tag.get_text(strip=True)  # e.g. "Sep. 5, 2026"
+                if not re.search(r"\d{4}", date_str):
                     continue
 
                 link = block.find("a", class_="widgetTitle--link")
                 href = link["href"] if link else ""
-                url  = ("https://www.opkansas.gov" + href) if href.startswith("/") else href or self.URL
+                url  = href if href.startswith("http") else ("https://www.opkansas.gov" + href) if href else self.URL
 
-                desc_div  = block.find(class_="widgetDesc")
-                desc_text = desc_div.get_text(" ", strip=True) if desc_div else ""
-                date_match = re.match(
-                    r"([A-Za-z]+ \d{1,2},\s*\d{4}[^A-Z]*?)(?:\d{4,5}\s+[A-Z]|$)",
-                    desc_text
-                )
-                date_str   = date_match.group(1).strip() if date_match else desc_text[:40]
-                start_date = _parse_date(date_str)
-                if not start_date:
+                # Time is in the first div.cp-fieldWrapper inside widgetDesc
+                desc_div = block.find("div", class_="widgetDesc")
+                time_str = ""
+                if desc_div:
+                    fw = desc_div.find("div", class_="cp-fieldWrapper")
+                    if fw:
+                        time_str = fw.get_text(strip=True)  # e.g. "7:30 a.m. - 1 p.m."
+
+                # Parse date
+                date_clean = re.sub(r"\.", "", date_str).strip()  # "Sep 5, 2026"
+                try:
+                    dt = datetime.strptime(date_clean, "%b %d, %Y")
+                    # Parse start time if available
+                    time_match = re.match(r"(\d+):(\d+)\s*a\.m\.", time_str)
+                    if time_match:
+                        dt = dt.replace(hour=int(time_match.group(1)), minute=int(time_match.group(2)))
+                    else:
+                        dt = dt.replace(hour=7, minute=30)
+                    start_date = CENTRAL.localize(dt)
+                except ValueError:
                     continue
 
                 events.append(Event(
-                    title=title, start_date=start_date, end_date=None,
-                    location="Overland Park Farmers Market, Overland Park", city="Overland Park",
-                    description="", url=url, source="OP Farmers Market",
+                    title="Overland Park Farmers Market",
+                    start_date=start_date, end_date=None,
+                    location="Overland Park Farmers Market, 8101 Marty St, Overland Park",
+                    city="Overland Park",
+                    description=f"Open {time_str}" if time_str else "",
+                    url=url, source="OP Farmers Market",
+                    cost="Free",
                 ))
             except Exception as e:
                 self.logger.warning(f"Block parse error: {e}")

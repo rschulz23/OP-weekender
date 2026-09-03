@@ -42,14 +42,21 @@ def _strip_emoji(text: str) -> str:
 
 
 # ── Color palette ────────────────────────────────────────────────────────────
-BRAND_BLUE    = "#1A3A5C"   # header background
-BRAND_ORANGE  = "#E8621A"   # event title links, cost badge
-LIGHT_BG      = "#F7F8FA"   # card background
-BORDER_COLOR  = "#E2E6EA"   # card border
-TEXT_PRIMARY  = "#1A1A2E"   # main text
-TEXT_MUTED    = "#6B7280"   # meta text (time, location, source)
+BRAND_BLUE    = "#5B8DB5"   # header background, nav pills (logo steel blue)
+BRAND_DARK    = "#2C5272"   # darker blue for links, accents
+BRAND_LIGHT   = "#D6E8F4"   # very light blue for subtle tints
+BRAND_ORANGE  = "#5B8DB5"   # kept for cost badge compat — same as BRAND_BLUE
+LIGHT_BG      = "#F4F8FC"   # card background (blue-tinted off-white)
+BORDER_COLOR  = "#D0E3F0"   # card border
+TEXT_PRIMARY  = "#1A2E3D"   # main text
+TEXT_MUTED    = "#5A7A94"   # meta text (time, location, source)
 WHITE         = "#FFFFFF"
 FREE_GREEN    = "#16A34A"
+
+# ── Logo ─────────────────────────────────────────────────────────────────────
+# Upload the logo PNG to your GitHub repo (assets/logo.png) and update this URL.
+# Raw URL format: https://raw.githubusercontent.com/rschulz23/REPO_NAME/main/assets/logo.png
+LOGO_URL = "https://raw.githubusercontent.com/rschulz23/op-weekender/main/assets/logo.png"
 
 # Category pill colors — (background, text)
 CATEGORY_COLORS: dict[str, tuple[str, str]] = {
@@ -101,7 +108,7 @@ def _fmt_time(dt: datetime) -> str:
 def _cost_badge(cost: Optional[str]) -> str:
     if not cost:
         return ""
-    color = FREE_GREEN if "free" in cost.lower() else BRAND_ORANGE
+    color = FREE_GREEN if "free" in cost.lower() else BRAND_DARK
     return (
         f'<span style="display:inline-block;background:{color};color:{WHITE};'
         f'font-size:11px;font-weight:700;letter-spacing:0.5px;padding:2px 8px;'
@@ -134,7 +141,7 @@ def _event_card(event: Event) -> str:
     <td style="padding:0;">
       {img_html}
       <div style="padding:16px 18px 14px;">
-        <a href="{event.url}" style="font-size:15px;font-weight:700;color:{BRAND_ORANGE};text-decoration:none;line-height:1.3;">{title}</a>{cost_badge}
+        <a href="{event.url}" style="font-size:15px;font-weight:700;color:{BRAND_DARK};text-decoration:none;line-height:1.3;">{title}</a>{cost_badge}
         <div style="margin-top:6px;font-size:12px;color:{TEXT_MUTED};line-height:1.6;">
           {time_str} &nbsp;&middot;&nbsp; {location}
         </div>
@@ -159,10 +166,114 @@ def _event_list_row(event: Event) -> str:
     cost     = f" &nbsp;&middot;&nbsp; {event.cost}" if event.cost else ""
     return (
         f'<div style="padding:7px 0;border-bottom:1px solid {BORDER_COLOR};line-height:1.5;">'
-        f'<a href="{event.url}" style="font-size:13px;font-weight:600;color:{BRAND_ORANGE};text-decoration:none;">{title}</a>'
+        f'<a href="{event.url}" style="font-size:13px;font-weight:600;color:{BRAND_DARK};text-decoration:none;">{title}</a>'
         f'<span style="font-size:12px;color:{TEXT_MUTED};"> &nbsp;&middot;&nbsp; {time_str} &nbsp;&middot;&nbsp; {location}{cost}</span>'
         f'</div>'
     )
+
+
+def _hs_football_section(events: list[Event]) -> str:
+    """Render all HS football games as a compact table of rows."""
+    bg, fg = CATEGORY_COLORS["High School Football"]
+    icon   = CATEGORY_ICONS["High School Football"]
+
+    rows_html = ""
+    for e in sorted(events, key=lambda x: x.start_date):
+        time_str  = _fmt_time(e.start_date)
+        home_away = e.description  # "Home" or "Away" stored in description
+        ha_badge  = ""
+        if home_away == "Home":
+            ha_badge = (
+                f'<span style="font-size:10px;font-weight:700;background:{bg};color:{fg};'
+                f'padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;">HOME</span>'
+            )
+        elif home_away == "Away":
+            ha_badge = (
+                f'<span style="font-size:10px;font-weight:700;background:#6B7280;color:{WHITE};'
+                f'padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;">AWAY</span>'
+            )
+        rows_html += (
+            f'<tr style="border-bottom:1px solid {BORDER_COLOR};">'
+            f'<td style="padding:10px 14px 10px 0;font-size:13px;font-weight:600;color:{TEXT_PRIMARY};width:45%;">'
+            f'<a href="{e.url}" style="color:{BRAND_DARK};text-decoration:none;">{_strip_emoji(e.title)}</a>{ha_badge}'
+            f'</td>'
+            f'<td style="padding:10px 8px;font-size:12px;color:{TEXT_MUTED};width:18%;white-space:nowrap;">{time_str}</td>'
+            f'<td style="padding:10px 0;font-size:12px;color:{TEXT_MUTED};">{_strip_emoji(e.location)}</td>'
+            f'</tr>'
+        )
+
+    return f"""
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0 10px;">
+  <tr>
+    <td>
+      <span style="display:inline-block;background:{bg};color:{fg};font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;padding:5px 16px;border-radius:20px;">
+        {icon}&nbsp; High School Football
+      </span>
+    </td>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{WHITE};border:1px solid {BORDER_COLOR};border-radius:8px;margin-bottom:20px;">
+  <thead>
+    <tr style="background:{BRAND_LIGHT};">
+      <th style="padding:8px 14px 8px 0;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:{TEXT_MUTED};text-align:left;width:45%;">Matchup</th>
+      <th style="padding:8px 8px;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:{TEXT_MUTED};text-align:left;width:18%;">Time</th>
+      <th style="padding:8px 0;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:{TEXT_MUTED};text-align:left;">Location</th>
+    </tr>
+  </thead>
+  <tbody style="padding:0 14px;">
+    <tr><td colspan="3" style="padding:0 14px;">
+      <table width="100%" cellpadding="0" cellspacing="0">{rows_html}</table>
+    </td></tr>
+  </tbody>
+</table>"""
+
+
+def _hs_football_table(events: list[Event]) -> str:
+    """Compact table of HS football games, nested inside Sports & Fitness."""
+    NAVY = "#2C5272"
+    rows_html = ""
+    for e in sorted(events, key=lambda x: x.start_date):
+        time_str  = _fmt_time(e.start_date)
+        home_away = e.description
+        ha_badge  = ""
+        if home_away == "Home":
+            ha_badge = (
+                f'<span style="font-size:10px;font-weight:700;background:{NAVY};color:{WHITE};'
+                f'padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;">HOME</span>'
+            )
+        elif home_away == "Away":
+            ha_badge = (
+                f'<span style="font-size:10px;font-weight:700;background:#6B7280;color:{WHITE};'
+                f'padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;">AWAY</span>'
+            )
+        rows_html += (
+            f'<tr style="border-bottom:1px solid {BORDER_COLOR};">'
+            f'<td style="padding:9px 12px 9px 0;font-size:13px;font-weight:600;width:45%;">'
+            f'<a href="{e.url}" style="color:{BRAND_DARK};text-decoration:none;">{_strip_emoji(e.title)}</a>{ha_badge}'
+            f'</td>'
+            f'<td style="padding:9px 8px;font-size:12px;color:{TEXT_MUTED};width:18%;white-space:nowrap;">{time_str}</td>'
+            f'<td style="padding:9px 0;font-size:12px;color:{TEXT_MUTED};">{_strip_emoji(e.location)}</td>'
+            f'</tr>'
+        )
+
+    return f"""
+<div style="margin-top:14px;margin-bottom:4px;">
+  <span style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:{NAVY};">&#127944;&nbsp; High School Football</span>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{WHITE};border:1px solid {BORDER_COLOR};border-radius:8px;margin-bottom:16px;">
+  <thead>
+    <tr style="background:{BRAND_LIGHT};">
+      <th style="padding:7px 12px 7px 14px;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:{TEXT_MUTED};text-align:left;width:45%;">Matchup</th>
+      <th style="padding:7px 8px;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:{TEXT_MUTED};text-align:left;width:18%;">Time</th>
+      <th style="padding:7px 14px 7px 0;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:{TEXT_MUTED};text-align:left;">Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td colspan="3" style="padding:0 14px;">
+      <table width="100%" cellpadding="0" cellspacing="0">{rows_html}</table>
+    </td></tr>
+  </tbody>
+</table>"""
 
 
 def _category_section(category: str, events: list[Event]) -> str:
@@ -171,8 +282,17 @@ def _category_section(category: str, events: list[Event]) -> str:
     if not events:
         return ""
 
+
     bg, fg   = CATEGORY_COLORS.get(category, ("#6B7280", WHITE))
     icon     = CATEGORY_ICONS.get(category, "&bull;")
+
+    # Separate HS football games — rendered as a table, never as cards
+    if category == "Sports & Fitness":
+        football = [e for e in events if e.source == "HS Football"]
+        events   = [e for e in events if e.source != "HS Football"]
+    else:
+        football = []
+
     featured = events[:FEATURED_PER_CATEGORY]
     overflow = events[FEATURED_PER_CATEGORY:]
 
@@ -188,6 +308,23 @@ def _category_section(category: str, events: list[Event]) -> str:
             f'</div>'
         )
 
+    football_html = _hs_football_table(football) if football else ""
+
+    # If Sports & Fitness has only football (no other events), skip the pill
+    # header and just show the football table under a lighter label.
+    if category == "Sports & Fitness" and not events and football:
+        return f"""
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0 10px;">
+  <tr>
+    <td>
+      <span style="display:inline-block;background:{bg};color:{fg};font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;padding:5px 16px;border-radius:20px;">
+        {icon}&nbsp; {category}
+      </span>
+    </td>
+  </tr>
+</table>
+{football_html}"""
+
     return f"""
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0 10px;">
   <tr>
@@ -201,7 +338,8 @@ def _category_section(category: str, events: list[Event]) -> str:
 <div style="margin-bottom:8px;">
   {cards}
 </div>
-{list_rows}"""
+{list_rows}
+{football_html}"""
 
 
 def _day_section(label: str, events: list[Event], anchor: str = "") -> str:
@@ -243,19 +381,32 @@ def _header(friday: datetime, saturday: datetime, sunday: datetime, total: int) 
     sat_label  = saturday.strftime("%A, %B %-d")
     sun_label  = sunday.strftime("%A, %B %-d")
     return f"""
-<table width="100%" cellpadding="0" cellspacing="0" style="background:{BRAND_BLUE};border-radius:10px 10px 0 0;margin-bottom:0;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{BRAND_BLUE};border-radius:12px 12px 0 0;margin-bottom:0;">
   <tr>
-    <td style="padding:30px 24px 24px;text-align:center;">
-      <div style="font-size:28px;font-weight:900;color:{WHITE};letter-spacing:-0.5px;line-height:1.2;">
-        OP Weekender
-      </div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.75);margin-top:8px;letter-spacing:0.2px;">
-        {date_range} &nbsp;&middot;&nbsp; {total} events in the Overland Park area
+    <td style="padding:32px 28px 28px;text-align:center;">
+      <!-- Logo image -->
+      <img src="{LOGO_URL}" alt="OP Weekender" width="160"
+           style="width:160px;max-width:160px;height:auto;display:block;margin:0 auto 18px;" />
+      <!-- decorative rule + tagline -->
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
+        <tr>
+          <td width="15%" style="width:15%;border-bottom:1px solid rgba(255,255,255,0.25);vertical-align:middle;font-size:0;line-height:0;">&nbsp;</td>
+          <td style="padding:0 14px;white-space:nowrap;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.65);text-align:center;">Your weekend guide to Overland Park</td>
+          <td width="15%" style="width:15%;border-bottom:1px solid rgba(255,255,255,0.25);vertical-align:middle;font-size:0;line-height:0;">&nbsp;</td>
+        </tr>
+      </table>
+      <!-- date range -->
+      <div style="font-size:14px;font-weight:700;color:{WHITE};letter-spacing:0.3px;">
+        {date_range}
       </div>
     </td>
   </tr>
+  <!-- bottom accent stripe -->
+  <tr>
+    <td height="3" style="height:3px;font-size:0;line-height:0;background:rgba(255,255,255,0.3);">&nbsp;</td>
+  </tr>
 </table>
-<table width="100%" cellpadding="0" cellspacing="0" style="background:{WHITE};border:1px solid {BORDER_COLOR};border-top:none;border-radius:0 0 10px 10px;margin-bottom:28px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{WHITE};border:1px solid {BORDER_COLOR};border-top:none;border-radius:0 0 12px 12px;margin-bottom:28px;">
   <tr>
     <td style="padding:14px 24px 16px;text-align:center;">
       <a href="#friday"   style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:12px;font-weight:700;text-decoration:none;padding:7px 18px;border-radius:20px;margin:0 4px;">{fri_label}</a>
@@ -268,12 +419,30 @@ def _header(friday: datetime, saturday: datetime, sunday: datetime, total: int) 
 
 SUBSCRIBE_URL = "https://op-weekender.beehiiv.com/subscribe"
 
+# Create a Google Form at forms.google.com and paste the shareable link here
+SUBMIT_EVENT_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeu7Pxa4CAy_sNF7krJ6KdstfVdupkB_zKFu28Iqgh5JGxUeA/viewform"
+
 def _footer() -> str:
     return f"""
-<table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid {BORDER_COLOR};margin-top:36px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:36px;margin-bottom:20px;">
+  <tr>
+    <td style="background:{BRAND_LIGHT};border:1px solid {BORDER_COLOR};border-left:4px solid {BRAND_BLUE};border-radius:8px;padding:18px 22px;">
+      <div style="font-size:14px;font-weight:700;color:{BRAND_DARK};margin-bottom:6px;">
+        Know about an upcoming event?
+      </div>
+      <div style="font-size:13px;color:{TEXT_MUTED};line-height:1.6;margin-bottom:14px;">
+        Submit it for next week&rsquo;s newsletter &mdash; local events, markets, shows, community gatherings, anything worth knowing about in the Overland Park area.
+      </div>
+      <a href="{SUBMIT_EVENT_URL}" style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:12px;font-weight:700;text-decoration:none;padding:8px 20px;border-radius:20px;letter-spacing:0.3px;">
+        Submit an Event &rarr;
+      </a>
+    </td>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid {BORDER_COLOR};">
   <tr>
     <td style="padding:28px 0 8px;text-align:center;">
-      <a href="{SUBSCRIBE_URL}" style="display:inline-block;background:{BRAND_ORANGE};color:{WHITE};font-size:13px;font-weight:700;text-decoration:none;padding:10px 28px;border-radius:20px;letter-spacing:0.3px;">
+      <a href="{SUBSCRIBE_URL}" style="display:inline-block;background:{BRAND_BLUE};color:{WHITE};font-size:13px;font-weight:700;text-decoration:none;padding:10px 28px;border-radius:20px;letter-spacing:0.3px;">
         Subscribe to OP Weekender
       </a>
     </td>
@@ -282,15 +451,14 @@ def _footer() -> str:
     <td style="padding:12px 0 4px;text-align:center;">
       <p style="font-size:13px;color:{TEXT_MUTED};margin:0;">
         Enjoying this? Forward it to a neighbor &mdash; they can subscribe at
-        <a href="{SUBSCRIBE_URL}" style="color:{BRAND_ORANGE};text-decoration:none;font-weight:600;">op-weekender.beehiiv.com</a>
+        <a href="{SUBSCRIBE_URL}" style="color:{BRAND_DARK};text-decoration:none;font-weight:600;">op-weekender.beehiiv.com</a>
       </p>
     </td>
   </tr>
   <tr>
     <td style="padding:10px 0 24px;text-align:center;">
       <p style="font-size:12px;color:{TEXT_MUTED};margin:0;">
-        Know of an event we missed? Reply to this email and we&#39;ll add it next week.
-        &nbsp;&middot;&nbsp; OP Weekender &nbsp;&middot;&nbsp; Overland Park, KS
+        OP Weekender &nbsp;&middot;&nbsp; Overland Park, KS
       </p>
     </td>
   </tr>

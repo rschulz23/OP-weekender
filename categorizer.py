@@ -278,5 +278,8 @@ def categorize(event: Event) -> str:
 def categorize_all(events: list[Event]) -> list[Event]:
     """Assign .category to every event in-place. Returns the same list."""
     for event in events:
+        # Preserve pre-assigned categories (e.g. High School Football)
+        if event.category and event.category != "Other":
+            continue
         event.category = categorize(event)
     return events

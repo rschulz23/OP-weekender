@@ -13,7 +13,6 @@ from .venues import (
     KnuckleheadsScraper,
     GreenLadyLoungeScraper,
     SportingKCScraper,
-    KCCurrentScraper,
     KCMonarchsScraper,
     MidlandKCScraper,
     TMobileCenterScraper,
@@ -23,6 +22,13 @@ from .venues import (
     OPFarmersMarketScraper,
 )
 from .ticketmaster import TicketmasterScraper
+from .hs_football import HighSchoolFootballScraper
+from .kc_music_festival import KCMusicFestivalScraper
+from .worlds_of_fun import WorldsOfFunScraper
+from .bourgmont import BourgmontWineryScraper
+from .kc_chiefs import KCChiefsScraper
+from .kc_royals import KCRoyalsScraper
+from .kc_current import KCCurrentScraperNew
 
 ALL_SCRAPERS = [
     ShawneeMissionPostScraper,
@@ -39,7 +45,7 @@ ALL_SCRAPERS = [
     KnuckleheadsScraper,
     GreenLadyLoungeScraper,
     SportingKCScraper,
-    KCCurrentScraper,
+    KCCurrentScraperNew,
     KCMonarchsScraper,
     MidlandKCScraper,
     TMobileCenterScraper,
@@ -48,4 +54,10 @@ ALL_SCRAPERS = [
     OPConventionCenterScraper,
     OPFarmersMarketScraper,
     TicketmasterScraper,
+    HighSchoolFootballScraper,
+    KCMusicFestivalScraper,
+    WorldsOfFunScraper,
+    BourgmontWineryScraper,
+    KCChiefsScraper,
+    KCRoyalsScraper,
 ]
