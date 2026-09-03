@@ -15,6 +15,11 @@ import pytz
 
 from .base import BaseScraper, Event
 
+UA = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+)
+
 CENTRAL = pytz.timezone("America/Chicago")
 
 HEADERS = {
@@ -49,13 +54,33 @@ class HighSchoolFootballScraper(BaseScraper):
     name = "HS Football"
 
     def fetch(self) -> list[Event]:
+        # Use Playwright so gobound.com sees a real browser (plain requests
+        # are blocked by gobound on cloud/CI IP ranges).
+        try:
+            from playwright.sync_api import sync_playwright
+            use_playwright = True
+        except ImportError:
+            use_playwright = False
+
         raw: list[Event] = []
-        for slug, school in SCHOOLS.items():
-            try:
-                games = self._fetch_school(slug, school)
-                raw.extend(games)
-            except Exception as e:
-                self.logger.warning(f"  {school}: failed — {e}")
+        if use_playwright:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                context = browser.new_context(user_agent=UA)
+                for slug, school in SCHOOLS.items():
+                    try:
+                        games = self._fetch_school_playwright(context, slug, school)
+                        raw.extend(games)
+                    except Exception as e:
+                        self.logger.warning(f"  {school}: failed — {e}")
+                browser.close()
+        else:
+            for slug, school in SCHOOLS.items():
+                try:
+                    games = self._fetch_school_requests(slug, school)
+                    raw.extend(games)
+                except Exception as e:
+                    self.logger.warning(f"  {school}: failed — {e}")
 
         # Deduplicate: same two teams on the same date appear twice when both
         # schools are in our list. Key on sorted team names + date.
@@ -71,18 +96,13 @@ class HighSchoolFootballScraper(BaseScraper):
         self.logger.info(f"HS Football: {len(events)} unique games fetched ({len(raw)} before dedup)")
         return events
 
-    def _fetch_school(self, slug: str, school: str) -> list[Event]:
-        url = BASE_URL.format(slug=slug)
-        resp = requests.get(url, headers=HEADERS, timeout=15)
-        resp.raise_for_status()
-
-        soup = BeautifulSoup(resp.text, "html.parser")
+    def _parse_html(self, html: str, school: str, url: str) -> list[Event]:
+        soup = BeautifulSoup(html, "html.parser")
         table = soup.find("table", class_="table-sm")
         if not table:
             return []
-
         events = []
-        for row in table.find_all("tr")[1:]:  # skip header row
+        for row in table.find_all("tr")[1:]:
             cells = [td.get_text(" ", strip=True) for td in row.find_all(["td", "th"])]
             if len(cells) < 6:
                 continue
@@ -90,6 +110,23 @@ class HighSchoolFootballScraper(BaseScraper):
             if event:
                 events.append(event)
         return events
+
+    def _fetch_school_playwright(self, context, slug: str, school: str) -> list[Event]:
+        url = BASE_URL.format(slug=slug)
+        page = context.new_page()
+        try:
+            page.goto(url, wait_until="domcontentloaded", timeout=20000)
+            page.wait_for_selector("table.table-sm", timeout=8000)
+            html = page.content()
+        finally:
+            page.close()
+        return self._parse_html(html, school, url)
+
+    def _fetch_school_requests(self, slug: str, school: str) -> list[Event]:
+        url = BASE_URL.format(slug=slug)
+        resp = requests.get(url, headers=HEADERS, timeout=15)
+        resp.raise_for_status()
+        return self._parse_html(resp.text, school, url)
 
     def _parse_row(self, cells: list[str], school: str, url: str) -> Event | None:
         try:
