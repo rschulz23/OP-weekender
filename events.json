@@ -21,10 +21,10 @@
     "title": "Pickleball",
     "start_date": "2026-09-04T09:00:00-05:00",
     "end_date": null,
-    "location": "Matt Ross Community Center (MRCC)",
+    "location": "Tomahawk Ridge Community Center",
     "city": "Overland Park",
     "description": "Play and practice with fellow pickleball players. \r\nTimes and days are subject to change due to court availability.",
-    "url": "https://jcprd.com/Calendar.aspx?EID=16994&month=9&year=2026&day=2&calType=0",
+    "url": "https://jcprd.com/Calendar.aspx?EID=17189&month=9&year=2026&day=2&calType=0",
     "source": "JCPRD",
     "image_url": null,
     "cost": null,
@@ -346,6 +346,20 @@
       "family"
     ],
     "category": "Outdoors & Nature"
+  },
+  {
+    "title": "Sporting KC vs DALDallas",
+    "start_date": "2026-09-06T00:00:00-05:00",
+    "end_date": null,
+    "location": "Children's Mercy Park, Kansas City",
+    "city": "Kansas City",
+    "description": "",
+    "url": "https://www.sportingkc.com/competitions/mls-regular-season/2026/matches/dalvsskc-09-05-2026/",
+    "source": "Sporting KC",
+    "image_url": null,
+    "cost": null,
+    "tags": [],
+    "category": "Sports & Fitness"
   },
   {
     "title": "Kids Crew: Fall Kickoff",
