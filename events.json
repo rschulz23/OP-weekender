@@ -126,6 +126,20 @@
     "category": "Family & Kids"
   },
   {
+    "title": "Live Music",
+    "start_date": "2026-09-04T17:00:00-05:00",
+    "end_date": null,
+    "location": "Bourgmont Winery, 28700 W 199th St, Bucyrus, KS",
+    "city": "Bucyrus",
+    "description": "",
+    "url": "https://www.bourgmont.com/events/2026/9/4/live-music",
+    "source": "Bourgmont Winery",
+    "image_url": "https://images.squarespace-cdn.com/content/v1/58d75c996a4963a07f12c0d8/1775689025393-0TJ2YQLER27YH0UKHAV4/Live+music++%2874%29.png",
+    "cost": null,
+    "tags": [],
+    "category": "Food & Drink"
+  },
+  {
     "title": "School Hours 5PM-9PM",
     "start_date": "2026-09-04T17:00:00-05:00",
     "end_date": null,
@@ -154,15 +168,15 @@
     "category": "Arts & Culture"
   },
   {
-    "title": "Kansas City Royals vs. Toronto Blue Jays",
+    "title": "Toronto Blue Jays at Kansas City Royals",
     "start_date": "2026-09-04T19:10:00-05:00",
     "end_date": null,
-    "location": "Kauffman Stadium \u2014 I-70 and Blueridge Cutoff, Kansas City",
+    "location": "Kauffman Stadium, Kansas City",
     "city": "Kansas City",
-    "description": "Sports \u2014 Baseball",
-    "url": "https://www.ticketmaster.com/event/Z7r9jZ1A7QaQv",
-    "source": "Kauffman Stadium",
-    "image_url": "https://s1.ticketm.net/dam/a/156/deae008b-8fdb-4d51-86c3-1324aba1c156_RETINA_PORTRAIT_16_9.jpg",
+    "description": "",
+    "url": "https://www.mlb.com/royals/schedule",
+    "source": "KC Royals",
+    "image_url": null,
     "cost": null,
     "tags": [],
     "category": "Sports & Fitness"
@@ -180,6 +194,20 @@
     "cost": null,
     "tags": [],
     "category": "Other"
+  },
+  {
+    "title": "KC Current vs Bay FC",
+    "start_date": "2026-09-04T21:00:00-05:00",
+    "end_date": null,
+    "location": "PayPal Park, San Jose, CA",
+    "city": "Kansas City",
+    "description": "Regular Season",
+    "url": "https://www.kansascitycurrent.com/schedule",
+    "source": "KC Current",
+    "image_url": null,
+    "cost": null,
+    "tags": [],
+    "category": "Sports & Fitness"
   },
   {
     "title": "Farmers Market",
@@ -244,6 +272,20 @@
     "cost": null,
     "tags": [],
     "category": "Food & Drink"
+  },
+  {
+    "title": "Oktoberfest at Worlds of Fun",
+    "start_date": "2026-09-05T10:00:00-05:00",
+    "end_date": null,
+    "location": "Worlds of Fun, Kansas City, MO",
+    "city": "Kansas City",
+    "description": "Step into Europa for a lively Bavarian celebration filled with authentic German food and beverage, toe-tapping music, and family-friendly entertainment.",
+    "url": "https://worldsoffun.enchantedparks.com/calendar/oktoberfest-at-worlds-of-fun-2/2026-09-05/",
+    "source": "Worlds of Fun",
+    "image_url": null,
+    "cost": null,
+    "tags": [],
+    "category": "Family & Kids"
   },
   {
     "title": "Cottonwood Tales at the Overland Park Arboretum & Botanical Gardens",
@@ -316,20 +358,6 @@
     "category": "Arts & Culture"
   },
   {
-    "title": "Kansas City Royals vs Toronto Blue Jays: Royal-Tees Giveaway",
-    "start_date": "2026-09-05T18:10:00-05:00",
-    "end_date": null,
-    "location": "Kauffman Stadium \u2014 I-70 and Blueridge Cutoff, Kansas City",
-    "city": "Kansas City",
-    "description": "Sports \u2014 Baseball",
-    "url": "https://www.ticketmaster.com/event/Z7r9jZ1A7QaQe",
-    "source": "Kauffman Stadium",
-    "image_url": "https://s1.ticketm.net/dam/a/156/deae008b-8fdb-4d51-86c3-1324aba1c156_RETINA_PORTRAIT_16_9.jpg",
-    "cost": null,
-    "tags": [],
-    "category": "Sports & Fitness"
-  },
-  {
     "title": "Overnight Fishing at Lexington Lake Park",
     "start_date": "2026-09-05T23:00:00-05:00",
     "end_date": null,
@@ -348,7 +376,7 @@
     "category": "Outdoors & Nature"
   },
   {
-    "title": "Sporting KC vs DALDallas",
+    "title": "Sporting KC vs Dallas",
     "start_date": "2026-09-06T00:00:00-05:00",
     "end_date": null,
     "location": "Children's Mercy Park, Kansas City",
@@ -376,18 +404,32 @@
     "category": "Community & Festivals"
   },
   {
-    "title": "Kansas City Royals vs Toronto Blue Jays: Big Bling Birthday Bash Chain Giveaway",
+    "title": "Toronto Blue Jays at Kansas City Royals",
     "start_date": "2026-09-06T13:10:00-05:00",
     "end_date": null,
-    "location": "Kauffman Stadium \u2014 I-70 and Blueridge Cutoff, Kansas City",
+    "location": "Kauffman Stadium, Kansas City",
     "city": "Kansas City",
-    "description": "Sports \u2014 Baseball",
-    "url": "https://www.ticketmaster.com/event/Z7r9jZ1A7QaQd",
-    "source": "Kauffman Stadium",
-    "image_url": "https://s1.ticketm.net/dam/a/156/deae008b-8fdb-4d51-86c3-1324aba1c156_RETINA_PORTRAIT_16_9.jpg",
+    "description": "",
+    "url": "https://www.mlb.com/royals/schedule",
+    "source": "KC Royals",
+    "image_url": null,
     "cost": null,
     "tags": [],
     "category": "Sports & Fitness"
+  },
+  {
+    "title": "Live Music",
+    "start_date": "2026-09-06T14:00:00-05:00",
+    "end_date": null,
+    "location": "Bourgmont Winery, 28700 W 199th St, Bucyrus, KS",
+    "city": "Bucyrus",
+    "description": "",
+    "url": "https://www.bourgmont.com/events/2026/9/6/live-music",
+    "source": "Bourgmont Winery",
+    "image_url": "https://images.squarespace-cdn.com/content/v1/58d75c996a4963a07f12c0d8/1781282804888-Q0LQTIQD23SYNOP07WX2/SEPTEMBER+6.png",
+    "cost": null,
+    "tags": [],
+    "category": "Food & Drink"
   },
   {
     "title": "Live Music in the Tasting Room",
