@@ -46,10 +46,12 @@ jobs:
       # ── Run scraper + renderer ────────────────────────────────────────────
       - name: Generate newsletter
         env:
-          NOTIFY_EMAIL:           ${{ secrets.NOTIFY_EMAIL }}
-          GMAIL_ADDRESS:          ${{ secrets.GMAIL_ADDRESS }}
-          GMAIL_APP_PASSWORD:     ${{ secrets.GMAIL_APP_PASSWORD }}
-          TICKETMASTER_API_KEY:   ${{ secrets.TICKETMASTER_API_KEY }}
+          NOTIFY_EMAIL:             ${{ secrets.NOTIFY_EMAIL }}
+          GMAIL_ADDRESS:            ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD:       ${{ secrets.GMAIL_APP_PASSWORD }}
+          TICKETMASTER_API_KEY:     ${{ secrets.TICKETMASTER_API_KEY }}
+          BEEHIIV_API_KEY:          ${{ secrets.BEEHIIV_API_KEY }}
+          BEEHIIV_PUBLICATION_ID:   ${{ secrets.BEEHIIV_PUBLICATION_ID }}
         run: python ci_generate.py
 
       # ── Upload HTML as downloadable artifact ──────────────────────────────

@@ -31,6 +31,7 @@ import pytz
 
 import aggregator
 import formatter
+from beehiiv import BeehiivClient
 
 logging.basicConfig(
     level=logging.INFO,
@@ -118,6 +119,35 @@ def send_email(html: str, saturday: datetime, subject: str) -> bool:
         return False
 
 
+def create_beehiiv_draft(html: str, subject: str, saturday: datetime) -> bool:
+    """
+    Create a draft post in Beehiiv via API.
+    Returns True on success, False if credentials are missing or call fails.
+    """
+    api_key = os.environ.get("BEEHIIV_API_KEY")
+    pub_id  = os.environ.get("BEEHIIV_PUBLICATION_ID")
+
+    if not api_key or not pub_id:
+        log.info("Beehiiv credentials not set — skipping draft creation")
+        return False
+
+    try:
+        client = BeehiivClient(api_key=api_key, publication_id=pub_id)
+        result = client.create_post(
+            title=subject,
+            html=html,
+            subtitle=f"Your weekend guide to Overland Park — {saturday.strftime('%B %-d, %Y')}",
+            draft=True,
+        )
+        post = result.get("data", result)
+        post_url = post.get("web_url") or post.get("url") or ""
+        log.info(f"Beehiiv draft created: {post_url}")
+        return True
+    except Exception as e:
+        log.error(f"Beehiiv draft creation failed: {e}")
+        return False
+
+
 def main():
     friday, saturday, sunday = _next_weekend()
     date_label = f"{friday.strftime('%B %-d')} - {sunday.strftime('%B %-d, %Y')}"
@@ -145,6 +175,9 @@ def main():
     # ── Email ─────────────────────────────────────────────────────────────
     email_sent = send_email(html, saturday, subject)
 
+    # ── Beehiiv draft ─────────────────────────────────────────────────────
+    draft_created = create_beehiiv_draft(html, subject, saturday)
+
     # ── Summary ───────────────────────────────────────────────────────────
     print()
     print("=" * 56)
@@ -152,6 +185,7 @@ def main():
     print(f"  {len(events)} events | {len(html):,} bytes")
     print(f"  Saved to: {OUTPUT_FILE}")
     print(f"  Email: {'sent' if email_sent else 'skipped (no credentials)'}")
+    print(f"  Beehiiv draft: {'created ✅' if draft_created else 'skipped (no credentials)'}")
     print("=" * 56)
     print(f"  Subject: {subject}")
     print("=" * 56)
