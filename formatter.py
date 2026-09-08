@@ -12,6 +12,7 @@ Design principles:
 """
 
 from __future__ import annotations
+from collections import defaultdict
 from datetime import datetime
 from typing import Optional
 import pytz
@@ -276,6 +277,59 @@ def _hs_football_table(events: list[Event]) -> str:
 </table>"""
 
 
+def _kc_live_music_table(events: list[Event]) -> str:
+    """Compact day-grouped table of KC Live Music events."""
+    MUSIC_COLOR = "#6B21A8"  # purple
+    if not events:
+        return ""
+
+    # Group by day label
+    days: dict[str, list[Event]] = defaultdict(list)
+    for e in sorted(events, key=lambda x: x.start_date):
+        label = e.start_date.strftime("%A, %B %-d")
+        days[label].append(e)
+
+    rows_html = ""
+    for i, (day_label, day_events) in enumerate(days.items()):
+        # Day sub-header row
+        sep = f'border-top:2px solid {BORDER_COLOR};' if i > 0 else ''
+        rows_html += (
+            f'<tr style="{sep}background:#F5F0FA;">'
+            f'<td colspan="3" style="padding:7px 14px;font-size:11px;font-weight:700;'
+            f'letter-spacing:0.6px;text-transform:uppercase;color:{MUSIC_COLOR};">'
+            f'{day_label}</td></tr>'
+        )
+        for e in day_events:
+            time_str = _fmt_time(e.start_date)
+            # Venue is everything after " @ " in the title, or use location city
+            venue = e.title.split(" @ ", 1)[1] if " @ " in e.title else e.location.split(",")[0]
+            artist = e.title.split(" @ ", 1)[0] if " @ " in e.title else e.title
+            rows_html += (
+                f'<tr style="border-bottom:1px solid {BORDER_COLOR};">'
+                f'<td style="padding:8px 8px 8px 14px;font-size:13px;font-weight:600;width:45%;">'
+                f'<a href="{e.url}" style="color:{BRAND_DARK};text-decoration:none;">{_strip_emoji(artist)}</a>'
+                f'</td>'
+                f'<td style="padding:8px;font-size:12px;color:{TEXT_MUTED};width:35%;">{_strip_emoji(venue)}</td>'
+                f'<td style="padding:8px 14px 8px 0;font-size:12px;color:{TEXT_MUTED};white-space:nowrap;">{time_str}</td>'
+                f'</tr>'
+            )
+
+    return f"""
+<div style="margin-top:14px;margin-bottom:4px;">
+  <span style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:{MUSIC_COLOR};">&#127925;&nbsp; Live Music</span>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{WHITE};border:1px solid {BORDER_COLOR};border-radius:8px;margin-bottom:16px;">
+  <thead>
+    <tr style="background:#F5F0FA;">
+      <th style="padding:7px 8px 7px 14px;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:{TEXT_MUTED};text-align:left;width:45%;">Artist</th>
+      <th style="padding:7px 8px;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:{TEXT_MUTED};text-align:left;width:35%;">Venue</th>
+      <th style="padding:7px 14px 7px 0;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:{TEXT_MUTED};text-align:left;">Time</th>
+    </tr>
+  </thead>
+  <tbody>{rows_html}</tbody>
+</table>"""
+
+
 def _category_section(category: str, events: list[Event]) -> str:
     """Render a coloured category pill, up to FEATURED_PER_CATEGORY full cards,
     then any remaining events as compact text rows."""
@@ -293,6 +347,13 @@ def _category_section(category: str, events: list[Event]) -> str:
     else:
         football = []
 
+    # Separate KC Live Music events — rendered as a compact day-grouped table
+    if category == "Music & Entertainment":
+        live_music = [e for e in events if e.source == "KC Live Music"]
+        events     = [e for e in events if e.source != "KC Live Music"]
+    else:
+        live_music = []
+
     featured = events[:FEATURED_PER_CATEGORY]
     overflow = events[FEATURED_PER_CATEGORY:]
 
@@ -308,7 +369,8 @@ def _category_section(category: str, events: list[Event]) -> str:
             f'</div>'
         )
 
-    football_html = _hs_football_table(football) if football else ""
+    football_html   = _hs_football_table(football) if football else ""
+    live_music_html = _kc_live_music_table(live_music) if live_music else ""
 
     # If Sports & Fitness has only football (no other events), skip the pill
     # header and just show the football table under a lighter label.
@@ -339,7 +401,8 @@ def _category_section(category: str, events: list[Event]) -> str:
   {cards}
 </div>
 {list_rows}
-{football_html}"""
+{football_html}
+{live_music_html}"""
 
 
 def _day_section(label: str, events: list[Event], anchor: str = "") -> str:
