@@ -29,6 +29,10 @@ from .bourgmont import BourgmontWineryScraper
 from .kc_chiefs import KCChiefsScraper
 from .kc_royals import KCRoyalsScraper
 from .kc_current import KCCurrentScraperNew
+from .serendipity_farm import SerendipityFarmScraper
+from .aubrey_vineyards import AubreyVineyardsScraper
+from .guitars_cadillacs import GuitarsCadillacsScraper
+from .kc_live_music import KCLiveMusicScraper
 
 ALL_SCRAPERS = [
     ShawneeMissionPostScraper,
@@ -60,4 +64,8 @@ ALL_SCRAPERS = [
     BourgmontWineryScraper,
     KCChiefsScraper,
     KCRoyalsScraper,
+    SerendipityFarmScraper,
+    AubreyVineyardsScraper,
+    GuitarsCadillacsScraper,
+    KCLiveMusicScraper,
 ]
