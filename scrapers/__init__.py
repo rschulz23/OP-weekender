@@ -15,7 +15,6 @@ from .venues import (
     SportingKCScraper,
     KCMonarchsScraper,
     MidlandKCScraper,
-    TMobileCenterScraper,
     LeawoodCalendarScraper,
     OPKansasScraper,
     OPConventionCenterScraper,
@@ -34,6 +33,7 @@ from .aubrey_vineyards import AubreyVineyardsScraper
 from .guitars_cadillacs import GuitarsCadillacsScraper
 from .kc_live_music import KCLiveMusicScraper
 from .truman import TrumanScraper
+from .tmobile_center import TMobileCenterScraper
 
 ALL_SCRAPERS = [
     ShawneeMissionPostScraper,
@@ -53,7 +53,6 @@ ALL_SCRAPERS = [
     KCCurrentScraperNew,
     KCMonarchsScraper,
     MidlandKCScraper,
-    TMobileCenterScraper,
     LeawoodCalendarScraper,
     OPKansasScraper,
     OPConventionCenterScraper,
@@ -70,4 +69,5 @@ ALL_SCRAPERS = [
     GuitarsCadillacsScraper,
     KCLiveMusicScraper,
     TrumanScraper,
+    TMobileCenterScraper,
 ]

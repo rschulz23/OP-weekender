@@ -8,7 +8,6 @@ Requires env var: TICKETMASTER_API_KEY
 Get a free key at: https://developer.ticketmaster.com
 
 Venue IDs (concerts):
-  50225  T-Mobile Center
   49168  Azura Amphitheater (Bonner Springs)
   49175  Starlight Theatre
   49686  Uptown Theater
@@ -39,7 +38,6 @@ CENTRAL = pytz.timezone("America/Chicago")
 TM_BASE = "https://app.ticketmaster.com/discovery/v2"
 
 VENUE_IDS = [
-    "KovZpZAE7eeA",  # T-Mobile Center
     "KovZpa3sfe",    # Azura Amphitheater
     "KovZpZAF7EaA",  # Starlight Theatre
     "KovZpa3sre",    # Uptown Theater
@@ -61,7 +59,6 @@ ATTRACTION_IDS = [
 
 # Maps venue ID → friendly display name
 VENUE_NAMES = {
-    "KovZpZAE7eeA":  "T-Mobile Center",
     "KovZpa3sfe":    "Azura Amphitheater",
     "KovZpZAF7EaA":  "Starlight Theatre",
     "KovZpa3sre":    "Uptown Theater",

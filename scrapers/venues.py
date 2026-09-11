@@ -845,61 +845,6 @@ class MidlandKCScraper(BaseScraper):
         return events
 
 
-# ── T-Mobile Center ───────────────────────────────────────────────────────────
-
-class TMobileCenterScraper(BaseScraper):
-    name = "T-Mobile Center"
-    URL  = "https://www.t-mobilecenter.com/events"
-    BASE = "https://www.t-mobilecenter.com"
-
-    def fetch(self) -> list[Event]:
-        try:
-            resp = requests.get(self.URL, headers=HEADERS, timeout=15)
-            resp.raise_for_status()
-        except Exception as e:
-            self.logger.warning(f"Fetch failed: {e}")
-            return []
-        soup = BeautifulSoup(resp.text, "lxml")
-        return self._parse(soup)
-
-    def _parse(self, soup: BeautifulSoup) -> list[Event]:
-        import json as _json
-        events = []
-        # Page embeds a JSON-LD array of Event objects (Vue app loads the same data)
-        for script in soup.find_all("script", type="application/ld+json"):
-            try:
-                data = _json.loads(script.string or "")
-                items = data if isinstance(data, list) else [data]
-                for item in items:
-                    if item.get("@type") != "Event":
-                        continue
-                    title = item.get("name", "").strip()
-                    if not title:
-                        continue
-                    start_date = _parse_date(item.get("startDate", ""))
-                    if not start_date:
-                        continue
-                    url = item.get("url") or self.URL
-                    if url.startswith("/"):
-                        url = self.BASE + url
-                    image_url = None
-                    img = item.get("image")
-                    if isinstance(img, str):
-                        image_url = img
-                    elif isinstance(img, dict):
-                        image_url = img.get("url")
-                    events.append(Event(
-                        title=title, start_date=start_date, end_date=None,
-                        location="T-Mobile Center, Kansas City", city="Kansas City",
-                        description="", url=url, source="T-Mobile Center",
-                        image_url=image_url,
-                    ))
-            except Exception as e:
-                self.logger.warning(f"JSON-LD parse error: {e}")
-
-        self.logger.info(f"Parsed {len(events)} events from T-Mobile Center")
-        return events
-
 
 # ── Leawood City Calendar (RSS) ───────────────────────────────────────────────
 
