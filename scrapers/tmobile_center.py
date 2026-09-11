@@ -36,11 +36,11 @@ _YEAR_RE = re.compile(r'(\d{4})\s*$')
 
 # The shared categorizer keys off title keywords and mis-files performer names
 # here ("Teddy Swims" and "Eric Clapton" both land in Sports & Fitness), so the
-# category is decided at the venue instead: concerts unless the title says
-# otherwise.
+# category is decided at the venue instead: everything is Music & Entertainment
+# unless it is a genuine athletic competition. Touring shows built around a
+# sport — monster trucks, pro wrestling, the Globetrotters — stay Entertainment.
 _SPORTS_RE = re.compile(
-    r'\b(pbr|bull rid\w+|rodeo|monster truck\w*|wrestl\w+|wwe|aew|basketball|'
-    r'hockey|globetrotters|boxing|ufc|mma|supercross|motocross)\b',
+    r'\b(pbr|bull rid\w+|rodeo|basketball|hockey|boxing|ufc|mma|volleyball)\b',
     re.IGNORECASE,
 )
 
