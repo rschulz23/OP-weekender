@@ -15,7 +15,6 @@ Venue IDs (concerts):
   50599  KC Live! at Power & Light
   50571  Kauffman Center for the Performing Arts
   50295  GrindersKC
-  341872 The Truman KC
   49188  Folly Theater
   50304  Kansas Speedway
   50600  The Midland Theatre (also on AXS)
@@ -47,7 +46,6 @@ VENUE_IDS = [
     "KovZpZAE7eAA",  # KC Live!
     "KovZpaF1me",    # Kauffman Center
     "KovZpZAaJJnA",  # Grinders KC
-    "KovZ917AQI8",   # The Truman
     "KovZpaoXie",    # Folly Theater
     "KovZpZAaEeIA",  # Kansas Speedway
     "KovZpZAEdaIA",  # The Midland Theatre
@@ -70,7 +68,6 @@ VENUE_NAMES = {
     "KovZpZAE7eAA":  "KC Live!",
     "KovZpaF1me":    "Kauffman Center",
     "KovZpZAaJJnA":  "Grinders KC",
-    "KovZ917AQI8":   "The Truman",
     "KovZpaoXie":    "Folly Theater",
     "KovZpZAaEeIA":  "Kansas Speedway",
     "KovZpZAEdaIA":  "The Midland Theatre",

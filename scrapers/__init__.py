@@ -33,6 +33,7 @@ from .serendipity_farm import SerendipityFarmScraper
 from .aubrey_vineyards import AubreyVineyardsScraper
 from .guitars_cadillacs import GuitarsCadillacsScraper
 from .kc_live_music import KCLiveMusicScraper
+from .truman import TrumanScraper
 
 ALL_SCRAPERS = [
     ShawneeMissionPostScraper,
@@ -68,4 +69,5 @@ ALL_SCRAPERS = [
     AubreyVineyardsScraper,
     GuitarsCadillacsScraper,
     KCLiveMusicScraper,
+    TrumanScraper,
 ]
