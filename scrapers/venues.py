@@ -407,63 +407,99 @@ class BlueValleyRecScraper(BaseScraper):
 # ── Knuckleheads ──────────────────────────────────────────────────────────────
 
 class KnuckleheadsScraper(BaseScraper):
-    name    = "Knuckleheads"
-    # ShowWare ticketing — JS-rendered, use Playwright
-    URL     = "https://tickets.knuckleheadskc.com"
-    REAL_UA = (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    )
+    """Knuckleheads via the JSON feed behind its ShowWare ticketing site.
+
+    The page itself renders its listing client-side, but the widget it calls
+    returns plain JSON, so no browser is needed.
+    """
+    name  = "Knuckleheads"
+    BASE  = "https://tickets.knuckleheadskc.com"
+    API   = f"{BASE}/include/widgets/events/performancelist.asp"
+    # ShowWare formats every date like "Friday, September 11, 2026 8:00:00 PM"
+    DATE_FMT = "%A, %B %d, %Y %I:%M:%S %p"
 
     def fetch(self) -> list[Event]:
+        params = {
+            "fromDate": "", "toDate": "", "venue": "0", "city": "",
+            "swEvent": "0", "category": "0", "searchString": "", "searchType": "0",
+            "showHidden": "0", "showPackages": "1", "action": "perf",
+            "listPageSize": "100", "listMaxSize": "200", "page": "1", "cp": "0",
+        }
         try:
-            from playwright.sync_api import sync_playwright
-        except ImportError:
-            self.logger.warning("Playwright not installed — skipping Knuckleheads")
+            resp = requests.get(self.API, params=params, headers=HEADERS, timeout=25)
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception as e:
+            self.logger.error(f"Fetch failed: {e}")
             return []
 
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(user_agent=self.REAL_UA)
-            page = context.new_page()
-            try:
-                page.goto(self.URL, wait_until="domcontentloaded", timeout=30000)
-                page.wait_for_selector(".show-item, .event-item, li.item, .event-listing", timeout=12000)
-            except Exception as e:
-                self.logger.warning(f"Page load issue: {e}")
-                browser.close()
-                return []
-            page.wait_for_timeout(2000)
-            html = page.content()
-            browser.close()
-
-        soup = BeautifulSoup(html, "lxml")
-        return self._parse(soup)
-
-    def _parse(self, soup: BeautifulSoup) -> list[Event]:
         events = []
-        for item in soup.find_all(class_=re.compile(r"show-item|event-item|event-listing")):
+        now = datetime.now(CENTRAL)
+
+        for perf in data.get("performance", []):
             try:
-                title_tag = item.find(class_=re.compile(r"name|title")) or item.find(["h2", "h3", "h4"])
-                if not title_tag:
+                title = (perf.get("Event") or perf.get("PerformanceName") or "").strip()
+                if not title:
                     continue
-                title = title_tag.get_text(strip=True)
-                date_tag = item.find(class_=re.compile(r"date|time")) or item.find("time")
-                date_str = (date_tag.get("datetime") or date_tag.get_text(strip=True)) if date_tag else ""
-                start_date = _parse_date(date_str) or datetime.now(CENTRAL)
-                link = item.find("a", href=True)
-                url  = link["href"] if link else self.URL
-                if url.startswith("/"):
-                    url = self.URL + url
+
+                start_date = self._parse_dt(perf.get("PerformanceDateTime"))
+                if not start_date or start_date < now:
+                    continue
+                end_date = self._parse_dt(perf.get("PerformanceEndDateTime"))
+
+                # Descriptions are HTML blobs; strip to plain text for the card
+                description = BeautifulSoup(perf.get("Description") or "", "lxml").get_text(" ", strip=True)
+
+                image = perf.get("PerformanceImage") or perf.get("Image1")
+                cost = self._format_cost(perf.get("PerformanceMinPrice"),
+                                         perf.get("PerformanceMaxPrice"))
+
                 events.append(Event(
-                    title=title, start_date=start_date, end_date=None,
-                    location="Knuckleheads, Kansas City", city="Kansas City",
-                    description="", url=url, source="Knuckleheads",
+                    title=title,
+                    start_date=start_date,
+                    end_date=end_date,
+                    location="Knuckleheads, 2715 Rochester Ave, Kansas City, MO",
+                    city="Kansas City",
+                    description=description[:300],
+                    url=f"{self.BASE}/eventperformances.asp?evt={perf.get('EventID')}",
+                    source="Knuckleheads",
+                    image_url=f"{self.BASE}/UPLImage/{image}" if image else None,
+                    cost=cost,
+                    # Set explicitly: the shared categorizer scores these long
+                    # artist bios by keyword and mis-files them.
+                    category="Music & Entertainment",
                 ))
             except Exception as e:
                 self.logger.warning(f"Item parse error: {e}")
+
+        events.sort(key=lambda e: e.start_date)
         self.logger.info(f"Parsed {len(events)} events from Knuckleheads")
         return events
+
+    def _parse_dt(self, raw: str | None) -> datetime | None:
+        if not raw:
+            return None
+        try:
+            return CENTRAL.localize(datetime.strptime(raw, self.DATE_FMT))
+        except ValueError:
+            return None
+
+    @staticmethod
+    def _format_cost(lo, hi) -> str | None:
+        """ShowWare uses six-figure placeholder prices for unpriced shows."""
+        try:
+            lo = float(lo)
+        except (TypeError, ValueError):
+            return None
+        if lo <= 0 or lo >= 10000:
+            return None
+        try:
+            hi = float(hi)
+        except (TypeError, ValueError):
+            hi = lo
+        if hi >= 10000 or hi <= lo:
+            return f"${lo:.0f}"
+        return f"${lo:.0f}-${hi:.0f}"
 
 
 # ── Green Lady Lounge ─────────────────────────────────────────────────────────
