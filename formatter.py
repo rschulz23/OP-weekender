@@ -147,9 +147,6 @@ def _event_card(event: Event) -> str:
           {time_str} &nbsp;&middot;&nbsp; {location}
         </div>
         {f'<p style="margin:10px 0 2px;font-size:13px;color:{TEXT_PRIMARY};line-height:1.7;">{desc}</p>' if desc else ''}
-        <div style="margin-top:10px;font-size:11px;color:{TEXT_MUTED};">
-          via <a href="{event.url}" style="color:{TEXT_MUTED};text-decoration:underline;">{event.source}</a>
-        </div>
       </div>
     </td>
   </tr>
