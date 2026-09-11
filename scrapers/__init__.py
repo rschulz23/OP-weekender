@@ -34,6 +34,7 @@ from .guitars_cadillacs import GuitarsCadillacsScraper
 from .kc_live_music import KCLiveMusicScraper
 from .truman import TrumanScraper
 from .tmobile_center import TMobileCenterScraper
+from .park_place import ParkPlaceScraper
 
 ALL_SCRAPERS = [
     ShawneeMissionPostScraper,
@@ -70,4 +71,5 @@ ALL_SCRAPERS = [
     KCLiveMusicScraper,
     TrumanScraper,
     TMobileCenterScraper,
+    ParkPlaceScraper,
 ]
