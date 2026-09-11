@@ -16,7 +16,7 @@ Sources:
 
 import re
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import parser as dateparser
 import pytz
 from bs4 import BeautifulSoup
@@ -547,108 +547,82 @@ class GreenLadyLoungeScraper(BaseScraper):
 # ── Sporting Kansas City ──────────────────────────────────────────────────────
 
 class SportingKCScraper(BaseScraper):
-    name    = "Sporting KC"
-    URL     = "https://www.sportingkc.com/schedule/"
-    REAL_UA = (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    )
+    """Sporting KC fixtures via ESPN's public MLS scoreboard API.
+
+    The club's own schedule page is client-rendered and omits kickoff times;
+    ESPN publishes exact start times, venue and home/away for every fixture.
+    """
+    name      = "Sporting KC"
+    URL       = "https://www.sportingkc.com/schedule/"
+    API       = "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard"
+    TEAM_ID   = "186"
+    DAYS_AHEAD = 120
+    HOME_ONLY = True
+    # ESPN's API 403s on browser-like User-Agents, so don't send the shared one.
+    API_HEADERS = {"Accept": "application/json"}
 
     def fetch(self) -> list[Event]:
+        now    = datetime.now(CENTRAL)
+        window = now + timedelta(days=self.DAYS_AHEAD)
+        params = {
+            "dates": f"{now:%Y%m%d}-{window:%Y%m%d}",
+            "limit": 500,
+        }
         try:
-            from playwright.sync_api import sync_playwright
-        except ImportError:
-            self.logger.warning("Playwright not installed — skipping Sporting KC")
+            resp = requests.get(self.API, params=params, headers=self.API_HEADERS, timeout=20)
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception as e:
+            self.logger.error(f"ESPN fetch failed: {e}")
             return []
 
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(user_agent=self.REAL_UA)
-            page = context.new_page()
-            try:
-                page.goto(self.URL, wait_until="domcontentloaded", timeout=30000)
-                page.wait_for_selector(".mls-l-module--match-list, .c-schedule, [class*='match']", timeout=12000)
-            except Exception as e:
-                self.logger.warning(f"Page load issue: {e}")
-                browser.close()
-                return []
-            page.wait_for_timeout(2500)
-            html = page.content()
-            browser.close()
-
-        import json as _json
-        soup = BeautifulSoup(html, "lxml")
         events = []
-
-        # JSON-LD SportsEvent
-        for script in soup.find_all("script", type="application/ld+json"):
+        for ev in data.get("events", []):
             try:
-                data = _json.loads(script.string or "")
-                items = data if isinstance(data, list) else [data]
-                for item in items:
-                    if item.get("@type") in ("SportsEvent", "Event"):
-                        start = _parse_date(item.get("startDate", ""))
-                        if not start:
-                            continue
-                        loc = item.get("location", {})
-                        location = loc.get("name", "Children's Mercy Park") if isinstance(loc, dict) else "Children's Mercy Park"
-                        raw_name = item.get("name", "Sporting KC")
-                        # MLS JSON-LD sometimes concatenates team code + city,
-                        # e.g. "Sporting KC vs DALDallas" → strip leading uppercase code
-                        clean_name = re.sub(r'\b([A-Z]{2,4})(?=[A-Z][a-z])', r'', raw_name)
-                        # Skip if parsed as an own-game (SKC vs SKC)
-                        if "Sporting KC vs Sporting KC" in clean_name or "Sporting Kansas City vs Sporting Kansas City" in clean_name:
-                            continue
-                        if not start or start < datetime.now(CENTRAL):
-                            continue
-                        events.append(Event(
-                            title=clean_name,
-                            start_date=start, end_date=None,
-                            location=f"{location}, Kansas City", city="Kansas City",
-                            description="", url=item.get("url", self.URL),
-                            source="Sporting KC",
-                        ))
-            except Exception:
-                pass
+                comp       = ev["competitions"][0]
+                competitors = comp["competitors"]
+                skc = next((c for c in competitors if c["team"]["id"] == self.TEAM_ID), None)
+                if skc is None:
+                    continue
+                opp = next(c for c in competitors if c["team"]["id"] != self.TEAM_ID)
 
-        if not events:
-            seen = set()
-            # MLS widget match cards
-            for card in soup.find_all(class_=re.compile(r"match-list__match|c-schedule__item|match-row")):
-                try:
-                    date_tag = card.find("time") or card.find(class_=re.compile(r"date|time"))
-                    if not date_tag:
-                        continue
-                    start_date = _parse_date(date_tag.get("datetime") or date_tag.get_text(strip=True))
-                    if not start_date or start_date < datetime.now(CENTRAL):
-                        continue
-                    opp = card.find(class_=re.compile(r"opponent|away|home|team-name"))
-                    if opp:
-                        # Strip leading team abbreviation (e.g. "DALDallas" → "Dallas")
-                        raw_opp = opp.get_text(strip=True)
-                        clean_opp = re.sub(r'^[A-Z]{2,5}(?=[A-Z][a-z])', '', raw_opp).strip()
-                        # Skip if opponent resolves to Sporting KC itself (home game duplicate)
-                        if "sporting" in clean_opp.lower() or "kansas city" in clean_opp.lower():
-                            continue
-                        title = f"Sporting KC vs {clean_opp}"
-                    else:
-                        title = "Sporting KC"
-                    dedup_key = (title, start_date.date())
-                    if dedup_key in seen:
-                        continue
-                    seen.add(dedup_key)
-                    link = card.find("a", href=True)
-                    url  = link["href"] if link else self.URL
-                    events.append(Event(
-                        title=title, start_date=start_date, end_date=None,
-                        location="Children's Mercy Park, Kansas City", city="Kansas City",
-                        description="", url=url, source="Sporting KC",
-                    ))
-                except Exception:
-                    pass
+                is_home = skc["homeAway"] == "home"
+                if self.HOME_ONLY and not is_home:
+                    continue
 
+                start = datetime.fromisoformat(ev["date"].replace("Z", "+00:00")).astimezone(CENTRAL)
+                if start < now:
+                    continue
+
+                venue     = comp.get("venue", {})
+                venue_name = venue.get("fullName", "")
+                city_raw   = venue.get("address", {}).get("city", "")
+
+                if is_home:
+                    # ESPN still lists the home ground under its former name
+                    location = "Children's Mercy Park, Kansas City, KS"
+                    city     = "Kansas City"
+                else:
+                    location = f"{venue_name}, {city_raw}" if city_raw else venue_name
+                    city     = city_raw
+
+                opponent = opp["team"]["displayName"]
+                title    = f"Sporting KC {'vs' if is_home else 'at'} {opponent}"
+
+                events.append(Event(
+                    title=title, start_date=start, end_date=None,
+                    location=location, city=city,
+                    description="MLS Regular Season",
+                    url=self.URL, source="Sporting KC",
+                    category="Sports & Fitness",
+                ))
+            except Exception as e:
+                self.logger.warning(f"Fixture parse error: {e}")
+
+        events.sort(key=lambda e: e.start_date)
         self.logger.info(f"Parsed {len(events)} events from Sporting KC")
         return events
+
 
 
 # ── Kansas City Current ───────────────────────────────────────────────────────
