@@ -53,10 +53,10 @@
     "title": "Pickleball",
     "start_date": "2026-09-18T09:00:00-05:00",
     "end_date": null,
-    "location": "Tomahawk Ridge Community Center",
+    "location": "Matt Ross Community Center (MRCC)",
     "city": "Overland Park",
     "description": "Play and practice with fellow pickleball players. \r\nTimes and days are subject to change due to court availability.",
-    "url": "https://jcprd.com/Calendar.aspx?EID=17199&month=9&year=2026&day=16&calType=0",
+    "url": "https://jcprd.com/Calendar.aspx?EID=17004&month=9&year=2026&day=16&calType=0",
     "source": "JCPRD",
     "image_url": null,
     "cost": null,
@@ -1330,6 +1330,20 @@
     "cost": null,
     "tags": [],
     "category": "Music & Entertainment"
+  },
+  {
+    "title": "Sporting KC vs Philadelphia Union",
+    "start_date": "2026-09-19T19:30:00-05:00",
+    "end_date": null,
+    "location": "Children's Mercy Park, Kansas City, KS",
+    "city": "Kansas City",
+    "description": "MLS Regular Season",
+    "url": "https://www.sportingkc.com/schedule/",
+    "source": "Sporting KC",
+    "image_url": null,
+    "cost": null,
+    "tags": [],
+    "category": "Sports & Fitness"
   },
   {
     "title": "Yesenia Then",
