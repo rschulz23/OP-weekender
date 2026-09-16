@@ -583,27 +583,25 @@ class GreenLadyLoungeScraper(BaseScraper):
 # ── Sporting Kansas City ──────────────────────────────────────────────────────
 
 class SportingKCScraper(BaseScraper):
-    """Sporting KC fixtures via ESPN's public MLS scoreboard API.
+    """Sporting KC fixtures via ESPN's public MLS team schedule API.
 
     The club's own schedule page is client-rendered and omits kickoff times;
     ESPN publishes exact start times, venue and home/away for every fixture.
+    ``fixture=true`` returns upcoming matches (without it, only completed
+    ones). Avoid the scoreboard endpoint: it began rejecting date ranges with
+    a 400, which silently emptied this scraper.
     """
     name      = "Sporting KC"
     URL       = "https://www.sportingkc.com/schedule/"
-    API       = "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard"
     TEAM_ID   = "186"
-    DAYS_AHEAD = 120
+    API       = f"https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/{TEAM_ID}/schedule"
     HOME_ONLY = True
     # ESPN's API 403s on browser-like User-Agents, so don't send the shared one.
     API_HEADERS = {"Accept": "application/json"}
 
     def fetch(self) -> list[Event]:
         now    = datetime.now(CENTRAL)
-        window = now + timedelta(days=self.DAYS_AHEAD)
-        params = {
-            "dates": f"{now:%Y%m%d}-{window:%Y%m%d}",
-            "limit": 500,
-        }
+        params = {"fixture": "true"}
         try:
             resp = requests.get(self.API, params=params, headers=self.API_HEADERS, timeout=20)
             resp.raise_for_status()
