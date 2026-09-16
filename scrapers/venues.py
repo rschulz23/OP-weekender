@@ -16,7 +16,7 @@ Sources:
 
 import re
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil import parser as dateparser
 import pytz
 from bs4 import BeautifulSoup
