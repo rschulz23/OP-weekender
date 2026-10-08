@@ -493,6 +493,8 @@ def _header(friday: datetime, saturday: datetime, sunday: datetime, total: int) 
 
 
 SUBSCRIBE_URL = "https://op-weekender.beehiiv.com/subscribe"
+# Shown as the link text in the footer, derived so there is one place to edit.
+SUBSCRIBE_LABEL = re.sub(r'^https?://(?:www\.)?|/.*$', '', SUBSCRIBE_URL)
 
 # Create a Google Form at forms.google.com and paste the shareable link here
 SUBMIT_EVENT_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeu7Pxa4CAy_sNF7krJ6KdstfVdupkB_zKFu28Iqgh5JGxUeA/viewform"
@@ -526,7 +528,7 @@ def _footer() -> str:
     <td style="padding:12px 0 4px;text-align:center;">
       <p style="font-size:13px;color:{TEXT_MUTED};margin:0;">
         Enjoying this? Forward it to a neighbor &mdash; they can subscribe at
-        <a href="{SUBSCRIBE_URL}" style="color:{BRAND_DARK};text-decoration:none;font-weight:600;">op-weekender.beehiiv.com</a>
+        <a href="{SUBSCRIBE_URL}" style="color:{BRAND_DARK};text-decoration:none;font-weight:600;">{SUBSCRIBE_LABEL}</a>
       </p>
     </td>
   </tr>
