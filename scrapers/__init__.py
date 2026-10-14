@@ -1,4 +1,3 @@
-from .shawnee_mission_post import ShawneeMissionPostScraper
 from .johnson_county_post import JohnsonCountyPostScraper
 from .visit_overland_park import VisitOverlandParkScraper
 from .jcprd import JCPRDScraper
@@ -37,7 +36,6 @@ from .tmobile_center import TMobileCenterScraper
 from .park_place import ParkPlaceScraper
 
 ALL_SCRAPERS = [
-    ShawneeMissionPostScraper,
     JohnsonCountyPostScraper,
     VisitOverlandParkScraper,
     JCPRDScraper,
