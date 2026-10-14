@@ -5,17 +5,24 @@
     "end_date": "2026-10-18T23:59:00-05:00",
     "location": "Camelot Ballroom, Kansas City, Kansas 66103",
     "city": "Kansas City",
-<<<<<<< Updated upstream
-    "description": "Kansas City, Pujo is coming!Join ABKC Sangam for ABKC Sangam Durgotsab 2026, a three-day celebration of Durga Puja in the Kansas City area from October 16\u201318, 2026 at Camelot Ballroom in Overland Park.Whether Pujo feels like home or you're experiencing it for the first time, come celebrate three days filled with tradition, food, music, cultural programs, friendship and community. Bring your family, bring your friends \u2014 there's a place for everyone here.And when the evening sets in, the celebrati",
-    "url": "https://abkcs.org/durga-puja",
-    "source": "Visit Overland Park",
-    "image_url": "https://files.idss.com/C514/c1a5bb50-cb8d-4497-8295-15d48a162d9c.jpeg",
-=======
     "description": "Kansas City, Pujo is coming! Join ABKC Sangam for ABKC Sangam Durgotsab 2026, a three-day celebration of Durga Puja in the Kansas City area from October 16\u201318, 2026 at Camelot Ballroom in Overland Park. Whether Pujo feels like home or you're experiencing it for the first time, come celebrate three days filled with tradition, food, music, cultural programs, friendship and community. Bring your family, bring your friends \u2014 there's a place for everyone here. And when the evening sets in, the celebr",
     "url": "https://abkcs.org/durga-puja",
     "source": "Visit Overland Park",
     "image_url": "",
->>>>>>> Stashed changes
+    "cost": null,
+    "tags": [],
+    "category": "Community & Festivals"
+  },
+  {
+    "title": "Into the Night Fall Festival",
+    "start_date": "2026-10-16T00:00:00-05:00",
+    "end_date": null,
+    "location": "14701 Mission Road, Leawood, KS",
+    "city": "Leawood",
+    "description": "",
+    "url": "https://www.leawood.org/Calendar.aspx?EID=1549&month=10&year=2026&day=14&calType=0",
+    "source": "Leawood",
+    "image_url": null,
     "cost": null,
     "tags": [],
     "category": "Community & Festivals"
@@ -37,6 +44,48 @@
       "family"
     ],
     "category": "Family & Kids"
+  },
+  {
+    "title": "Botanical Illustration Panel Exhibition",
+    "start_date": "2026-10-16T00:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://www.opkansas.gov/content/event/botanical-illustration-panel-exhibition-oct-16-2026-all-day",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/664ebd79-965c-4fbb-b176-2c83be8e9dd5?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Arts & Culture"
+  },
+  {
+    "title": "Walk and Read at the Arboretum: Clever Crow",
+    "start_date": "2026-10-16T00:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://www.opkansas.gov/content/event/walk-and-read-at-the-arboretum-clever-crow-oct-16-2026-all-day",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/15b6d8c0-3229-49db-918e-d5848fecf5d6?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Sports & Fitness"
+  },
+  {
+    "title": "Art at the Center: Lily Taylor Exhibit",
+    "start_date": "2026-10-16T05:30:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://www.opkansas.gov/Art",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/e327e426-6c47-4c4d-a03a-556acd1df8e6?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Arts & Culture"
   },
   {
     "title": "Kids' Day Out",
@@ -171,6 +220,34 @@
     "category": "Family & Kids"
   },
   {
+    "title": "Mugs and Members Social Hour",
+    "start_date": "2026-10-16T10:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://buy.acmeticketing.com/events/562/detail/696abdedadcc74cc9a3f0d2c",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/bbc03026-f654-4eb1-bca4-06d24f413a9c?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Other"
+  },
+  {
+    "title": "Pumpkin Hollow",
+    "start_date": "2026-10-16T10:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://artsandrec-op.org/farmstead/pumpkin-hollow/",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/03a458cc-2873-4a18-85ab-fac4e5e2c8d5?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Other"
+  },
+  {
     "title": "Homeschool Day",
     "start_date": "2026-10-16T10:00:00-05:00",
     "end_date": null,
@@ -281,21 +358,6 @@
     "category": "Food & Drink"
   },
   {
-    "title": "Into the Night Fall Festival",
-    "start_date": "2026-10-16T17:00:00-05:00",
-    "end_date": null,
-    "location": "Ironwoods Park",
-    "city": "Leawood",
-    "description": "Celebrate the season at Ironwoods Park during our annual Into the Night Fall Festival! Enjoy an evening filled with family-friendly fall fun, including a pumpkin patch, pumpkin decorating, petting zoo, hayrides, a luminary trail, s\u2019mores by the fire, caramel apple nachos, inflatables, a rock wall, cornhole, crafts, and more!",
-    "url": "https://www.leawood.org/Calendar.aspx?EID=1549&month=10&year=2026&day=14&calType=0",
-    "source": "City of Leawood",
-<<<<<<< Updated upstream
-    "image_url": null,
-    "cost": null,
-    "tags": [],
-    "category": "Community & Festivals"
-  },
-  {
     "title": "Arts On Fire",
     "start_date": "2026-10-16T17:00:00-05:00",
     "end_date": "2026-10-16T21:00:00-05:00",
@@ -360,15 +422,12 @@
     "description": "Genres: Jazz",
     "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
     "source": "KC Live Music",
-=======
->>>>>>> Stashed changes
     "image_url": null,
     "cost": null,
     "tags": [],
-    "category": "Community & Festivals"
+    "category": "Music & Entertainment"
   },
   {
-<<<<<<< Updated upstream
     "title": "Walker Mathison & Brandee Lynne @ Tall Trellis Brew Co.",
     "start_date": "2026-10-16T18:00:00-05:00",
     "end_date": null,
@@ -378,141 +437,11 @@
     "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
     "source": "KC Live Music",
     "image_url": null,
-=======
-    "title": "Arts On Fire",
-    "start_date": "2026-10-16T17:00:00-05:00",
-    "end_date": "2026-10-16T21:00:00-05:00",
-    "location": "InterUrban ArtHouse, Overland Park, Kansas 66204",
-    "city": "Overland Park",
-    "description": "Join us for our annual Arts on Fire Celebration! This unforgettable evening features live circus (with fire!), local food and drink, the return of the highly anticipated 6\u201dx6\u201d Art Sale and the opening of the 12\u201dx12\u201d Member Exhibition.Every ticket includes one 6x6 piece of your choice! Additional pieces may be purchased for $50 each. All 12x12\u201d work is priced $300 and below. All sales support year-round programming to provide affordable studio space, business education, paid opportunities for art",
-    "url": "https://www.interurbanarthouse.org/arts-on-fire-2026",
-    "source": "Visit Overland Park",
-    "image_url": "https://files.idss.com/C514/a54fa19b-5648-452a-8456-ca4e5b77e0ee.jpg",
-    "cost": null,
-    "tags": [],
-    "category": "Arts & Culture"
-  },
-  {
-    "title": "Third Fridays in Downtown OP",
-    "start_date": "2026-10-16T17:00:00-05:00",
-    "end_date": "2026-10-16T20:00:00-05:00",
-    "location": "Downtown Overland Park, Overland Park, Kansas",
-    "city": "Overland Park",
-    "description": "Wander through local art galleries, browse charming shops, and satisfy your taste buds at one of our many restaurants in Downtown Overland Park every third Friday of the month! Participating Businesses Include: 80 Santa Fe Art Gallery\ud83d\udccd 7944 Santa Fe Drive Images Art Gallery\ud83d\udccd 7320 West 80th Street Interurban Art House\ud83d\udccd 8001 Newton Street Crafted Fair Trade\ud83d\udccd7947 Santa Fe Drive Made in KC\ud83d\udccd7325 W 80th Street Awakening Illumination\ud83d\udccd7319 W 81st StreetHouse of Clak\ud83d\udccd7811 Marty Street",
-    "url": "https://www.downtownop.org/events/overland-park-event-page-ajcxw-rctlf-3xdt8-34da7-9sjs5-5pp2x-33fly-74nj4-9r2nc-23la6-53enr-43y62-6b3rg-tfhtb-c876k-2p6bt-2we64-ddjsn-4g2wy-2yf92-lkfjd-bsx74-epd5c",
-    "source": "Visit Overland Park",
-    "image_url": "https://files.idss.com/C514/177d90d1-5955-44f8-89d8-64b193823e98.jpeg",
-    "cost": null,
-    "tags": [],
-    "category": "Arts & Culture"
-  },
-  {
-    "title": "Girls' Night Out at Paint Glaze & Fire",
-    "start_date": "2026-10-16T17:30:00-05:00",
-    "end_date": "2026-10-16T20:00:00-05:00",
-    "location": "Paint Glaze & Fire, Overland Park, Kansas 66213",
-    "city": "Overland Park",
-    "description": "Let's go girls, it's time for a GNO!\ud83d\udc95 Call up your friends and make plans to create a glass fusion project or paint pottery at Paint Glaze & Fire. Girls Night Out is held on the third Friday of every month.During this special event, you may bring your own adult beverage, just be sure to bring your own glasses, wine bottle and wine opener! If you plan to create a glass fusion project, there is no slump fee during this event. For pottery painting and glass fusion, there is a minimum purchase of $2",
-    "url": "https://app.getoccasion.com/p/n/07de742d5ff432b9442ce96088753a4f4db5a69d/v5?time_slot_id=gufylfC-pmpJ0",
-    "source": "Visit Overland Park",
-    "image_url": "https://files.idss.com/C514/images/calendar/IMG_7447_FD26FB72-F055-AE9B-CB3DD1C8A07D4D06.jpg",
-    "cost": null,
-    "tags": [],
-    "category": "Arts & Culture"
-  },
-  {
-    "title": "Night of the Living Farm",
-    "start_date": "2026-10-16T17:30:00-05:00",
-    "end_date": "2026-10-16T21:00:00-05:00",
-    "location": "Deanna Rose Children's Farmstead, Overland Park, Kansas 66221",
-    "city": "Overland Park",
-    "description": "Explore the Farmstead after dark... if you dare!Dress in your best costume and get ready for a night of Halloween fun for all ages. From spooky thrills to not-so-scary chills, there\u2019s something for everyone.This is a key fundraiser event for Friends of the Farmstead where all proceeds benefit the future of the Deanna Rose Children's Farmstead.Activities Included:Scary and non-scary hayridesLine Dancing in the Dairy BarnRuby's Carnival GamesRubber Duck Races at the Mining ShackSpooky Experiments ",
-    "url": "https://artsandrec-op.org/farmstead/night-living-farm/",
-    "source": "Visit Overland Park",
-    "image_url": "https://files.idss.com/C514/08aa004a-b415-4218-9fe4-b6d09cc5ae0f.jpg",
-    "cost": null,
-    "tags": [],
-    "category": "Community & Festivals"
-  },
-  {
-    "title": "Live Music with the Bourbon Brothers",
-    "start_date": "2026-10-16T17:30:00-05:00",
-    "end_date": null,
-    "location": "Serendipity Farm & Vine, 4674 W 183rd St, Stilwell, KS",
-    "city": "Stilwell",
-    "description": "",
-    "url": "https://www.serendipityfarmandvine.com/event/live-music-with-the-bourbon-brothers-5/",
-    "source": "Serendipity Farm & Vine",
-    "image_url": "https://www.serendipityfarmandvine.com/wp-content/uploads/2026/02/Screenshot-2026-09-11-at-11.20.36-AM-scaled.png",
->>>>>>> Stashed changes
     "cost": null,
     "tags": [],
     "category": "Music & Entertainment"
   },
   {
-<<<<<<< Updated upstream
-    "title": "Mojo Brookzz",
-    "start_date": "2026-10-16T19:00:00-05:00",
-    "end_date": null,
-    "location": "The Midland Theatre - MO \u2014 1228 Main St, Kansas City",
-    "city": "Kansas City",
-    "description": "Arts & Theatre",
-    "url": "https://www.ticketmaster.com/event/Z7r9jZ1A70bfJ",
-    "source": "The Midland Theatre - MO",
-    "image_url": "https://s1.ticketm.net/dam/c/8cf/a6653880-7899-4f67-8067-1f95f4d158cf_124761_TABLET_LANDSCAPE_16_9.jpg",
-=======
-    "title": "Max Groove @ Sullivan\u2019s Steakhouse",
-    "start_date": "2026-10-16T18:00:00-05:00",
-    "end_date": null,
-    "location": "Sullivan\u2019s Steakhouse, Leawood, KS",
-    "city": "Leawood",
-    "description": "Genres: Jazz",
-    "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
-    "source": "KC Live Music",
-    "image_url": null,
->>>>>>> Stashed changes
-    "cost": null,
-    "tags": [],
-    "category": "Music & Entertainment"
-  },
-  {
-<<<<<<< Updated upstream
-    "title": "Grand Villanova @ Lenexa Public Market",
-    "start_date": "2026-10-16T19:00:00-05:00",
-    "end_date": null,
-    "location": "Lenexa Public Market, Lenexa, KS",
-    "city": "Lenexa",
-    "description": "Kansas City\u2019s Premiere Power Trio",
-=======
-    "title": "Walker Mathison & Brandee Lynne @ Tall Trellis Brew Co.",
-    "start_date": "2026-10-16T18:00:00-05:00",
-    "end_date": null,
-    "location": "Tall Trellis Brew Co., Olathe, KS",
-    "city": "Olathe",
-    "description": "",
->>>>>>> Stashed changes
-    "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
-    "source": "KC Live Music",
-    "image_url": null,
-    "cost": null,
-    "tags": [],
-    "category": "Music & Entertainment"
-  },
-  {
-<<<<<<< Updated upstream
-    "title": "Madd Honey @ Limitless Brewing",
-    "start_date": "2026-10-16T19:00:00-05:00",
-    "end_date": null,
-    "location": "Limitless Brewing, Lenexa, KS",
-    "city": "Lenexa",
-    "description": "Genres: Alternative, Classic Rock, Country, Covers, Emo, Pop, Rock",
-    "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
-    "source": "KC Live Music",
-    "image_url": null,
-    "cost": null,
-    "tags": [],
-    "category": "Music & Entertainment"
-=======
     "title": "Mojo Brookzz",
     "start_date": "2026-10-16T19:00:00-05:00",
     "end_date": null,
@@ -553,7 +482,76 @@
     "cost": null,
     "tags": [],
     "category": "Music & Entertainment"
->>>>>>> Stashed changes
+  },
+  {
+    "title": "Blue Valley North @ Bishop Miege",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "Dixon Doll Stadium",
+    "city": "Overland Park",
+    "description": "Away",
+    "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthhs/v/schedule",
+    "source": "HS Football",
+    "image_url": null,
+    "cost": "Free",
+    "tags": [],
+    "category": "Sports & Fitness"
+  },
+  {
+    "title": "Blue Valley Northwest vs St. James Academy",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "Switzer Football Stadium",
+    "city": "Overland Park",
+    "description": "Home",
+    "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthwesths/v/schedule",
+    "source": "HS Football",
+    "image_url": null,
+    "cost": "Free",
+    "tags": [],
+    "category": "Sports & Fitness"
+  },
+  {
+    "title": "Blue Valley Southwest vs Saint Thomas Aquinas",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "Antioch ANTDAC Stadium",
+    "city": "Overland Park",
+    "description": "Home",
+    "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleysw/v/schedule",
+    "source": "HS Football",
+    "image_url": null,
+    "cost": "Free",
+    "tags": [],
+    "category": "Sports & Fitness"
+  },
+  {
+    "title": "Blue Valley vs Blue Valley West",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "Blue Valley High School Lamar District Activity Center",
+    "city": "Overland Park",
+    "description": "Home",
+    "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalley/v/schedule",
+    "source": "HS Football",
+    "image_url": null,
+    "cost": "Free",
+    "tags": [],
+    "category": "Sports & Fitness"
+  },
+  {
+    "title": "Olathe East vs Gardner Edgerton",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "College Boulevard Activity Complex CBAC Football Field",
+    "city": "Overland Park",
+    "description": "Home",
+    "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule",
+    "source": "HS Football",
+    "image_url": null,
+    "cost": "Free",
+    "tags": [],
+    "category": "Sports & Fitness"
   },
   {
     "title": "Pottery & Pinot Wheel Throwing Experience (21+)",
@@ -568,6 +566,62 @@
     "cost": null,
     "tags": [],
     "category": "Arts & Culture"
+  },
+  {
+    "title": "SM North vs Olathe South",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "SMSD North Stadium Track and Turf Field",
+    "city": "Overland Park",
+    "description": "Home",
+    "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorth/v/schedule",
+    "source": "HS Football",
+    "image_url": null,
+    "cost": "Free",
+    "tags": [],
+    "category": "Sports & Fitness"
+  },
+  {
+    "title": "SM South @ Lawrence Free State",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "Lawrence Free State High School",
+    "city": "Overland Park",
+    "description": "Away",
+    "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smsouth/v/schedule",
+    "source": "HS Football",
+    "image_url": null,
+    "cost": "Free",
+    "tags": [],
+    "category": "Sports & Fitness"
+  },
+  {
+    "title": "SM West vs Olathe North",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "SMSD South Stadium",
+    "city": "Overland Park",
+    "description": "Home",
+    "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissionwesths/v/schedule",
+    "source": "HS Football",
+    "image_url": null,
+    "cost": "Free",
+    "tags": [],
+    "category": "Sports & Fitness"
+  },
+  {
+    "title": "St. Thomas Aquinas @ Blue Valley Southwest",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "Antioch ANTDAC Stadium",
+    "city": "Overland Park",
+    "description": "Away",
+    "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/saintthomasaquinas/v/schedule",
+    "source": "HS Football",
+    "image_url": null,
+    "cost": "Free",
+    "tags": [],
+    "category": "Sports & Fitness"
   },
   {
     "title": "Kansas City Mavericks vs Rapid City Rush - Barn Party Night",
@@ -732,18 +786,32 @@
     "category": "Family & Kids"
   },
   {
-    "title": "Farmers Market",
-    "start_date": "2026-10-17T07:00:00-05:00",
+    "title": "Botanical Illustration Panel Exhibition",
+    "start_date": "2026-10-17T00:00:00-05:00",
     "end_date": null,
-    "location": "Event Location",
-    "city": "Shawnee",
+    "location": "Overland Park",
+    "city": "Overland Park",
     "description": "",
-    "url": "https://www.cityofshawnee.org/Calendar.aspx?EID=1119&month=10&year=2026&day=17&calType=0",
-    "source": "City of Shawnee",
-    "image_url": null,
+    "url": "https://www.opkansas.gov/content/event/botanical-illustration-panel-exhibition-oct-17-2026-all-day",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/664ebd79-965c-4fbb-b176-2c83be8e9dd5?cache=1800",
     "cost": null,
     "tags": [],
-    "category": "Food & Drink"
+    "category": "Arts & Culture"
+  },
+  {
+    "title": "Walk and Read at the Arboretum: Clever Crow",
+    "start_date": "2026-10-17T00:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://www.opkansas.gov/content/event/walk-and-read-at-the-arboretum-clever-crow-oct-17-2026-all-day",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/15b6d8c0-3229-49db-918e-d5848fecf5d6?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Sports & Fitness"
   },
   {
     "title": "\u26d4 Practice: Cancelled",
@@ -762,6 +830,20 @@
       "family"
     ],
     "category": "Family & Kids"
+  },
+  {
+    "title": "Farmers Market",
+    "start_date": "2026-10-17T08:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://www.opkansas.org/recreation-fun/farmers-market/",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/6cc532ed-e03a-437c-a7d0-8542ee0d5e2e?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Food & Drink"
   },
   {
     "title": "Overland Park Farmers Market",
@@ -808,6 +890,20 @@
       "family"
     ],
     "category": "Workshops & Classes"
+  },
+  {
+    "title": "Recycling Extravaganza",
+    "start_date": "2026-10-17T09:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://www.opkansas.org/city-services/trash-recycling/recycling-extravaganza/",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/470de0ac-6690-4979-9cf4-b6d9f88e2edc?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Other"
   },
   {
     "title": "Cars in the Park at Theatre in the Park",
@@ -858,6 +954,20 @@
     "cost": null,
     "tags": [],
     "category": "Family & Kids"
+  },
+  {
+    "title": "Pumpkin Hollow",
+    "start_date": "2026-10-17T10:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://artsandrec-op.org/farmstead/pumpkin-hollow/",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/03a458cc-2873-4a18-85ab-fac4e5e2c8d5?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Other"
   },
   {
     "title": "Saturday Open Jam Hosted by Billy Ebeling",
@@ -1009,20 +1119,6 @@
     "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
     "source": "KC Live Music",
     "image_url": null,
-    "cost": null,
-    "tags": [],
-    "category": "Music & Entertainment"
-  },
-  {
-    "title": "Disney Worlds Collide Concert Tour",
-    "start_date": "2026-10-17T19:00:00-05:00",
-    "end_date": null,
-    "location": "T-Mobile Center, 1407 Grand Blvd, Kansas City, MO",
-    "city": "Kansas City",
-    "description": "The next&nbsp;&ldquo;Worlds Collide Concert Tour&rdquo;&nbsp;of North America coming&nbsp;to T-Mobile Center&nbsp;on&nbsp;October 17.The all-new &ldquo;Worlds Collide Concert Tour&rdquo; brings together the worlds of&nbsp;&ldquo;Descendants,&rdquo; &ldquo;ZOMBIES&rdquo;&nbsp;and for the very first time,&nbsp;&ldquo;Camp Rock,&rdquo;&nbsp;in an unforgettable new arena spectacular. A pop concert of the highest caliber, this year&rsquo;s cast features an exceptionally talented lineup of Disney stars including Malachi Barton (&ldquo;ZOMBIES 4,&rdquo; &ldquo;Camp Rock 3&rdquo;), Liamani Segura (&ldquo;Descendants: Wicked Wonderland,&rdquo; &ldquo;Camp Rock 3&rdquo;), Dara Rene&eacute; (&ldquo;Descendants: The Rise of Red&rdquo;), Mekonnen Knife (&ldquo;ZOMBIES 4&rdquo;), Hudson Stone (&ldquo;Camp Rock 3&rdquo;), Swayam Bhatia (&ldquo;ZOMBIES 4&rdquo;), Kiara Romero (&ldquo;Descendants: Wicked Wonderland&rdquo;), and Alexandro Byrd (&ldquo;Descendants: Wicked Wonderland&rdquo;). Fans will experience an evening packed with hit songs from all three franchises brought together in a brand-new production with fresh mashups and fan favorite songs. Next-level choreography and electrifying special effects create an evening filled with nonstop delight, fan interactions, and nostalgia. Come dressed as your favorite character, sing along all night, and experience the music and moments from&nbsp;&ldquo;Descendants,&rdquo; &ldquo;ZOMBIES&rdquo; and &ldquo;Camp Rock&rdquo;&nbsp;colliding on stage in this all-new concert experience.&nbsp;",
-    "url": "https://www.t-mobilecenter.com/events/detail/worlds-collide-2026",
-    "source": "T-Mobile Center",
-    "image_url": "https://www.t-mobilecenter.com/assets/img/10.17.26-Disney-World-Collide-675x435-v2-8f315358fb.jpg",
     "cost": null,
     "tags": [],
     "category": "Music & Entertainment"
@@ -1214,11 +1310,7 @@
     "category": "Music & Entertainment"
   },
   {
-<<<<<<< Updated upstream
     "title": "Rustin Smith @ Last Call Lounge",
-=======
-    "title": "Max Indiveri @ Last Call Lounge",
->>>>>>> Stashed changes
     "start_date": "2026-10-17T20:30:00-05:00",
     "end_date": null,
     "location": "Last Call Lounge, Overland Park, KS",
@@ -1260,6 +1352,20 @@
     "category": "Music & Entertainment"
   },
   {
+    "title": "Night of the Living Farm",
+    "start_date": "2026-10-17T21:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://artsandrec-op.org/farmstead/night-living-farm/",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/44b29dac-fbc4-4b70-99c5-48246359bafc?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Other"
+  },
+  {
     "title": "The Stolen Winnebagos @ BrewTop Overland Park",
     "start_date": "2026-10-17T21:00:00-05:00",
     "end_date": null,
@@ -1274,6 +1380,48 @@
     "category": "Music & Entertainment"
   },
   {
+    "title": "Paul Heacock Presentation - Leawood Veterans Memorial Group",
+    "start_date": "2026-10-18T00:00:00-05:00",
+    "end_date": null,
+    "location": "4800 Town Center Drive, Leawood, KS",
+    "city": "Leawood",
+    "description": "",
+    "url": "https://www.leawood.org/Calendar.aspx?EID=1539&month=10&year=2026&day=14&calType=0",
+    "source": "Leawood",
+    "image_url": null,
+    "cost": null,
+    "tags": [],
+    "category": "Community & Festivals"
+  },
+  {
+    "title": "Botanical Illustration Panel Exhibition",
+    "start_date": "2026-10-18T00:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://www.opkansas.gov/content/event/botanical-illustration-panel-exhibition-oct-18-2026-all-day",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/664ebd79-965c-4fbb-b176-2c83be8e9dd5?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Arts & Culture"
+  },
+  {
+    "title": "Walk and Read at the Arboretum: Clever Crow",
+    "start_date": "2026-10-18T00:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://www.opkansas.gov/content/event/walk-and-read-at-the-arboretum-clever-crow-oct-18-2026-all-day",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/15b6d8c0-3229-49db-918e-d5848fecf5d6?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Sports & Fitness"
+  },
+  {
     "title": "Oktoberfest at Worlds of Fun",
     "start_date": "2026-10-18T10:00:00-05:00",
     "end_date": null,
@@ -1286,6 +1434,34 @@
     "cost": null,
     "tags": [],
     "category": "Family & Kids"
+  },
+  {
+    "title": "Pumpkin Hollow",
+    "start_date": "2026-10-18T10:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://artsandrec-op.org/farmstead/pumpkin-hollow/",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/03a458cc-2873-4a18-85ab-fac4e5e2c8d5?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Other"
+  },
+  {
+    "title": "Prairie Hike",
+    "start_date": "2026-10-18T11:00:00-05:00",
+    "end_date": null,
+    "location": "Overland Park",
+    "city": "Overland Park",
+    "description": "",
+    "url": "https://buy.acmeticketing.com/events/562/detail/69f0efa0a02d5c8748d6adb2",
+    "source": "City of Overland Park",
+    "image_url": "https://content.civicplus.com/api/assets/ks-overlandpark/76e7410d-f511-468a-aa68-d2e3056956be?cache=1800",
+    "cost": null,
+    "tags": [],
+    "category": "Outdoors & Nature"
   },
   {
     "title": "Walking 11am-12pm",
@@ -1328,20 +1504,6 @@
     "cost": "$20",
     "tags": [],
     "category": "Music & Entertainment"
-  },
-  {
-    "title": "Paul Heacock Presentation - Leawood Veterans Memorial Group",
-    "start_date": "2026-10-18T13:00:00-05:00",
-    "end_date": null,
-    "location": "Leawood City Hall - Oak Room",
-    "city": "Leawood",
-    "description": "Hear about Heacock\u2019s book \u201850 Missions to Dawn: A WWII B-24 Pilot\u2019s War\u2019, a gripping true-life air combat memoir that follows young \u201cBud\u201d and his crew as they fight to survive a 50-mission tour over Nazi-held Europe. Drawn from Bud\u2019s wartime diary, flight logs, letters and after-action reports.\r\n\r\nDonations to the Leawood Veterans Memorial gratefully accepted",
-    "url": "https://www.leawood.org/Calendar.aspx?EID=1539&month=10&year=2026&day=14&calType=0",
-    "source": "City of Leawood",
-    "image_url": null,
-    "cost": null,
-    "tags": [],
-    "category": "Community & Festivals"
   },
   {
     "title": "Live Music",
