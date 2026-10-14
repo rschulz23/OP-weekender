@@ -883,67 +883,81 @@ class MidlandKCScraper(BaseScraper):
 # ── Leawood City Calendar (RSS) ───────────────────────────────────────────────
 
 class LeawoodCalendarScraper(BaseScraper):
-    name = "Leawood"
-    URL  = "https://www.leawood.org/RSSFeed.aspx?ModID=58&CID=Main-Calendar-14"
+    """Leawood's featured events, read from the calendar page.
+
+    Two reasons this does not use the obvious sources: leawood.org sits behind
+    Cloudflare and returns 403 to plain requests whatever headers are sent, so
+    it needs a real browser; and the site's RSS feed, which this used to read,
+    is served but permanently empty — no <item> elements at all.
+    """
+    name    = "Leawood"
+    URL     = "https://www.leawood.org/calendar.aspx"
+    BASE    = "https://www.leawood.org"
+    REAL_UA = (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    )
 
     def fetch(self) -> list[Event]:
-        import xml.etree.ElementTree as ET
         try:
-            resp = requests.get(self.URL, headers=HEADERS, timeout=15)
-            resp.raise_for_status()
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            self.logger.warning("Playwright not installed — skipping Leawood")
+            return []
+
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                page = browser.new_context(user_agent=self.REAL_UA).new_page()
+                page.goto(self.URL, wait_until="domcontentloaded", timeout=35000)
+                page.wait_for_selector("a[href*='EID=']", timeout=15000)
+                html = page.content()
+                browser.close()
         except Exception as e:
-            self.logger.warning(f"Fetch failed: {e}")
+            self.logger.warning(f"Page load issue: {e}")
             return []
 
-        try:
-            root = ET.fromstring(resp.content)
-        except ET.ParseError as e:
-            self.logger.warning(f"XML parse error: {e}")
-            return []
-
-        # RSS namespace for calendarEvent custom fields
-        ns = {"ce": "urn:schemas-microsoft-com:office:office"}
-        # Try to detect the actual namespace from the document
-        ns_match = re.search(r'xmlns:calendarEvent=["\']([^"\']+)["\']', resp.text)
-        ce_ns = ns_match.group(1) if ns_match else ""
-
+        soup = BeautifulSoup(html, "lxml")
         events = []
-        for item in root.findall(".//item"):
+        seen: set[str] = set()
+
+        for li in soup.select("div.section.featured li"):
             try:
-                title = (item.findtext("title") or "").strip()
-                url   = (item.findtext("link") or "").strip()
-                if not title or not url:
+                link = li.select_one("a[href*='EID=']")
+                if not link:
+                    continue
+                eid = re.search(r'EID=(\d+)', link["href"])
+                if not eid or eid.group(1) in seen:
                     continue
 
-                # Prefer calendarEvent:EventDates for the date
-                date_text = ""
-                if ce_ns:
-                    date_el = item.find(f"{{{ce_ns}}}EventDates")
-                    time_el = item.find(f"{{{ce_ns}}}EventTimes")
-                    loc_el  = item.find(f"{{{ce_ns}}}Location")
-                    if date_el is not None and date_el.text:
-                        date_text = date_el.text.strip()
-                        if time_el is not None and time_el.text:
-                            date_text += " " + time_el.text.strip().split("-")[0].strip()
-                    location = loc_el.text.strip() if loc_el is not None and loc_el.text else "Leawood, KS"
-                else:
-                    location = "Leawood, KS"
-
-                if not date_text:
-                    date_text = item.findtext("pubDate") or ""
-
-                start_date = _parse_date(date_text)
-                if not start_date:
+                # <h4> holds the title; the <p> beneath it is the date and
+                # street address separated by a <br>. Dates use non-breaking
+                # spaces, which the date parser will not accept.
+                title_tag = li.find("h4")
+                detail_tag = li.find("p")
+                if not title_tag or not detail_tag:
                     continue
+                title = title_tag.get_text(" ", strip=True)
 
-                # Strip HTML from description
-                raw_desc = item.findtext("description") or ""
-                desc = re.sub(r"<[^>]+>", " ", raw_desc).strip()[:300]
+                detail = detail_tag.get_text("|", strip=True).replace("\xa0", " ")
+                date_text, _, address = detail.partition("|")
 
+                start_date = _parse_date(date_text.strip())
+                if not start_date or not title:
+                    continue
+                seen.add(eid.group(1))
+
+                location = address.strip() or "Leawood, KS"
+                href = link["href"]
                 events.append(Event(
-                    title=title, start_date=start_date, end_date=None,
-                    location=location, city="Leawood",
-                    description=desc, url=url, source="Leawood",
+                    title=title,
+                    start_date=start_date,
+                    end_date=None,
+                    location=f"{location}, Leawood, KS" if not location.endswith("KS") else location,
+                    city="Leawood",
+                    description="",
+                    url=self.BASE + href if href.startswith("/") else href,
+                    source="Leawood",
                 ))
             except Exception as e:
                 self.logger.warning(f"Item parse error: {e}")
@@ -954,11 +968,48 @@ class LeawoodCalendarScraper(BaseScraper):
 
 # ── Overland Park City Events (CivicPlus / Playwright) ───────────────────────
 
+# CivicPlus writes the date as "Oct. 14, 2026" or "June 23, 2026", immediately
+# followed by a time (or "All Day") and then a street address with no separator.
+# Match the date and time directly rather than trying to find where the address
+# begins — that is what broke when the month names became abbreviated.
+_OP_DATE_RE = re.compile(r'([A-Za-z]{3,9})\.?\s+(\d{1,2}),\s*(\d{4})')
+_OP_TIME_RE = re.compile(r'(\d{1,2})(?::(\d{2}))?\s*([ap])\.?\s*m\.?', re.IGNORECASE)
+
+
+def _parse_op_datetime(text: str) -> datetime | None:
+    """Pull the start datetime out of a CivicPlus widgetDesc string."""
+    m = _OP_DATE_RE.search(text)
+    if not m:
+        return None
+    month, day, year = m.group(1), m.group(2), m.group(3)
+    for fmt in ("%b %d %Y", "%B %d %Y"):
+        try:
+            dt = datetime.strptime(f"{month[:3] if fmt.startswith('%b') else month} {day} {year}", fmt)
+            break
+        except ValueError:
+            continue
+    else:
+        return None
+
+    # Only look between the date and the address for a start time, so house
+    # numbers and zip codes can't be read as one.
+    tail = text[m.end():m.end() + 30]
+    t = _OP_TIME_RE.search(tail)
+    if t:
+        hour = int(t.group(1)) % 12
+        if t.group(3).lower() == "p":
+            hour += 12
+        dt = dt.replace(hour=hour, minute=int(t.group(2) or 0))
+    return CENTRAL.localize(dt)
+
+
 class OPKansasScraper(BaseScraper):
     name    = "City of Overland Park"
-    URL     = "https://www.opkansas.org/parks-recreation-and-sports/special-events/"
-    # The /events page is a pure JS app; use the parks/recreation events page
-    # which tends to have server-side rendered JSON-LD
+    URL     = "https://www.opkansas.gov/events"
+    # CivicPlus app: the listing is client-rendered, so wait for the item
+    # selector rather than for the network to go idle — this page keeps
+    # background requests running and never reaches networkidle, which timed
+    # the scraper out at 40s and returned nothing.
     REAL_UA = (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
@@ -976,8 +1027,9 @@ class OPKansasScraper(BaseScraper):
             context = browser.new_context(user_agent=self.REAL_UA)
             page = context.new_page()
             try:
-                page.goto("https://www.opkansas.gov/events", wait_until="networkidle", timeout=40000)
-                page.wait_for_timeout(3000)
+                page.goto(self.URL, wait_until="domcontentloaded", timeout=40000)
+                page.wait_for_selector(".widgetItem--contentItem", timeout=25000)
+                page.wait_for_timeout(1500)
             except Exception as e:
                 self.logger.warning(f"Page load issue: {e}")
                 browser.close()
@@ -1043,18 +1095,13 @@ class OPKansasScraper(BaseScraper):
                     href = link["href"] if link else ""
                     url  = ("https://www.opkansas.gov" + href) if href.startswith("/") else href or "https://www.opkansas.gov/events"
 
-                    # Date and location are in div.widgetDesc as plain text
-                    # Format: "June 23, 2026, All Day 8909 W. 179th Street Overland Park..."
+                    # Date, time and address run together in one string, e.g.
+                    # "Oct. 14, 2026, 5:30 a.m. - 9 p.m. 11902 Lowell Ave ..."
+                    # or "Oct. 14, 2026, All Day 8909 W. 179th Street ...".
                     desc_div = block.find(class_="widgetDesc")
                     desc_text = desc_div.get_text(" ", strip=True) if desc_div else ""
 
-                    # Extract date — text before the address (first comma-separated date pattern)
-                    date_match = re.match(
-                        r"([A-Za-z]+ \d{1,2},\s*\d{4}[^A-Z]*?)(?:\d{4,5}\s+[A-Z]|$)",
-                        desc_text
-                    )
-                    date_str = date_match.group(1).strip() if date_match else desc_text[:40]
-                    start = _parse_date(date_str)
+                    start = _parse_op_datetime(desc_text)
                     if not start:
                         continue
 
