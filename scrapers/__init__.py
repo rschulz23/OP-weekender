@@ -1,11 +1,7 @@
 from .johnson_county_post import JohnsonCountyPostScraper
 from .visit_overland_park import VisitOverlandParkScraper
 from .jcprd import JCPRDScraper
-from .city_calendars import (
-    OlatheCalendarScraper,
-    ShawneeCalendarScraper,
-    LenexaCalendarScraper,
-)
+from .city_calendars import ShawneeCalendarScraper
 from .eventbrite import EventbriteScraper
 from .venues import (
     BluhawkScraper,
@@ -42,9 +38,7 @@ ALL_SCRAPERS = [
     JohnsonCountyPostScraper,
     VisitOverlandParkScraper,
     JCPRDScraper,
-    OlatheCalendarScraper,
     ShawneeCalendarScraper,
-    LenexaCalendarScraper,
     EventbriteScraper,
     BluhawkScraper,
     PrairiefireScraper,
