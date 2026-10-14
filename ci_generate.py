@@ -3,7 +3,7 @@ OP Weekender — CI Generator
 ================================
 Runs in GitHub Actions (or any headless Linux environment).
 No pbcopy, no webbrowser — saves newsletter.html and optionally
-sends it to you via email so it's ready to paste into Beehiiv.
+sends it to you via email so it's ready to paste into MailerLite.
 
 Environment variables (set as GitHub Actions Secrets):
   NOTIFY_EMAIL        Your email address to receive the newsletter
@@ -31,7 +31,6 @@ import pytz
 
 import aggregator
 import formatter
-from beehiiv import BeehiivClient
 
 logging.basicConfig(
     level=logging.INFO,
@@ -57,7 +56,26 @@ def _next_weekend():
     return friday, saturday, sunday
 
 
-def send_email(html: str, saturday: datetime, subject: str) -> bool:
+def _health_report(silent: list[str]) -> str:
+    """Plain-text block naming any source that returned nothing this run.
+
+    A source going quiet is how a site changing its markup shows up: the
+    newsletter still builds and still looks fine, just without that source.
+    Surfacing it here is the only place it gets seen before the send.
+    """
+    if not silent:
+        return "\nAll sources reported events.\n"
+    return (
+        f"\n{'=' * 52}\n"
+        f"HEADS UP — {len(silent)} source(s) returned no events:\n"
+        + "".join(f"  - {name}\n" for name in silent)
+        + "\nThat is expected when a venue genuinely has nothing on, but a\n"
+          "source that normally reports every week has probably broken.\n"
+        + "=" * 52 + "\n"
+    )
+
+
+def send_email(html: str, saturday: datetime, subject: str, silent: list[str]) -> bool:
     """
     Email the newsletter HTML to NOTIFY_EMAIL.
     Returns True on success, False if env vars are missing or send fails.
@@ -80,17 +98,18 @@ def send_email(html: str, saturday: datetime, subject: str) -> bool:
     # ── Plain-text body with paste instructions ────────────────────────────
     instructions = (
         "Your OP Weekender is ready!\n\n"
-        "To publish in Beehiiv:\n"
-        "  1. Go to https://app.beehiiv.com/posts/new\n"
-        "  2. Click the (+) block inserter\n"
-        "  3. Choose 'HTML' block (under 'Advanced' or search 'HTML')\n"
-        "  4. Open the attached newsletter.html file\n"
-        "     Select All (Cmd+A) -> Copy (Cmd+C)\n"
-        "  5. Paste (Cmd+V) in the Beehiiv HTML block\n"
-        "  6. Preview on desktop + mobile\n"
-        "  7. Schedule send for Thursday morning\n\n"
+        "To publish in MailerLite:\n"
+        "  1. Campaigns -> Create campaign -> Regular campaign\n"
+        "  2. Choose the 'Custom HTML' editor (NOT Drag & drop — its HTML\n"
+        "     block caps out well below the size of this newsletter, and the\n"
+        "     editor cannot be switched after the campaign is created)\n"
+        "  3. Open the attached newsletter.html file\n"
+        "     Select All (Cmd+A) -> Copy (Cmd+C) -> paste it in\n"
+        "  4. Preview on desktop + mobile\n"
+        "  5. Schedule send for Thursday morning\n\n"
         f"Subject line to use:\n  {subject}\n"
     )
+    instructions += _health_report(silent)
     msg.attach(MIMEText(instructions, "plain"))
 
     # ── Inline HTML part (viewable directly in email client) ───────────────
@@ -119,35 +138,6 @@ def send_email(html: str, saturday: datetime, subject: str) -> bool:
         return False
 
 
-def create_beehiiv_draft(html: str, subject: str, saturday: datetime) -> bool:
-    """
-    Create a draft post in Beehiiv via API.
-    Returns True on success, False if credentials are missing or call fails.
-    """
-    api_key = os.environ.get("BEEHIIV_API_KEY")
-    pub_id  = os.environ.get("BEEHIIV_PUBLICATION_ID")
-
-    if not api_key or not pub_id:
-        log.info("Beehiiv credentials not set — skipping draft creation")
-        return False
-
-    try:
-        client = BeehiivClient(api_key=api_key, publication_id=pub_id)
-        result = client.create_post(
-            title=subject,
-            html=html,
-            subtitle=f"Your weekend guide to Overland Park — {saturday.strftime('%B %-d, %Y')}",
-            draft=True,
-        )
-        post = result.get("data", result)
-        post_url = post.get("web_url") or post.get("url") or ""
-        log.info(f"Beehiiv draft created: {post_url}")
-        return True
-    except Exception as e:
-        log.error(f"Beehiiv draft creation failed: {e}")
-        return False
-
-
 def main():
     friday, saturday, sunday = _next_weekend()
     date_label = f"{friday.strftime('%B %-d')} - {sunday.strftime('%B %-d, %Y')}"
@@ -158,6 +148,7 @@ def main():
     # ── Scrape ────────────────────────────────────────────────────────────
     log.info("Scraping events...")
     events = aggregator.run()
+    silent = aggregator.silent_sources()
     aggregator.events_to_json(events, "events.json")
     log.info(f"{len(events)} unique weekend events found")
 
@@ -173,10 +164,7 @@ def main():
     log.info(f"Saved {len(html):,} bytes to {OUTPUT_FILE}")
 
     # ── Email ─────────────────────────────────────────────────────────────
-    email_sent = send_email(html, saturday, subject)
-
-    # ── Beehiiv draft ─────────────────────────────────────────────────────
-    draft_created = create_beehiiv_draft(html, subject, saturday)
+    email_sent = send_email(html, saturday, subject, silent)
 
     # ── Summary ───────────────────────────────────────────────────────────
     print()
@@ -185,7 +173,9 @@ def main():
     print(f"  {len(events)} events | {len(html):,} bytes")
     print(f"  Saved to: {OUTPUT_FILE}")
     print(f"  Email: {'sent' if email_sent else 'skipped (no credentials)'}")
-    print(f"  Beehiiv draft: {'created ✅' if draft_created else 'skipped (no credentials)'}")
+    print(f"  Sources: {len(aggregator.LAST_RUN_COUNTS) - len(silent)} reporting, {len(silent)} silent")
+    if silent:
+        print(f"  Silent: {', '.join(silent)}")
     print("=" * 56)
     print(f"  Subject: {subject}")
     print("=" * 56)

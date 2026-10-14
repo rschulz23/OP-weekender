@@ -114,6 +114,18 @@ def sort_events(events: list[Event]) -> list[Event]:
     return sorted(events, key=lambda e: (e.start_date, e.city, e.title))
 
 
+# Events each scraper returned on the most recent run(), before any filtering.
+# A source at zero means the scraper itself produced nothing, which is how a
+# site changing its markup shows up — the newsletter still builds, just without
+# that source. Populated by run(); read it through silent_sources().
+LAST_RUN_COUNTS: dict[str, int] = {}
+
+
+def silent_sources() -> list[str]:
+    """Sources that returned no events at all on the last run."""
+    return sorted(name for name, count in LAST_RUN_COUNTS.items() if count == 0)
+
+
 def run(
     target_saturday: Optional[datetime] = None,
     scraper_classes=None,
@@ -133,12 +145,18 @@ def run(
     logger.info(f"Running {len(scraper_classes)} scrapers...")
 
     all_events: list[Event] = []
+    LAST_RUN_COUNTS.clear()
     for cls in scraper_classes:
         scraper = cls()
         events = scraper.safe_fetch()
+        LAST_RUN_COUNTS[scraper.name] = len(events)
         all_events.extend(events)
 
     logger.info(f"Total raw events: {len(all_events)}")
+
+    silent = silent_sources()
+    if silent:
+        logger.warning(f"{len(silent)} source(s) returned nothing: {', '.join(silent)}")
 
     weekend_events = filter_weekend(all_events, friday, sunday)
     logger.info(f"Weekend events (before dedup): {len(weekend_events)}")
