@@ -49,6 +49,9 @@ SCHOOLS: dict[str, str] = {
 
 BASE_URL = "https://www.gobound.com/ks/KSHSAA/fb/2026-27/{slug}/v/schedule"
 
+# Date cell reads "Fri 10/16/26" — match the date wherever it sits in the cell.
+_DATE_RE = re.compile(r'(\d{1,2}/\d{1,2}/\d{2,4})')
+
 
 class HighSchoolFootballScraper(BaseScraper):
     name = "HS Football"
@@ -130,7 +133,7 @@ class HighSchoolFootballScraper(BaseScraper):
 
     def _parse_row(self, cells: list[str], school: str, url: str) -> Event | None:
         try:
-            date_str  = cells[0].strip()   # "9/4/26"
+            date_str  = cells[0].strip()   # "Fri 10/16/26"
             opp_raw   = cells[1].strip()   # "vsBlue Valley Northwest" or "@Olathe West"
             time_raw  = cells[2].strip()   # "7:00 PMCT"
             location  = cells[5].strip()
@@ -138,8 +141,14 @@ class HighSchoolFootballScraper(BaseScraper):
             if not date_str or not opp_raw:
                 return None
 
-            # Parse date
-            dt_naive = datetime.strptime(date_str, "%m/%d/%y")
+            # Pull the date out rather than parsing the whole cell: gobound
+            # prefixes it with a weekday ("Fri 10/16/26") and has changed that
+            # formatting before.
+            m = _DATE_RE.search(date_str)
+            if not m:
+                self.logger.warning(f"{school}: unparsed date cell {date_str!r}")
+                return None
+            dt_naive = datetime.strptime(m.group(1), "%m/%d/%y")
             # Parse time — strip trailing timezone label (CT, ET, etc.)
             time_clean = re.sub(r"[A-Z]{2,4}$", "", time_raw).strip()
             if time_clean:
@@ -190,5 +199,6 @@ class HighSchoolFootballScraper(BaseScraper):
                 cost="Free",
                 category="Sports & Fitness",
             )
-        except Exception:
+        except Exception as e:
+            self.logger.warning(f"{school}: row parse failed ({e}) — {cells[:3]}")
             return None
