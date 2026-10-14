@@ -24,17 +24,14 @@ from .base import BaseScraper, Event, HEADERS
 
 CENTRAL = pytz.timezone("America/Chicago")
 
+# Overland Park and Leawood are deliberately absent: both have dedicated
+# scrapers (OPKansasScraper, LeawoodCalendarScraper) that handle the JS
+# rendering and Cloudflare blocking those sites now require.
 CITY_CONFIGS = [
     {
-        "name": "Overland Park",
-        "url": "https://www.opkansas.org/events/",
-        "base_url": "https://www.opkansas.org",
-        "city": "Overland Park",
-        "platform": "generic",
-    },
-    {
         "name": "Olathe",
-        # Primary URL blocks; try the Patch community calendar as fallback
+        # olatheks.gov returns 403 to scripted requests and to a headless
+        # browser alike; the Patch community calendar is the stand-in.
         "url": "https://patch.com/kansas/olathe-ks/calendar",
         "base_url": "https://patch.com",
         "city": "Olathe",
@@ -48,15 +45,8 @@ CITY_CONFIGS = [
         "platform": "civicengage",
     },
     {
-        "name": "Leawood",
-        "url": "https://www.leawood.org/Calendar.aspx",
-        "base_url": "https://www.leawood.org",
-        "city": "Leawood",
-        "platform": "civicengage",
-    },
-    {
         "name": "Lenexa",
-        # Primary URL blocks; try Visit Shawnee which covers Lenexa too
+        # lenexa.com blocks scripted requests and its own calendar URL 404s.
         "url": "https://events.visitshawnee.com/calendar",
         "base_url": "https://events.visitshawnee.com",
         "city": "Lenexa",
@@ -298,27 +288,39 @@ PLATFORM_PARSERS = {
 }
 
 
-class CityCalendarScraper(BaseScraper):
-    """
-    Single scraper that iterates over all city calendar configs.
-    Returns combined events from all five cities.
-    """
-    name = "CityCalendars"
+class _CityCalendarScraper(BaseScraper):
+    """One city's calendar. Split per city so the run report names the exact
+    city that went quiet — when all five shared one scraper, a working Shawnee
+    masked Olathe and Lenexa returning nothing for weeks."""
+
+    CONFIG: dict = {}
 
     def fetch(self) -> list[Event]:
-        all_events = []
+        config = self.CONFIG
+        try:
+            resp = requests.get(config["url"], headers=HEADERS, timeout=15)
+            resp.raise_for_status()
+        except Exception as e:
+            self.logger.warning(f"Fetch failed: {e}")
+            return []
 
-        for config in CITY_CONFIGS:
-            try:
-                self.logger.info(f"Fetching {config['name']} ({config['platform']})...")
-                resp = requests.get(config["url"], headers=HEADERS, timeout=15)
-                resp.raise_for_status()
-                soup = BeautifulSoup(resp.text, "lxml")
-                parser = PLATFORM_PARSERS.get(config["platform"], _parse_generic)
-                city_events = parser(soup, config)
-                self.logger.info(f"  → {config['name']}: {len(city_events)} events")
-                all_events.extend(city_events)
-            except Exception as e:
-                self.logger.warning(f"  → {config['name']} failed: {e}")
+        soup = BeautifulSoup(resp.text, "lxml")
+        parser = PLATFORM_PARSERS.get(config["platform"], _parse_generic)
+        events = parser(soup, config)
+        self.logger.info(f"Parsed {len(events)} events from {config['name']}")
+        return events
 
-        return all_events
+
+def _city_scraper(config: dict) -> type:
+    return type(
+        f"{config['city'].replace(' ', '')}CalendarScraper",
+        (_CityCalendarScraper,),
+        {"name": f"City of {config['city']}", "CONFIG": config},
+    )
+
+
+OlatheCalendarScraper  = _city_scraper(CITY_CONFIGS[0])
+ShawneeCalendarScraper = _city_scraper(CITY_CONFIGS[1])
+LenexaCalendarScraper  = _city_scraper(CITY_CONFIGS[2])
+
+CITY_SCRAPERS = [OlatheCalendarScraper, ShawneeCalendarScraper, LenexaCalendarScraper]
