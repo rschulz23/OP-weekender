@@ -5,10 +5,17 @@
     "end_date": "2026-10-18T23:59:00-05:00",
     "location": "Camelot Ballroom, Kansas City, Kansas 66103",
     "city": "Kansas City",
+<<<<<<< Updated upstream
     "description": "Kansas City, Pujo is coming!Join ABKC Sangam for ABKC Sangam Durgotsab 2026, a three-day celebration of Durga Puja in the Kansas City area from October 16\u201318, 2026 at Camelot Ballroom in Overland Park.Whether Pujo feels like home or you're experiencing it for the first time, come celebrate three days filled with tradition, food, music, cultural programs, friendship and community. Bring your family, bring your friends \u2014 there's a place for everyone here.And when the evening sets in, the celebrati",
     "url": "https://abkcs.org/durga-puja",
     "source": "Visit Overland Park",
     "image_url": "https://files.idss.com/C514/c1a5bb50-cb8d-4497-8295-15d48a162d9c.jpeg",
+=======
+    "description": "Kansas City, Pujo is coming! Join ABKC Sangam for ABKC Sangam Durgotsab 2026, a three-day celebration of Durga Puja in the Kansas City area from October 16\u201318, 2026 at Camelot Ballroom in Overland Park. Whether Pujo feels like home or you're experiencing it for the first time, come celebrate three days filled with tradition, food, music, cultural programs, friendship and community. Bring your family, bring your friends \u2014 there's a place for everyone here. And when the evening sets in, the celebr",
+    "url": "https://abkcs.org/durga-puja",
+    "source": "Visit Overland Park",
+    "image_url": "",
+>>>>>>> Stashed changes
     "cost": null,
     "tags": [],
     "category": "Community & Festivals"
@@ -282,6 +289,7 @@
     "description": "Celebrate the season at Ironwoods Park during our annual Into the Night Fall Festival! Enjoy an evening filled with family-friendly fall fun, including a pumpkin patch, pumpkin decorating, petting zoo, hayrides, a luminary trail, s\u2019mores by the fire, caramel apple nachos, inflatables, a rock wall, cornhole, crafts, and more!",
     "url": "https://www.leawood.org/Calendar.aspx?EID=1549&month=10&year=2026&day=14&calType=0",
     "source": "City of Leawood",
+<<<<<<< Updated upstream
     "image_url": null,
     "cost": null,
     "tags": [],
@@ -352,12 +360,15 @@
     "description": "Genres: Jazz",
     "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
     "source": "KC Live Music",
+=======
+>>>>>>> Stashed changes
     "image_url": null,
     "cost": null,
     "tags": [],
-    "category": "Music & Entertainment"
+    "category": "Community & Festivals"
   },
   {
+<<<<<<< Updated upstream
     "title": "Walker Mathison & Brandee Lynne @ Tall Trellis Brew Co.",
     "start_date": "2026-10-16T18:00:00-05:00",
     "end_date": null,
@@ -367,11 +378,141 @@
     "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
     "source": "KC Live Music",
     "image_url": null,
+=======
+    "title": "Arts On Fire",
+    "start_date": "2026-10-16T17:00:00-05:00",
+    "end_date": "2026-10-16T21:00:00-05:00",
+    "location": "InterUrban ArtHouse, Overland Park, Kansas 66204",
+    "city": "Overland Park",
+    "description": "Join us for our annual Arts on Fire Celebration! This unforgettable evening features live circus (with fire!), local food and drink, the return of the highly anticipated 6\u201dx6\u201d Art Sale and the opening of the 12\u201dx12\u201d Member Exhibition.Every ticket includes one 6x6 piece of your choice! Additional pieces may be purchased for $50 each. All 12x12\u201d work is priced $300 and below. All sales support year-round programming to provide affordable studio space, business education, paid opportunities for art",
+    "url": "https://www.interurbanarthouse.org/arts-on-fire-2026",
+    "source": "Visit Overland Park",
+    "image_url": "https://files.idss.com/C514/a54fa19b-5648-452a-8456-ca4e5b77e0ee.jpg",
+    "cost": null,
+    "tags": [],
+    "category": "Arts & Culture"
+  },
+  {
+    "title": "Third Fridays in Downtown OP",
+    "start_date": "2026-10-16T17:00:00-05:00",
+    "end_date": "2026-10-16T20:00:00-05:00",
+    "location": "Downtown Overland Park, Overland Park, Kansas",
+    "city": "Overland Park",
+    "description": "Wander through local art galleries, browse charming shops, and satisfy your taste buds at one of our many restaurants in Downtown Overland Park every third Friday of the month! Participating Businesses Include: 80 Santa Fe Art Gallery\ud83d\udccd 7944 Santa Fe Drive Images Art Gallery\ud83d\udccd 7320 West 80th Street Interurban Art House\ud83d\udccd 8001 Newton Street Crafted Fair Trade\ud83d\udccd7947 Santa Fe Drive Made in KC\ud83d\udccd7325 W 80th Street Awakening Illumination\ud83d\udccd7319 W 81st StreetHouse of Clak\ud83d\udccd7811 Marty Street",
+    "url": "https://www.downtownop.org/events/overland-park-event-page-ajcxw-rctlf-3xdt8-34da7-9sjs5-5pp2x-33fly-74nj4-9r2nc-23la6-53enr-43y62-6b3rg-tfhtb-c876k-2p6bt-2we64-ddjsn-4g2wy-2yf92-lkfjd-bsx74-epd5c",
+    "source": "Visit Overland Park",
+    "image_url": "https://files.idss.com/C514/177d90d1-5955-44f8-89d8-64b193823e98.jpeg",
+    "cost": null,
+    "tags": [],
+    "category": "Arts & Culture"
+  },
+  {
+    "title": "Girls' Night Out at Paint Glaze & Fire",
+    "start_date": "2026-10-16T17:30:00-05:00",
+    "end_date": "2026-10-16T20:00:00-05:00",
+    "location": "Paint Glaze & Fire, Overland Park, Kansas 66213",
+    "city": "Overland Park",
+    "description": "Let's go girls, it's time for a GNO!\ud83d\udc95 Call up your friends and make plans to create a glass fusion project or paint pottery at Paint Glaze & Fire. Girls Night Out is held on the third Friday of every month.During this special event, you may bring your own adult beverage, just be sure to bring your own glasses, wine bottle and wine opener! If you plan to create a glass fusion project, there is no slump fee during this event. For pottery painting and glass fusion, there is a minimum purchase of $2",
+    "url": "https://app.getoccasion.com/p/n/07de742d5ff432b9442ce96088753a4f4db5a69d/v5?time_slot_id=gufylfC-pmpJ0",
+    "source": "Visit Overland Park",
+    "image_url": "https://files.idss.com/C514/images/calendar/IMG_7447_FD26FB72-F055-AE9B-CB3DD1C8A07D4D06.jpg",
+    "cost": null,
+    "tags": [],
+    "category": "Arts & Culture"
+  },
+  {
+    "title": "Night of the Living Farm",
+    "start_date": "2026-10-16T17:30:00-05:00",
+    "end_date": "2026-10-16T21:00:00-05:00",
+    "location": "Deanna Rose Children's Farmstead, Overland Park, Kansas 66221",
+    "city": "Overland Park",
+    "description": "Explore the Farmstead after dark... if you dare!Dress in your best costume and get ready for a night of Halloween fun for all ages. From spooky thrills to not-so-scary chills, there\u2019s something for everyone.This is a key fundraiser event for Friends of the Farmstead where all proceeds benefit the future of the Deanna Rose Children's Farmstead.Activities Included:Scary and non-scary hayridesLine Dancing in the Dairy BarnRuby's Carnival GamesRubber Duck Races at the Mining ShackSpooky Experiments ",
+    "url": "https://artsandrec-op.org/farmstead/night-living-farm/",
+    "source": "Visit Overland Park",
+    "image_url": "https://files.idss.com/C514/08aa004a-b415-4218-9fe4-b6d09cc5ae0f.jpg",
+    "cost": null,
+    "tags": [],
+    "category": "Community & Festivals"
+  },
+  {
+    "title": "Live Music with the Bourbon Brothers",
+    "start_date": "2026-10-16T17:30:00-05:00",
+    "end_date": null,
+    "location": "Serendipity Farm & Vine, 4674 W 183rd St, Stilwell, KS",
+    "city": "Stilwell",
+    "description": "",
+    "url": "https://www.serendipityfarmandvine.com/event/live-music-with-the-bourbon-brothers-5/",
+    "source": "Serendipity Farm & Vine",
+    "image_url": "https://www.serendipityfarmandvine.com/wp-content/uploads/2026/02/Screenshot-2026-09-11-at-11.20.36-AM-scaled.png",
+>>>>>>> Stashed changes
     "cost": null,
     "tags": [],
     "category": "Music & Entertainment"
   },
   {
+<<<<<<< Updated upstream
+    "title": "Mojo Brookzz",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "The Midland Theatre - MO \u2014 1228 Main St, Kansas City",
+    "city": "Kansas City",
+    "description": "Arts & Theatre",
+    "url": "https://www.ticketmaster.com/event/Z7r9jZ1A70bfJ",
+    "source": "The Midland Theatre - MO",
+    "image_url": "https://s1.ticketm.net/dam/c/8cf/a6653880-7899-4f67-8067-1f95f4d158cf_124761_TABLET_LANDSCAPE_16_9.jpg",
+=======
+    "title": "Max Groove @ Sullivan\u2019s Steakhouse",
+    "start_date": "2026-10-16T18:00:00-05:00",
+    "end_date": null,
+    "location": "Sullivan\u2019s Steakhouse, Leawood, KS",
+    "city": "Leawood",
+    "description": "Genres: Jazz",
+    "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
+    "source": "KC Live Music",
+    "image_url": null,
+>>>>>>> Stashed changes
+    "cost": null,
+    "tags": [],
+    "category": "Music & Entertainment"
+  },
+  {
+<<<<<<< Updated upstream
+    "title": "Grand Villanova @ Lenexa Public Market",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "Lenexa Public Market, Lenexa, KS",
+    "city": "Lenexa",
+    "description": "Kansas City\u2019s Premiere Power Trio",
+=======
+    "title": "Walker Mathison & Brandee Lynne @ Tall Trellis Brew Co.",
+    "start_date": "2026-10-16T18:00:00-05:00",
+    "end_date": null,
+    "location": "Tall Trellis Brew Co., Olathe, KS",
+    "city": "Olathe",
+    "description": "",
+>>>>>>> Stashed changes
+    "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
+    "source": "KC Live Music",
+    "image_url": null,
+    "cost": null,
+    "tags": [],
+    "category": "Music & Entertainment"
+  },
+  {
+<<<<<<< Updated upstream
+    "title": "Madd Honey @ Limitless Brewing",
+    "start_date": "2026-10-16T19:00:00-05:00",
+    "end_date": null,
+    "location": "Limitless Brewing, Lenexa, KS",
+    "city": "Lenexa",
+    "description": "Genres: Alternative, Classic Rock, Country, Covers, Emo, Pop, Rock",
+    "url": "https://kclive411.com/live-music-by-geographic-area/live-music-in-the-johnson-county-kansas-area/",
+    "source": "KC Live Music",
+    "image_url": null,
+    "cost": null,
+    "tags": [],
+    "category": "Music & Entertainment"
+=======
     "title": "Mojo Brookzz",
     "start_date": "2026-10-16T19:00:00-05:00",
     "end_date": null,
@@ -412,6 +553,7 @@
     "cost": null,
     "tags": [],
     "category": "Music & Entertainment"
+>>>>>>> Stashed changes
   },
   {
     "title": "Pottery & Pinot Wheel Throwing Experience (21+)",
@@ -1072,7 +1214,11 @@
     "category": "Music & Entertainment"
   },
   {
+<<<<<<< Updated upstream
     "title": "Rustin Smith @ Last Call Lounge",
+=======
+    "title": "Max Indiveri @ Last Call Lounge",
+>>>>>>> Stashed changes
     "start_date": "2026-10-17T20:30:00-05:00",
     "end_date": null,
     "location": "Last Call Lounge, Overland Park, KS",
