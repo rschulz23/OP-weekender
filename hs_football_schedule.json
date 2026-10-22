@@ -1,0 +1,572 @@
+{
+  "scraped_at": "2026-10-21T21:47:54.964336-05:00",
+  "games": [
+    {
+      "title": "Blue Valley vs Blue Valley Northwest",
+      "start_date": "2026-09-04T00:00:00-05:00",
+      "location": "Blue Valley High School Lamar District Activity Center",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalley/v/schedule"
+    },
+    {
+      "title": "Blue Valley @ Olathe West",
+      "start_date": "2026-09-10T00:00:00-05:00",
+      "location": "Olathe District Athletic Center ODAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalley/v/schedule"
+    },
+    {
+      "title": "Blue Valley @ Bishop Miege",
+      "start_date": "2026-09-18T00:00:00-05:00",
+      "location": "Dixon Doll Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalley/v/schedule"
+    },
+    {
+      "title": "Blue Valley vs Blue Valley North",
+      "start_date": "2026-09-25T00:00:00-05:00",
+      "location": "Blue Valley High School Lamar District Activity Center",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalley/v/schedule"
+    },
+    {
+      "title": "Blue Valley vs Saint Thomas Aquinas",
+      "start_date": "2026-10-02T00:00:00-05:00",
+      "location": "Blue Valley High School Lamar District Activity Center",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalley/v/schedule"
+    },
+    {
+      "title": "Blue Valley @ Blue Valley Southwest",
+      "start_date": "2026-10-09T19:00:00-05:00",
+      "location": "Antioch ANTDAC Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalley/v/schedule"
+    },
+    {
+      "title": "Blue Valley vs Blue Valley West",
+      "start_date": "2026-10-16T19:00:00-05:00",
+      "location": "Blue Valley High School Lamar District Activity Center",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalley/v/schedule"
+    },
+    {
+      "title": "Blue Valley @ St. James Academy",
+      "start_date": "2026-10-23T19:00:00-05:00",
+      "location": "St. James Academy Michael T. Alex Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalley/v/schedule"
+    },
+    {
+      "title": "Blue Valley Northwest @ Olathe Northwest",
+      "start_date": "2026-09-10T00:00:00-05:00",
+      "location": "College Boulevard Activity Complex CBAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthwesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley Northwest @ Blue Valley Southwest",
+      "start_date": "2026-09-18T00:00:00-05:00",
+      "location": "Antioch ANTDAC Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthwesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley Northwest vs Blue Valley West",
+      "start_date": "2026-09-25T00:00:00-05:00",
+      "location": "Switzer Football Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthwesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley Northwest @ Blue Valley North",
+      "start_date": "2026-10-02T00:00:00-05:00",
+      "location": "Switzer Football Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthwesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley Northwest @ Saint Thomas Aquinas",
+      "start_date": "2026-10-09T00:00:00-05:00",
+      "location": "Saint Thomas Aquinas High School Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthwesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley Northwest vs St. James Academy",
+      "start_date": "2026-10-16T00:00:00-05:00",
+      "location": "Switzer Football Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthwesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley Northwest vs Bishop Miege",
+      "start_date": "2026-10-23T19:00:00-05:00",
+      "location": "Switzer Football Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthwesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley West vs Bishop Miege",
+      "start_date": "2026-09-04T00:00:00-05:00",
+      "location": "Antioch ANTDAC Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleywesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley West vs Lawrence Free State",
+      "start_date": "2026-09-10T00:00:00-05:00",
+      "location": "Antioch ANTDAC Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleywesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley West @ Saint Thomas Aquinas",
+      "start_date": "2026-09-18T00:00:00-05:00",
+      "location": "Saint Thomas Aquinas High School Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleywesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley West vs St. James Academy",
+      "start_date": "2026-10-02T19:00:00-05:00",
+      "location": "Antioch ANTDAC Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleywesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley West @ Blue Valley North",
+      "start_date": "2026-10-09T00:00:00-05:00",
+      "location": "Switzer Football Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleywesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley West vs Blue Valley Southwest",
+      "start_date": "2026-10-23T19:00:00-05:00",
+      "location": "Antioch ANTDAC Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleywesths/v/schedule"
+    },
+    {
+      "title": "Blue Valley Southwest @ Blue Valley North",
+      "start_date": "2026-09-04T00:00:00-05:00",
+      "location": "Switzer Football Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleysw/v/schedule"
+    },
+    {
+      "title": "Blue Valley Southwest @ St. James Academy",
+      "start_date": "2026-09-11T00:00:00-05:00",
+      "location": "St. James Academy Michael T. Alex Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleysw/v/schedule"
+    },
+    {
+      "title": "Blue Valley Southwest vs Bishop Miege",
+      "start_date": "2026-09-25T00:00:00-05:00",
+      "location": "Antioch ANTDAC Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleysw/v/schedule"
+    },
+    {
+      "title": "Blue Valley Southwest @ Topeka Highland Park",
+      "start_date": "2026-10-02T19:00:00-05:00",
+      "location": "Hummer Sports Weaver-Erwin Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleysw/v/schedule"
+    },
+    {
+      "title": "Blue Valley Southwest vs Saint Thomas Aquinas",
+      "start_date": "2026-10-16T00:00:00-05:00",
+      "location": "Antioch ANTDAC Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleysw/v/schedule"
+    },
+    {
+      "title": "Blue Valley North @ Olathe North",
+      "start_date": "2026-09-11T00:00:00-05:00",
+      "location": "Olathe District Athletic Center ODAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthhs/v/schedule"
+    },
+    {
+      "title": "Blue Valley North vs St. James Academy",
+      "start_date": "2026-09-18T00:00:00-05:00",
+      "location": "Switzer Football Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthhs/v/schedule"
+    },
+    {
+      "title": "Blue Valley North @ Bishop Miege",
+      "start_date": "2026-10-16T00:00:00-05:00",
+      "location": "Dixon Doll Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthhs/v/schedule"
+    },
+    {
+      "title": "Blue Valley North @ Saint Thomas Aquinas",
+      "start_date": "2026-10-23T19:00:00-05:00",
+      "location": "Saint Thomas Aquinas High School Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bluevalleynorthhs/v/schedule"
+    },
+    {
+      "title": "St. Thomas Aquinas vs St. James Academy",
+      "start_date": "2026-09-04T00:00:00-05:00",
+      "location": "Saint Thomas Aquinas High School Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/saintthomasaquinas/v/schedule"
+    },
+    {
+      "title": "St. Thomas Aquinas @ Bishop Miege",
+      "start_date": "2026-09-11T00:00:00-05:00",
+      "location": "Dixon Doll Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/saintthomasaquinas/v/schedule"
+    },
+    {
+      "title": "St. Thomas Aquinas @ Rockhurst",
+      "start_date": "2026-09-25T00:00:00-05:00",
+      "location": "Rockhurst High School",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/saintthomasaquinas/v/schedule"
+    },
+    {
+      "title": "SM North vs Olathe East",
+      "start_date": "2026-09-03T00:00:00-05:00",
+      "location": "SMSD North Stadium Track and Turf Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorth/v/schedule"
+    },
+    {
+      "title": "SM North @ Sumner Academy",
+      "start_date": "2026-09-11T00:00:00-05:00",
+      "location": "F.L. Schlagle Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorth/v/schedule"
+    },
+    {
+      "title": "SM North vs Shawnee Mission Northwest",
+      "start_date": "2026-09-18T00:00:00-05:00",
+      "location": "SMSD North Stadium Track and Turf Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorth/v/schedule"
+    },
+    {
+      "title": "SM North @ Lawrence Free State",
+      "start_date": "2026-09-25T00:00:00-05:00",
+      "location": "Lawrence Free State High School",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorth/v/schedule"
+    },
+    {
+      "title": "SM North @ Shawnee Mission West",
+      "start_date": "2026-10-02T00:00:00-05:00",
+      "location": "SMSD South Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorth/v/schedule"
+    },
+    {
+      "title": "SM North @ Mill Valley",
+      "start_date": "2026-10-09T00:00:00-05:00",
+      "location": "Mill Valley High School Football Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorth/v/schedule"
+    },
+    {
+      "title": "SM North vs Olathe South",
+      "start_date": "2026-10-16T19:00:00-05:00",
+      "location": "SMSD North Stadium Track and Turf Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorth/v/schedule"
+    },
+    {
+      "title": "SM North vs Olathe Northwest",
+      "start_date": "2026-10-22T19:00:00-05:00",
+      "location": "SMSD North Stadium Track and Turf Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorth/v/schedule"
+    },
+    {
+      "title": "SM West vs Lawrence Free State",
+      "start_date": "2026-09-04T00:00:00-05:00",
+      "location": "SMSD South Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissionwesths/v/schedule"
+    },
+    {
+      "title": "SM West @ Pittsburg",
+      "start_date": "2026-09-11T00:00:00-05:00",
+      "location": "Pittsburg Middle School",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissionwesths/v/schedule"
+    },
+    {
+      "title": "SM West vs Mill Valley",
+      "start_date": "2026-09-17T00:00:00-05:00",
+      "location": "SMSD South Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissionwesths/v/schedule"
+    },
+    {
+      "title": "SM West @ Olathe West",
+      "start_date": "2026-09-25T00:00:00-05:00",
+      "location": "College Boulevard Activity Complex CBAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissionwesths/v/schedule"
+    },
+    {
+      "title": "SM West @ Olathe South",
+      "start_date": "2026-10-08T19:00:00-05:00",
+      "location": "Olathe District Athletic Center ODAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissionwesths/v/schedule"
+    },
+    {
+      "title": "SM West vs Olathe North",
+      "start_date": "2026-10-16T19:00:00-05:00",
+      "location": "SMSD South Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissionwesths/v/schedule"
+    },
+    {
+      "title": "SM West @ Shawnee Mission Northwest",
+      "start_date": "2026-10-23T19:00:00-05:00",
+      "location": "SMSD North Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissionwesths/v/schedule"
+    },
+    {
+      "title": "SM East @ Olathe North",
+      "start_date": "2026-09-03T00:00:00-05:00",
+      "location": "Olathe District Athletic Center ODAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissioneasths/v/schedule"
+    },
+    {
+      "title": "SM East vs Rockhurst",
+      "start_date": "2026-09-10T00:00:00-05:00",
+      "location": "SMSD North Stadium Track and Turf Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissioneasths/v/schedule"
+    },
+    {
+      "title": "SM East @ Lawrence",
+      "start_date": "2026-09-18T00:00:00-05:00",
+      "location": "Lawrence High School",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissioneasths/v/schedule"
+    },
+    {
+      "title": "SM East @ Shawnee Mission South",
+      "start_date": "2026-09-25T00:00:00-05:00",
+      "location": "SMSD South Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissioneasths/v/schedule"
+    },
+    {
+      "title": "SM East vs Gardner Edgerton",
+      "start_date": "2026-10-02T00:00:00-05:00",
+      "location": "SMSD North Stadium Track and Turf Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissioneasths/v/schedule"
+    },
+    {
+      "title": "SM East vs Lawrence Free State",
+      "start_date": "2026-10-09T00:00:00-05:00",
+      "location": "SMSD North Stadium Track and Turf Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissioneasths/v/schedule"
+    },
+    {
+      "title": "SM East @ Olathe Northwest",
+      "start_date": "2026-10-15T00:00:00-05:00",
+      "location": "College Boulevard Activity Complex CBAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissioneasths/v/schedule"
+    },
+    {
+      "title": "SM East vs Olathe West",
+      "start_date": "2026-10-22T19:00:00-05:00",
+      "location": "SMSD South Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/shawneemissioneasths/v/schedule"
+    },
+    {
+      "title": "SM Northwest vs Mill Valley",
+      "start_date": "2026-09-04T00:00:00-05:00",
+      "location": "SMSD North Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorthwest/v/schedule"
+    },
+    {
+      "title": "SM Northwest @ Raymore-Peculiar",
+      "start_date": "2026-09-11T00:00:00-05:00",
+      "location": "Raymore-Peculiar High School",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorthwest/v/schedule"
+    },
+    {
+      "title": "SM Northwest vs Olathe North",
+      "start_date": "2026-09-25T00:00:00-05:00",
+      "location": "SMSD North Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorthwest/v/schedule"
+    },
+    {
+      "title": "SM Northwest @ Olathe South",
+      "start_date": "2026-10-02T00:00:00-05:00",
+      "location": "Olathe District Athletic Center ODAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorthwest/v/schedule"
+    },
+    {
+      "title": "SM Northwest @ Olathe West",
+      "start_date": "2026-10-09T00:00:00-05:00",
+      "location": "College Boulevard Activity Complex CBAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorthwest/v/schedule"
+    },
+    {
+      "title": "SM Northwest vs Lawrence",
+      "start_date": "2026-10-15T19:00:00-05:00",
+      "location": "SMSD North Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smnorthwest/v/schedule"
+    },
+    {
+      "title": "SM South @ Olathe West",
+      "start_date": "2026-09-04T00:00:00-05:00",
+      "location": "College Boulevard Activity Complex CBAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smsouth/v/schedule"
+    },
+    {
+      "title": "SM South @ Lincoln College Prep",
+      "start_date": "2026-09-11T00:00:00-05:00",
+      "location": "",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smsouth/v/schedule"
+    },
+    {
+      "title": "SM South vs Olathe North",
+      "start_date": "2026-09-18T00:00:00-05:00",
+      "location": "SMSD South Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smsouth/v/schedule"
+    },
+    {
+      "title": "SM South vs Lawrence",
+      "start_date": "2026-10-01T00:00:00-05:00",
+      "location": "SMSD South Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smsouth/v/schedule"
+    },
+    {
+      "title": "SM South @ Gardner Edgerton",
+      "start_date": "2026-10-09T00:00:00-05:00",
+      "location": "Gardner Edgerton High School District Athletic Complex Footbal...",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smsouth/v/schedule"
+    },
+    {
+      "title": "SM South @ Lawrence Free State",
+      "start_date": "2026-10-16T00:00:00-05:00",
+      "location": "Lawrence Free State High School",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smsouth/v/schedule"
+    },
+    {
+      "title": "SM South vs Olathe South",
+      "start_date": "2026-10-23T19:00:00-05:00",
+      "location": "SMSD South Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/smsouth/v/schedule"
+    },
+    {
+      "title": "Olathe East @ Lawrence Free State",
+      "start_date": "2026-08-28T20:30:00-05:00",
+      "location": "Basehor-Linwood High School Football Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Olathe East @ Basehor-Linwood",
+      "start_date": "2026-08-28T21:00:00-05:00",
+      "location": "Basehor-Linwood High School Football Stadium",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Olathe East vs Olathe Northwest",
+      "start_date": "2026-08-28T21:30:00-05:00",
+      "location": "Basehor-Linwood High School Football Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Olathe East vs Staley",
+      "start_date": "2026-09-11T00:00:00-05:00",
+      "location": "College Boulevard Activity Complex CBAC Football Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Olathe East @ Olathe South",
+      "start_date": "2026-09-18T00:00:00-05:00",
+      "location": "Olathe District Athletic Center ODAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Olathe East @ Lawrence",
+      "start_date": "2026-09-25T00:00:00-05:00",
+      "location": "Lawrence High School LHS Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Olathe East vs Olathe West",
+      "start_date": "2026-10-01T00:00:00-05:00",
+      "location": "College Boulevard Activity Complex CBAC Football Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Olathe East @ Olathe North",
+      "start_date": "2026-10-09T00:00:00-05:00",
+      "location": "Olathe District Athletic Center ODAC Football Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Olathe East vs Gardner Edgerton",
+      "start_date": "2026-10-16T00:00:00-05:00",
+      "location": "College Boulevard Activity Complex CBAC Football Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Olathe East vs Mill Valley",
+      "start_date": "2026-10-23T19:00:00-05:00",
+      "location": "College Boulevard Activity Complex CBAC Football Field",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/olatheeasths/v/schedule"
+    },
+    {
+      "title": "Bishop Miege vs Rockhurst",
+      "start_date": "2026-10-02T00:00:00-05:00",
+      "location": "Dixon Doll Stadium",
+      "description": "Home",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bishopmiegehs/v/schedule"
+    },
+    {
+      "title": "Bishop Miege @ St. James Academy",
+      "start_date": "2026-10-09T00:00:00-05:00",
+      "location": "St. James Academy Michael T. Alex Field",
+      "description": "Away",
+      "url": "https://www.gobound.com/ks/KSHSAA/fb/2026-27/bishopmiegehs/v/schedule"
+    }
+  ]
+}

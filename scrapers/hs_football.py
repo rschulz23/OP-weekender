@@ -7,13 +7,19 @@ games falling on the target weekend (Fri–Sun) as Event objects with
 category = "High School Football".
 """
 
+import json
 import re
 import requests
 from datetime import datetime
+from pathlib import Path
 from bs4 import BeautifulSoup
 import pytz
 
 from .base import BaseScraper, Event
+
+# Last good scrape of the season schedule, committed to the repo so CI can
+# fall back to it when gobound refuses the runner's IP.
+CACHE_PATH = Path(__file__).resolve().parent.parent / "hs_football_schedule.json"
 
 UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -48,6 +54,17 @@ SCHOOLS: dict[str, str] = {
 }
 
 BASE_URL = "https://www.gobound.com/ks/KSHSAA/fb/2026-27/{slug}/v/schedule"
+
+
+def _norm_team(name: str) -> str:
+    """Collapse the name variants gobound uses for the same school."""
+    n = name.strip().lower()
+    n = re.sub(r'\bsaint\b', 'st', n)
+    n = re.sub(r'\bst\.', 'st', n)
+    n = re.sub(r'\bshawnee mission\b', 'sm', n)
+    n = re.sub(r'\bblue valley\b', 'bv', n)
+    n = re.sub(r'[^a-z0-9 ]', '', n)
+    return re.sub(r'\s+', ' ', n).strip()
 
 # Date cell reads "Fri 10/16/26" — match the date wherever it sits in the cell.
 _DATE_RE = re.compile(r'(\d{1,2}/\d{1,2}/\d{2,4})')
@@ -86,18 +103,91 @@ class HighSchoolFootballScraper(BaseScraper):
                     self.logger.warning(f"  {school}: failed — {e}")
 
         # Deduplicate: same two teams on the same date appear twice when both
-        # schools are in our list. Key on sorted team names + date.
+        # schools are in our list. Team names must be normalised first — gobound
+        # writes the same school differently depending on whose page it is on
+        # ("St. Thomas Aquinas" vs "Saint Thomas Aquinas", "SM West" vs
+        # "Shawnee Mission West"), which previously let both copies through.
         seen: set[tuple] = set()
         events: list[Event] = []
         for e in raw:
             parts = e.title.split(" vs ") if " vs " in e.title else e.title.split(" @ ")
-            key = (frozenset(p.strip() for p in parts), e.start_date.date())
+            key = (frozenset(_norm_team(p) for p in parts), e.start_date.date())
             if key not in seen:
                 seen.add(key)
                 events.append(e)
 
-        self.logger.info(f"HS Football: {len(events)} unique games fetched ({len(raw)} before dedup)")
+        if events:
+            self._write_cache(events)
+            self.logger.info(f"HS Football: {len(events)} unique games fetched ({len(raw)} before dedup)")
+            return events
+
+        # gobound blocks datacenter IP ranges, so a run that works from a home
+        # connection can still come back empty from CI. The season schedule is
+        # fixed well in advance, so serve the last good scrape rather than
+        # dropping the section.
+        cached = self._read_cache()
+        if cached:
+            self.logger.warning(
+                f"HS Football: live fetch returned nothing — falling back to "
+                f"{len(cached)} cached games from {self._cache_age()}"
+            )
+            return cached
+
+        self.logger.warning("HS Football: live fetch returned nothing and no cache available")
+        return []
+
+    # ── Season cache ──────────────────────────────────────────────────────────
+
+    def _write_cache(self, events: list[Event]) -> None:
+        payload = {
+            "scraped_at": datetime.now(CENTRAL).isoformat(),
+            "games": [
+                {
+                    "title": e.title,
+                    "start_date": e.start_date.isoformat(),
+                    "location": e.location,
+                    "description": e.description,
+                    "url": e.url,
+                }
+                for e in events
+            ],
+        }
+        try:
+            CACHE_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        except Exception as e:
+            self.logger.warning(f"Could not write schedule cache: {e}")
+
+    def _read_cache(self) -> list[Event]:
+        try:
+            payload = json.loads(CACHE_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            return []
+        events = []
+        for g in payload.get("games", []):
+            try:
+                events.append(Event(
+                    title=g["title"],
+                    start_date=datetime.fromisoformat(g["start_date"]),
+                    end_date=None,
+                    location=g["location"],
+                    city="Overland Park",
+                    description=g.get("description", ""),
+                    url=g["url"],
+                    source="HS Football",
+                    image_url=None,
+                    cost="Free",
+                    category="Sports & Fitness",
+                ))
+            except Exception:
+                continue
         return events
+
+    def _cache_age(self) -> str:
+        try:
+            payload = json.loads(CACHE_PATH.read_text(encoding="utf-8"))
+            return payload.get("scraped_at", "unknown")[:10]
+        except Exception:
+            return "unknown"
 
     def _parse_html(self, html: str, school: str, url: str) -> list[Event]:
         soup = BeautifulSoup(html, "html.parser")
